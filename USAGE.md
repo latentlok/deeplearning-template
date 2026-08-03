@@ -105,7 +105,7 @@ max_steps: 2000        # primary — the loop is step-first
 max_epochs: null       # optional cap, checked at epoch boundaries
 grad_accum: 1          # effective batch = batch_size x grad_accum x world_size
 clip_grad: null
-device: auto           # auto | cpu | cuda | cuda:0
+device: auto           # auto | cpu | cuda | cuda:0; auto -> cuda:LOCAL_RANK, else cpu
 compile: false         # torch.compile; off by default, it obscures tracebacks
 log_every: 50          # steps
 val_every: 200         # steps
@@ -616,6 +616,14 @@ is fine for small physics models and painful at scale.
 
 Per-module overrides need no template support: call `.double()` or `.to(dtype)` in your
 module's `__init__`. Global default, local freedom.
+
+**Complex weights follow the real dtype** — `float32` gives `complex64`, `float64` gives
+`complex128` — and are never flattened to real. This needs saying because
+`nn.Module.to(float32)` casts complex parameters too: torch's `_apply` converts anything
+`is_floating_point()` *or* `is_complex()`, so the obvious implementation would discard
+the imaginary part of every spectral weight and emit nothing but a `ComplexWarning`. The
+Trainer moves modules with `cast_module` instead. Note `dtype=float64` plus complex
+weights means `complex128`, which safetensors cannot write — see *Checkpoint format*.
 
 ---
 

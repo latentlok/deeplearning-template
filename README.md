@@ -18,7 +18,7 @@ It works with anything that satisfies four assumptions:
 4. Progress is measured in steps.
 
 `batch` is never inspected, model outputs are a free dict, and steps return arbitrary
-scalars. Roughly 1,100 lines total, ~780 of which you never rewrite.
+scalars. Roughly 1,450 lines of code, ~1,120 of which you never rewrite.
 
 ## Install
 
@@ -37,7 +37,7 @@ Hydra's lazy `--shell-completion` help object. Lift it when hydra-core 1.4 ships
 Verify:
 
 ```bash
-uv run pytest tests/ -q                    # 57 tests
+uv run pytest tests/ -q                    # 63 tests
 uv run python -m dlt.train experiment=e0   # ~20-step smoke run
 ```
 

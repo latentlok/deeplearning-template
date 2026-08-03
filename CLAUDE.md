@@ -5,7 +5,7 @@ Guidance for Claude Code working in this repository.
 ## What this is
 
 A minimal, **fork-first** PyTorch training template. It provides the loop, the logging
-and the plug point; everything model-shaped lives in the fork. ~1,100 lines total.
+and the plug point; everything model-shaped lives in the fork. ~1,450 lines of code.
 
 `src/dlt/core/` is infrastructure that is rarely touched. `src/dlt/project/` is example
 code the user replaces. **Default to solving a problem in `project/` or in config, not
@@ -16,7 +16,7 @@ existing seams don't cover it before writing it.
 
 ```bash
 uv sync --extra dev                          # install (Python >=3.12,<3.14)
-uv run pytest tests/ -q                      # 61 tests
+uv run pytest tests/ -q                      # 63 tests
 uv run ruff check src tests scripts          # lint (must be clean)
 uv run ruff format src tests scripts
 uv run python -m dlt.train experiment=e0     # ~20-step smoke run
