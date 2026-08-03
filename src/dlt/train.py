@@ -79,21 +79,10 @@ def main(cfg: DictConfig) -> float | None:
             amp_dtype=amp_dtype,
         )
 
-        if cfg.get("resume"):
-            from dlt.core.checkpoint import load_checkpoint
-
-            log.info("resuming from %s", cfg.resume)
-            spec = module.configure_optimizers()
-            load_checkpoint(
-                cfg.resume,
-                module,
-                optimizers=spec.optimizers,
-                schedulers=spec.schedulers,
-                state=trainer.state,
-                datamodule=datamodule,
-            )
-
-        result = trainer.fit(module, datamodule)
+        # Resume is handled inside fit(), which builds the optimizers -- loading here
+        # would populate optimizers that fit() then replaces, silently continuing with
+        # a cold optimizer.
+        result = trainer.fit(module, datamodule, resume=cfg.get("resume"))
 
         # add_hparams at the end is what makes the HPARAMS tab work and runs comparable.
         logger.log_hparams(flatten_config(cfg), trainer.state.metrics)

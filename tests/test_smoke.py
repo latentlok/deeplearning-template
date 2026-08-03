@@ -187,6 +187,32 @@ def test_scaler_stats_are_buffers_and_ride_the_checkpoint() -> None:
     assert module.state_dict()["mean"].item() == pytest.approx(3.0)
 
 
+def test_resume_restores_step_and_optimizer_state(tmp_path) -> None:
+    """Regression: resume used to load into optimizers that fit() then replaced, so a
+    resumed run silently continued with a cold optimizer -- no error, just different
+    training. Adam momentum must survive, not just the weights and the step counter.
+    """
+    from dlt.core.checkpoint import save_checkpoint
+
+    trainer, _ = _fit(["experiment=e0"], max_steps=10, val_every=0, log_every=0)
+    save_checkpoint(
+        tmp_path / "ck", trainer.raw, optimizers=trainer.optimizers, state=trainer.state
+    )
+    saved_moments = len(trainer.optimizers[0].state_dict()["state"])
+    assert saved_moments > 0, "precondition: the optimizer should have accumulated state"
+
+    cfg = load(["experiment=e0"])
+    fresh = hydra.utils.instantiate(cfg.model)
+    dm = hydra.utils.instantiate(cfg.data)
+    resumed = Trainer(max_steps=10, val_every=0, log_every=0, device="cpu")
+    resumed.fit(fresh, dm, resume=tmp_path / "ck")
+
+    assert resumed.state.global_step == 10, "step counter did not resume"
+    assert len(resumed.optimizers[0].state_dict()["state"]) == saved_moments, (
+        "optimizer state was discarded on resume"
+    )
+
+
 def test_trainstate_roundtrips() -> None:
     s = TrainState(global_step=7, epoch=2, samples_seen=99, metrics={"a": 1.0})
     t = TrainState()

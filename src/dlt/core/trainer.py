@@ -13,6 +13,7 @@ import contextlib
 import logging
 import time
 from collections.abc import Iterator
+from pathlib import Path
 from typing import Any
 
 import torch
@@ -148,7 +149,9 @@ class Trainer:
 
     # -- fit -----------------------------------------------------------------------
 
-    def fit(self, module: TaskModule, datamodule: DataModule) -> float | None:
+    def fit(
+        self, module: TaskModule, datamodule: DataModule, resume: str | Path | None = None
+    ) -> float | None:
         self.module, self.datamodule = module, datamodule
         module.trainer = self
 
@@ -161,6 +164,24 @@ class Trainer:
                 f"configure_optimizers must return OptimSpec, got {type(spec).__name__}"
             )
         self.optimizers, self.schedulers = spec.optimizers, spec.schedulers
+
+        # Resume happens HERE, not in the caller: configure_optimizers() above builds
+        # fresh optimizers, so anything loaded before fit() would be silently thrown
+        # away and the run would continue with a cold optimizer -- no error, just
+        # different training.
+        if resume:
+            from dlt.core.checkpoint import load_checkpoint
+
+            log.info("resuming from %s", resume)
+            load_checkpoint(
+                resume,
+                module,
+                optimizers=self.optimizers,
+                schedulers=self.schedulers,
+                state=self.state,
+                datamodule=datamodule,
+            )
+            log.info("resumed at step %d (epoch %d)", self.state.global_step, self.state.epoch)
 
         if self.compile:
             self.module = torch.compile(module, mode=self.compile_mode)
