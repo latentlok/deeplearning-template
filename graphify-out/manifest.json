@@ -120,13 +120,13 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1785751613.6666708,
-    "ast_hash": "7b04f8cd0a8cc798cfcae8dc9cd7e85a",
+    "mtime": 1785752276.3308194,
+    "ast_hash": "273b1f6cff68a22df1a4ce0cdef81532",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1785751583.2005262,
-    "ast_hash": "a720ffa2e777cd7fb6e8e5c6ca6f423d",
+    "mtime": 1785752279.2788334,
+    "ast_hash": "0d98f57cd8cd53d2647347dca308c23d",
     "semantic_hash": ""
   },
   "USAGE.md": {
@@ -217,6 +217,11 @@
   "configs/trainer/default.yaml": {
     "mtime": 1785744129.0561109,
     "ast_hash": "d56e76ef1f054034edb869a3a6c71f5c",
+    "semantic_hash": ""
+  },
+  "UNRESOLVED.md": {
+    "mtime": 1785752271.0097942,
+    "ast_hash": "301372b42c6a46eb62f0b5a06c7c7496",
     "semantic_hash": ""
   }
 }

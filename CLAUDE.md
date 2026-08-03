@@ -37,7 +37,8 @@ that dict is logged automatically. Adding a model is two files: one in `project/
 config in `configs/model/`.
 
 Read `ARCHITECTURE.md` before changing `core/`. Read `USAGE.md` before changing a
-user-facing workflow.
+user-facing workflow. Read `UNRESOLVED.md` at the start of a session — it lists what is
+untested versus what is deliberately omitted, so you don't "fix" a decision.
 
 ## Non-obvious constraints
 

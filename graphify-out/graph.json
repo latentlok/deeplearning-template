@@ -1,4 +1,5 @@
 {
+  "hyperedges": [],
   "input_tokens": 0,
   "output_tokens": 0,
   "nodes": [
@@ -3442,7 +3443,7 @@
       "label": "Non-obvious constraints",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L42",
+      "source_location": "L43",
       "_origin": "ast"
     },
     {
@@ -3450,7 +3451,7 @@
       "label": "Measured library behaviour",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L72",
+      "source_location": "L73",
       "_origin": "ast"
     },
     {
@@ -3458,7 +3459,15 @@
       "label": "Conventions",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L85",
+      "source_location": "L86",
+      "_origin": "ast"
+    },
+    {
+      "id": "claude_code_graph",
+      "label": "Code graph",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L101",
       "_origin": "ast"
     },
     {
@@ -3466,7 +3475,7 @@
       "label": "Working style for this repo",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L100",
+      "source_location": "L117",
       "_origin": "ast"
     },
     {
@@ -3506,7 +3515,7 @@
       "label": "What ships",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L56",
+      "source_location": "L57",
       "_origin": "ast"
     },
     {
@@ -3514,7 +3523,111 @@
       "label": "Licence",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L67",
+      "source_location": "L68",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved",
+      "label": "UNRESOLVED.md",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved_unresolved",
+      "label": "Unresolved",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved_getting_running_on_a_new_machine",
+      "label": "Getting running on a new machine",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L9",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved_1_gpu_ddp_and_torch_compile_are_written_but_never_executed",
+      "label": "1. GPU, DDP and `torch.compile` are written but never executed",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L24",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved_2_complex_dtypes_are_reasoned_about_not_exercised",
+      "label": "2. Complex dtypes are reasoned about, not exercised",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L53",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved_3_notebooks_explore_run_ipynb_was_planned_and_never_written",
+      "label": "3. `notebooks/explore_run.ipynb` was planned and never written",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L69",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved_4_weights_only_fine_tuning_has_no_cli_flag",
+      "label": "4. Weights-only fine-tuning has no CLI flag",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L74",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved_5_no_datamodule_implements_state_dict_load_state_dict",
+      "label": "5. No DataModule implements `state_dict()` / `load_state_dict()`",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L81",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved_6_python_is_pinned_to_3_13_because_hydra_core_1_3_4_breaks_on_3_14",
+      "label": "6. Python is pinned to 3.13 because hydra-core 1.3.4 breaks on 3.14",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L91",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved_7_the_committed_code_graph_goes_stale",
+      "label": "7. The committed code graph goes stale",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L101",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved_8_smaller_known_edges",
+      "label": "8. Smaller known edges",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L115",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved_deliberately_out_of_scope_do_not_add_without_being_asked",
+      "label": "Deliberately out of scope — do not add without being asked",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L126",
+      "_origin": "ast"
+    },
+    {
+      "id": "unresolved_two_bugs_already_found_and_fixed_worth_knowing_the_pattern",
+      "label": "Two bugs already found and fixed — worth knowing the pattern",
+      "file_type": "document",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L137",
       "_origin": "ast"
     },
     {
@@ -12448,7 +12561,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L42",
+      "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12458,7 +12571,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L72",
+      "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12468,7 +12581,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L85",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "claude_claude_md",
+      "target": "claude_code_graph",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "CLAUDE.md",
+      "source_location": "L101",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12478,7 +12601,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L100",
+      "source_location": "L117",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12533,12 +12656,22 @@
       "_origin": "ast"
     },
     {
+      "source": "readme",
+      "target": "unresolved",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "readme_dlt_a_minimal_fork_first_pytorch_training_template",
       "target": "readme_what_ships",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L56",
+      "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12548,7 +12681,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L67",
+      "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12558,7 +12691,127 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
+      "source_location": "L70",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "unresolved",
+      "target": "unresolved_unresolved",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "unresolved_unresolved",
+      "target": "unresolved_getting_running_on_a_new_machine",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "unresolved_unresolved",
+      "target": "unresolved_1_gpu_ddp_and_torch_compile_are_written_but_never_executed",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "unresolved_unresolved",
+      "target": "unresolved_2_complex_dtypes_are_reasoned_about_not_exercised",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "unresolved_unresolved",
+      "target": "unresolved_3_notebooks_explore_run_ipynb_was_planned_and_never_written",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UNRESOLVED.md",
       "source_location": "L69",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "unresolved_unresolved",
+      "target": "unresolved_4_weights_only_fine_tuning_has_no_cli_flag",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L74",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "unresolved_unresolved",
+      "target": "unresolved_5_no_datamodule_implements_state_dict_load_state_dict",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L81",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "unresolved_unresolved",
+      "target": "unresolved_6_python_is_pinned_to_3_13_because_hydra_core_1_3_4_breaks_on_3_14",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L91",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "unresolved_unresolved",
+      "target": "unresolved_7_the_committed_code_graph_goes_stale",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L101",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "unresolved_unresolved",
+      "target": "unresolved_8_smaller_known_edges",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L115",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "unresolved_unresolved",
+      "target": "unresolved_deliberately_out_of_scope_do_not_add_without_being_asked",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L126",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "unresolved_unresolved",
+      "target": "unresolved_two_bugs_already_found_and_fixed_worth_knowing_the_pattern",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "UNRESOLVED.md",
+      "source_location": "L137",
       "weight": 1.0,
       "_origin": "ast"
     },
