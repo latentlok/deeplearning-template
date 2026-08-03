@@ -1,0 +1,28 @@
+# Run outputs and data are never committed -- runs are reproducible from configs,
+# and .hydra/ inside each run dir already records exactly what produced it.
+outputs/
+multirun/
+data/raw/
+data/processed/
+data/cache/
+*.zarr/
+*.pt
+*.safetensors
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+build/
+dist/
+
+# Tooling
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.DS_Store
+
+# Keep the lockfile and the Python pin: both are load-bearing for reproducibility.
+!uv.lock
+!.python-version

@@ -1,0 +1,15 @@
+# @package _global_
+defaults:
+  - override /model: forecast
+  - override /data: series
+
+exp_name: forecast
+seed: 42
+
+trainer:
+  max_steps: 2000
+  val_every: 200
+  # Free-running rollout is sequential and expensive, so it runs on its own cadence
+  # while cheap teacher-forced validation runs every val_every.
+  rollout_every: 500
+  monitor: val/h8/loss

@@ -1,0 +1,53 @@
+[project]
+name = "dlt"
+version = "0.1.0"
+description = "Minimal, fork-first PyTorch template: train, track, log. Nothing else."
+# Upper bound is real, not caution: hydra-core 1.3.4 breaks on Python 3.14, whose
+# argparse validates help strings and rejects Hydra's lazy --shell-completion help
+# object. Fixed in hydra-core 1.4 (dev only as of Aug 2026); lift this then.
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "torch>=2.13",
+    "hydra-core>=1.3.4",
+    "omegaconf>=2.3.1",
+    "tensorboard>=2.21",
+    "torchmetrics>=1.9",
+    "einops>=0.8.2",
+    "safetensors>=0.8",
+    "rich>=15.0",
+    "numpy>=2.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.1",
+    "ruff>=0.16",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dlt"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = [
+    "E501", # line length is handled by the formatter
+    # B027 flags empty methods on an ABC without @abstractmethod. That is the design
+    # here, not an oversight: rollout_step, save_extra/load_extra, DataModule.state_dict
+    # and most of the Logger surface are OPTIONAL hooks with no-op defaults, so you
+    # override only what you need. Making them abstract would force every fork to
+    # implement things it does not use.
+    "B027",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]

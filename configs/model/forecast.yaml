@@ -1,0 +1,15 @@
+_target_: dlt.project.forecast.Forecaster
+window: 16
+hidden_dim: 64
+lr: 1e-3
+
+# Scheduled sampling. Default is pure teacher forcing (constant 1.0). Anneal it to 0
+# to close the train/deploy gap -- and note this is an object rather than an inline
+# `max(0., 1 - step/N)` precisely so you can sweep it:
+#   -m model.teacher_forcing.over_steps=500,2000
+teacher_forcing:
+  _target_: dlt.core.utils.ScheduledValue
+  schedule: constant # constant | linear | cosine | exponential | inverse_sigmoid
+  start: 1.0
+  end: 0.0
+  over_steps: 1000

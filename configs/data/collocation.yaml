@@ -1,0 +1,6 @@
+_target_: dlt.project.pinn.CollocationData
+n_train: 1024
+n_val: 256
+x_max: 2.0
+batch_size: 128
+num_workers: 0

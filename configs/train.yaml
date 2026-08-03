@@ -1,0 +1,47 @@
+# Training entrypoint config.
+#
+# `_self_` comes first so that group defaults, and then `experiment`, override the
+# globals set here. `experiment` is last because its files use `# @package _global_`
+# to reach across every group.
+defaults:
+  - _self_
+  - paths: default
+  - model: mlp
+  - data: synthetic
+  - trainer: default
+  - callbacks: default
+  - tracking: default
+  - experiment: null
+  - debug: null
+
+exp_name: default
+seed: 42
+deterministic: false
+
+# dtype and amp are ORTHOGONAL axes, not one "precision" field.
+#   dtype is what the model lives in; amp is an autocast wrapper on top of fp32.
+# amp != none requires dtype=float32; the pair is validated at startup.
+dtype: float32 # float32 | float64
+amp: none # none | fp16 | bf16
+
+# Path to a checkpoint directory for an exact resume, e.g.
+#   +resume=outputs/pinn/2026-08-03_14-22-05_a3f9c2/ckpt/last
+resume: null
+
+hydra:
+  run:
+    # Grouped by experiment, time-sortable, and the hash marks identical configs.
+    # No counter: counters race under parallel launch and differ per machine.
+    dir: ${paths.output_root}/${exp_name}/${now:%Y-%m-%d_%H-%M-%S}_${run_hash:${hydra.job.override_dirname}}
+  sweep:
+    dir: ${paths.output_root}/${exp_name}/${now:%Y-%m-%d_%H-%M-%S}_sweep
+    subdir: ${hydra.job.num}
+  job:
+    # Keep CWD stable so relative data paths do not break inside the run dir.
+    chdir: false
+  job_logging:
+    handlers:
+      file:
+        # With chdir=false, Hydra's file handler would otherwise write relative to
+        # CWD and dump every run's log into the repo root.
+        filename: ${hydra.runtime.output_dir}/train.log

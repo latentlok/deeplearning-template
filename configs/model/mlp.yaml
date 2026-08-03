@@ -1,0 +1,6 @@
+_target_: dlt.project.mlp.MLP
+in_dim: 8
+hidden_dim: 32
+out_dim: 1
+lr: 1e-3
+weight_decay: 0.0

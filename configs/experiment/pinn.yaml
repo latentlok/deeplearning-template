@@ -1,0 +1,18 @@
+# @package _global_
+defaults:
+  - override /model: pinn
+  - override /data: collocation
+
+exp_name: pinn
+seed: 42
+
+# Physics caveats, not preferences: second derivatives are unreliable under autocast,
+# and double-backward through Inductor is fragile.
+dtype: float64
+amp: none
+
+trainer:
+  max_steps: 3000
+  val_every: 250
+  compile: false
+  monitor: val/l2_error # against the analytic solution e^(-x); cannot be gamed

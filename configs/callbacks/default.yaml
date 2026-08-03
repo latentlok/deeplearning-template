@@ -1,0 +1,28 @@
+# Callbacks OBSERVE; they never own the update. Anything that changes your results
+# belongs in training_step, not here.
+checkpoint:
+  _target_: dlt.core.callbacks.Checkpoint
+  dirpath: ${hydra:runtime.output_dir}/ckpt
+  save_every: 500
+  save_last: true
+  save_best: true
+  fmt: safetensors # safetensors | torch, or a _target_ WeightFormat for custom dtypes
+
+lr_monitor:
+  _target_: dlt.core.callbacks.LRMonitor
+
+timer:
+  _target_: dlt.core.callbacks.Timer
+
+nan_guard:
+  _target_: dlt.core.callbacks.NaNGuard
+
+# Expensive; enable when diagnosing. Complex params are split into abs/real/imag by
+# the TB logger, because add_histogram silently discards the imaginary part.
+# grad_stats:
+#   _target_: dlt.core.callbacks.GradStats
+#   every: 500
+
+# early_stopping:
+#   _target_: dlt.core.callbacks.EarlyStopping
+#   patience: 10

@@ -1,0 +1,115 @@
+"""Training entrypoint.
+
+Returns the monitored metric, which is the entire coupling surface an HPO sweeper
+needs. No sweeper is shipped; adding one later touches nothing in src/.
+"""
+
+from __future__ import annotations
+
+import logging
+from pathlib import Path
+
+import hydra
+from hydra.core.hydra_config import HydraConfig
+from omegaconf import DictConfig, OmegaConf
+
+from dlt.core.tracking import (
+    ConsoleLogger,
+    JSONLLogger,
+    MultiLogger,
+    RunMeta,
+    TensorBoardLogger,
+    flatten_config,
+)
+from dlt.core.utils import (
+    config_hash,
+    register_resolvers,
+    resolve_precision,
+    seed_everything,
+    set_default_dtype,
+)
+
+# Must run before @hydra.main composes -- hydra.run.dir interpolates ${run_hash:...}.
+register_resolvers()
+
+log = logging.getLogger(__name__)
+
+
+def build_logger(cfg: DictConfig, run_dir: Path) -> MultiLogger:
+    """Three channels, independently toggleable. TensorBoard is not always viewable;
+    train.log and metrics.jsonl are what keep a headless run legible."""
+    loggers = []
+    if cfg.tracking.tensorboard:
+        loggers.append(TensorBoardLogger(run_dir / "tb"))
+    if cfg.tracking.jsonl:
+        loggers.append(JSONLLogger(run_dir / "metrics.jsonl"))
+    if cfg.tracking.console:
+        loggers.append(ConsoleLogger(every=cfg.tracking.console_every))
+    return MultiLogger(loggers)
+
+
+@hydra.main(version_base="1.3", config_path="../../configs", config_name="train")
+def main(cfg: DictConfig) -> float | None:
+    run_dir = Path(HydraConfig.get().runtime.output_dir)
+
+    # dtype and amp are orthogonal axes; validate the pair before anything is built so
+    # a conflict is a config error, not a failure deep in a backward pass.
+    param_dtype, amp_dtype = resolve_precision(cfg.dtype, cfg.amp)
+
+    # Both UNCONDITIONAL: Hydra's basic launcher runs multirun jobs sequentially in one
+    # process, so anything set conditionally leaks from job to job. set_default_dtype
+    # must also precede model construction, or the model is fp32 while the data is fp64.
+    seed_everything(cfg.seed, deterministic=cfg.deterministic)
+    set_default_dtype(param_dtype)
+
+    log.info("run dir: %s", run_dir)
+    meta = RunMeta(run_dir, cfg.exp_name, config_hash(cfg))
+    logger = build_logger(cfg, run_dir)
+    logger.log_text("config", f"```yaml\n{OmegaConf.to_yaml(cfg, resolve=True)}\n```")
+
+    try:
+        datamodule = hydra.utils.instantiate(cfg.data)
+        module = hydra.utils.instantiate(cfg.model)
+        callbacks = [hydra.utils.instantiate(c) for c in (cfg.callbacks or {}).values()]
+        trainer = hydra.utils.instantiate(
+            cfg.trainer,
+            logger=logger,
+            callbacks=callbacks,
+            param_dtype=param_dtype,
+            amp_dtype=amp_dtype,
+        )
+
+        if cfg.get("resume"):
+            from dlt.core.checkpoint import load_checkpoint
+
+            log.info("resuming from %s", cfg.resume)
+            spec = module.configure_optimizers()
+            load_checkpoint(
+                cfg.resume,
+                module,
+                optimizers=spec.optimizers,
+                schedulers=spec.schedulers,
+                state=trainer.state,
+                datamodule=datamodule,
+            )
+
+        result = trainer.fit(module, datamodule)
+
+        # add_hparams at the end is what makes the HPARAMS tab work and runs comparable.
+        logger.log_hparams(flatten_config(cfg), trainer.state.metrics)
+        meta.finish("finished", trainer.state.metrics)
+        log.info("%s = %s", cfg.trainer.monitor, result)
+        return result
+
+    except BaseException as e:
+        # Crashed runs must be visibly crashed, not silently absent. The traceback goes
+        # to train.log, not just the terminal you already closed.
+        log.exception("run failed: %s", type(e).__name__)
+        meta.finish("failed")
+        raise
+    finally:
+        logger.close()
+
+
+if __name__ == "__main__":
+    main()

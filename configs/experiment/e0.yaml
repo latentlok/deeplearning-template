@@ -1,0 +1,17 @@
+# @package _global_
+# Smoke experiment: proves the wiring end to end in a couple of seconds.
+defaults:
+  - override /model: mlp
+  - override /data: synthetic
+
+exp_name: e0
+seed: 0
+
+trainer:
+  max_steps: 20
+  log_every: 5
+  val_every: 10
+
+callbacks:
+  checkpoint:
+    save_every: 10

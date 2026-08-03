@@ -1,0 +1,10 @@
+# root_dir is the launch directory. All *data* paths resolve from it rather than from
+# CWD, which is what stops the classic "my relative path broke inside the run dir".
+root_dir: ${hydra:runtime.cwd}
+data_dir: ${paths.root_dir}/data
+
+# output_root is deliberately RELATIVE and must not chain to ${hydra:...}.
+# hydra.sweep.dir is resolved before HydraConfig exists, so a hydra-resolver here
+# fails on --multirun ("HydraConfig was not set") while working fine for single runs.
+# chdir=false keeps CWD at the launch directory, so relative is unambiguous.
+output_root: outputs

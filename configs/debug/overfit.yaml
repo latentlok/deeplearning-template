@@ -1,0 +1,13 @@
+# @package _global_
+# Overfit a handful of samples with no noise. If the loss does not approach zero,
+# the bug is in your model or loss -- not your hyperparameters. Run this first.
+data:
+  n_train: 32
+  n_val: 32
+  batch_size: 32
+  noise: 0.0
+
+trainer:
+  max_steps: 500
+  log_every: 50
+  val_every: 100

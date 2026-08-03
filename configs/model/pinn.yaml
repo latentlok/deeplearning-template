@@ -1,0 +1,14 @@
+_target_: dlt.project.pinn.PINN
+hidden_dim: 32
+depth: 3
+lr: 1e-3
+
+# Swap to StaticWeights to watch the failure this exists to prevent: the residual is
+# averaged over hundreds of collocation points and the boundary over one, so untuned
+# the net learns u ~ 0, which satisfies du/dx = -u perfectly and ignores u(0)=1.
+weighting:
+  _target_: dlt.project.pinn.GradNormWeights
+  names: [residual, boundary]
+  reference: residual
+  every: 100
+  alpha: 0.9

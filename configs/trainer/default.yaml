@@ -1,0 +1,20 @@
+_target_: dlt.core.Trainer
+
+# The loop is STEP-FIRST. max_steps is primary; epochs are a derived convenience, and
+# len(dataloader) is never called so streaming datasets work.
+max_steps: 2000
+max_epochs: null # optional cap, checked at epoch boundaries
+
+grad_accum: 1 # effective batch = batch_size x grad_accum x world_size
+clip_grad: null
+
+device: auto # auto | cpu | cuda | cuda:0
+compile: false # torch.compile -- off by default; it obscures tracebacks
+compile_mode: default
+
+log_every: 50 # steps
+val_every: 200 # steps
+rollout_every: 0 # steps; 0 disables. Free-running eval is expensive.
+
+monitor: val/loss
+monitor_mode: min

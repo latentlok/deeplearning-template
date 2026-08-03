@@ -1,0 +1,16 @@
+# @package _global_
+# Two steps, no checkpoints. Proves the wiring without producing artifacts.
+trainer:
+  max_steps: 2
+  log_every: 1
+  val_every: 2
+  rollout_every: 0
+
+callbacks:
+  checkpoint:
+    save_every: 0
+    save_last: false
+    save_best: false
+
+tracking:
+  console_every: 1

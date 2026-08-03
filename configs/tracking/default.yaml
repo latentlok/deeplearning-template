@@ -1,0 +1,7 @@
+# Three channels, independently toggleable, all rank-zero-only.
+# TensorBoard is not always viewable -- train.log and metrics.jsonl are what keep a
+# headless run legible.
+tensorboard: true # -> <run_dir>/tb/
+jsonl: true # -> <run_dir>/metrics.jsonl
+console: true # -> <run_dir>/train.log + stdout
+console_every: 50 # steps
