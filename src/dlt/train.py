@@ -23,6 +23,7 @@ from dlt.core.tracking import (
 )
 from dlt.core.utils import (
     config_hash,
+    is_rank_zero,
     register_resolvers,
     resolve_precision,
     seed_everything,
@@ -38,6 +39,11 @@ log = logging.getLogger(__name__)
 def build_logger(cfg: DictConfig, run_dir: Path) -> MultiLogger:
     """Three channels, independently toggleable. TensorBoard is not always viewable;
     train.log and metrics.jsonl are what keep a headless run legible."""
+    # Gate CONSTRUCTION, not just the calls: MultiLogger drops writes off rank zero,
+    # but SummaryWriter creates its event file in __init__, so every rank left a
+    # second, empty event file in tb/ and `tensorboard --logdir` showed phantom runs.
+    if not is_rank_zero():
+        return MultiLogger([])
     loggers = []
     if cfg.tracking.tensorboard:
         loggers.append(TensorBoardLogger(run_dir / "tb"))
@@ -51,6 +57,12 @@ def build_logger(cfg: DictConfig, run_dir: Path) -> MultiLogger:
 @hydra.main(version_base="1.3", config_path="../../configs", config_name="train")
 def main(cfg: DictConfig) -> float | None:
     run_dir = Path(HydraConfig.get().runtime.output_dir)
+
+    # Every rank shares one run dir, so INFO from N ranks means N copies of every line
+    # in train.log. Warnings and tracebacks still come through from every rank -- the
+    # one that dies is rarely rank zero.
+    if not is_rank_zero():
+        logging.getLogger().setLevel(logging.WARNING)
 
     # dtype and amp are orthogonal axes; validate the pair before anything is built so
     # a conflict is a config error, not a failure deep in a backward pass.

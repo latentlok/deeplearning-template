@@ -76,6 +76,15 @@ reimplement the skeleton.
 It is **step-first**. Epochs are derived, and `len(dataloader)` is never called, so
 streaming / `IterableDataset` training works without inventing a fake epoch.
 
+Compile and distributed wrapping are isolated in one overridable method, `wrap()`, so a
+fork can swap DDP for FSDP2 without reimplementing the loop. Two constraints hold it
+together, both of which fail *silently* when broken: whatever `wrap()` returns must own
+the forward — DDP and `torch.compile` act only on graphs built inside their own
+`forward`, so calling `training_step` directly means no all-reduce and no tracing — and
+`wrap()` must precede `configure_optimizers()`, because FSDP2 swaps every `Parameter`
+for a sharded `DTensor` and an optimizer built first would hold tensors that never get
+a gradient.
+
 Four things gradient accumulation must get right, all handled:
 
 - loss divided by `grad_accum` before backward
@@ -103,6 +112,7 @@ algorithm, and hiding it in a hook is exactly what this rule prevents.
 | Want to change | Do this |
 |---|---|
 | the update rule | subclass `Trainer`, override `train_step` |
+| the distributed strategy | subclass `Trainer`, override `wrap` (FSDP2, custom DDP) |
 | a tracking backend | subclass `Logger` in `core/tracking.py` |
 | checkpoint encoding | subclass `WeightFormat`, point `checkpoint.format` at it |
 | observation | add a `Callback` |

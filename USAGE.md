@@ -727,14 +727,43 @@ micro-steps are handled for you:
 uv run torchrun --nproc_per_node=4 -m dlt.train experiment=mine
 ```
 
-Single-device is the same code with `world_size == 1`. Add a `DistributedSampler` in
-your DataModule when `world_size > 1`.
+Single-device is the same code with `world_size == 1`. **Add a `DistributedSampler` in
+your DataModule when `world_size > 1`** — without one every rank draws the same batches
+and you pay N devices for one device's worth of data. The Trainer warns when it sees a
+train loader without one.
 
-**Not verified on hardware** — this project's development machine has no compatible GPU,
-so the distributed and `torch.compile` paths are written but untested. Treat them as
-first things to check on a real multi-GPU box. Note also that DDP handles
-double-backward poorly, so models with `create_graph=True` physics losses are better run
-single-device.
+### Swapping the strategy
+
+`Trainer.wrap()` is the single place where compile and distributed wrapping happen.
+Override it and nothing else changes:
+
+```python
+class FSDPTrainer(Trainer):
+    def wrap(self, module):
+        fully_shard(module)      # FSDP2 shards in place; no wrapper object
+        return module
+```
+
+Two rules make this work, and both are load-bearing:
+
+- **Whatever `wrap()` returns must own the forward.** DDP and `torch.compile` only act
+  on graphs built inside their own `forward`; calling `module.training_step` directly
+  walks past both — DDP silently stops all-reducing and compile traces nothing.
+- **`wrap()` runs before `configure_optimizers()`**, because FSDP2 replaces every
+  `Parameter` with a sharded `DTensor`. Build the optimizer first and it holds the
+  pre-shard tensors, which never receive a gradient: the run trains, logs a loss, and
+  updates nothing.
+
+Sharded weights do not go through `safetensors` — a `DTensor` has no accessible storage
+pointer. Use `checkpoint.format=torch` (per-rank) or subclass `WeightFormat` around
+`torch.distributed.checkpoint`. The error names the escape hatch.
+
+**Verified on CPU/gloo only.** Two-rank DDP, `no_sync()` with `grad_accum`, rank-zero
+gating, `torch.compile`, `amp=bf16`/`fp16` and FSDP2 via `wrap()` are all exercised on
+this project's machine, which has no compatible GPU. What that does *not* cover: CUDA
+kernels, the `nccl` backend, multi-GPU device placement and `GradScaler` on real fp16
+hardware. Note also that DDP handles double-backward poorly, so models with
+`create_graph=True` physics losses are better run single-device.
 
 ---
 

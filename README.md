@@ -52,7 +52,6 @@ or pass `trainer.device=cpu`.
   evaluation, sweeps, adding your own model.
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** — the two contracts, the loop, and why each
   design decision is the way it is.
-- **[UNRESOLVED.md](UNRESOLVED.md)** — what is untested versus deliberately omitted.
 
 ## What ships
 

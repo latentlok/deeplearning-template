@@ -22,11 +22,14 @@ from torch.nn.parallel import DistributedDataParallel
 from dlt.core.base import DataModule, OptimSpec, TaskModule, TrainState
 from dlt.core.utils import (
     MetricAccumulator,
+    cast_module,
     effective_batch_size,
     get_world_size,
     infer_batch_size,
+    init_distributed,
     is_rank_zero,
     move_to_device,
+    resolve_device,
 )
 
 log = logging.getLogger(__name__)
@@ -60,6 +63,51 @@ class _BatchStream:
         return out if self._dict else out[""]
 
 
+class _StepWrapper(torch.nn.Module):
+    """Makes `training_step` the forward that DDP and torch.compile actually see.
+
+    Both only act on graphs built inside their own forward. Calling
+    module.training_step directly walks straight past them: DDP's reducer never runs
+    prepare_for_backward so nothing is all-reduced and the ranks silently diverge,
+    and torch.compile never traces a single frame. Neither raises.
+
+    Used only when compile or world_size > 1 is on; single-device training keeps the
+    direct call and this class never appears.
+    """
+
+    def __init__(self, task: TaskModule) -> None:
+        super().__init__()
+        self._task = task
+
+    def forward(self, batch: Any, state: TrainState) -> dict[str, torch.Tensor]:
+        return self._task.training_step(batch, state)
+
+
+def _warn_if_unsharded(loaders: Any) -> None:
+    """Sharding is the DataModule's job. Staying silent about it is not.
+
+    With no DistributedSampler every rank draws the SAME batches, so N ranks all-reduce
+    N identical gradients: N times the compute for one device's worth of data, no error
+    anywhere, and a loss curve that looks perfectly healthy.
+    """
+    if get_world_size() <= 1:
+        return
+    from torch.utils.data import IterableDataset
+    from torch.utils.data.distributed import DistributedSampler
+
+    for lo in loaders.values() if isinstance(loaders, dict) else [loaders]:
+        ds = getattr(lo, "dataset", None)
+        if isinstance(ds, IterableDataset):  # streaming shards inside the dataset
+            continue
+        if not isinstance(getattr(lo, "sampler", None), DistributedSampler):
+            log.warning(
+                "world_size=%d but the train loader has no DistributedSampler -- every "
+                "rank will draw the same batches. Build one in your DataModule.",
+                get_world_size(),
+            )
+            return
+
+
 class Trainer:
     def __init__(
         self,
@@ -90,11 +138,10 @@ class Trainer:
         self.callbacks = list(callbacks or [])
         self.logger = logger
 
-        self.device = torch.device(
-            ("cuda" if torch.cuda.is_available() else "cpu") if device == "auto" else device
-        )
+        self.device = resolve_device(device)
         # GradScaler is only meaningful for fp16; bf16 has fp32's exponent range.
         self.scaler = torch.amp.GradScaler(self.device.type, enabled=(amp_dtype is torch.float16))
+        self._owns_pg = False
         self.module: Any = None
         self.datamodule: DataModule | None = None
         self.optimizers: list[Any] = []
@@ -128,9 +175,15 @@ class Trainer:
 
     @property
     def raw(self) -> TaskModule:
-        """The module underneath any DDP wrapper."""
+        """The TaskModule underneath any DDP / compile / step wrapper.
+
+        `_task` resolves through torch.compile's OptimizedModule too, which forwards
+        unknown attributes to the module it wrapped.
+        """
         m = self.module
-        return m.module if isinstance(m, DistributedDataParallel) else m
+        if isinstance(m, DistributedDataParallel):
+            m = m.module
+        return getattr(m, "_task", m)
 
     def _emit(self, hook: str, **kw: Any) -> None:
         for cb in self.callbacks:
@@ -155,8 +208,19 @@ class Trainer:
         self.module, self.datamodule = module, datamodule
         module.trainer = self
 
+        # Before anything touches the device: torchrun exports the env vars but never
+        # creates the process group, and DDP will not construct without one.
+        self._owns_pg = init_distributed(self.device)
+
         datamodule.setup("fit")
-        module.to(device=self.device, dtype=self.param_dtype)
+        cast_module(module, self.device, self.param_dtype)
+
+        # Wrap BEFORE building optimizers. A strategy that replaces parameter objects
+        # rather than wrapping them -- FSDP2's fully_shard swaps every Parameter for a
+        # sharded DTensor -- would otherwise leave the optimizer holding the pre-wrap
+        # tensors, which never receive a gradient: the run trains cleanly, logs a loss,
+        # and updates nothing. DDP and compile keep the same objects either way.
+        self.module = self.wrap(module)
 
         spec = module.configure_optimizers()
         if not isinstance(spec, OptimSpec):
@@ -183,14 +247,8 @@ class Trainer:
             )
             log.info("resumed at step %d (epoch %d)", self.state.global_step, self.state.epoch)
 
-        if self.compile:
-            self.module = torch.compile(module, mode=self.compile_mode)
-        if get_world_size() > 1:
-            self.module = DistributedDataParallel(
-                self.module, device_ids=[self.device.index] if self.device.type == "cuda" else None
-            )
-
         loader = datamodule.train_dataloader()
+        _warn_if_unsharded(loader)
         stream = _BatchStream(loader)
         eff = effective_batch_size(getattr(loader, "batch_size", None), self.grad_accum)
         log.info(
@@ -243,8 +301,33 @@ class Trainer:
             raise
         finally:
             self._emit("on_fit_end")
+            if self._owns_pg:
+                torch.distributed.destroy_process_group()
+                self._owns_pg = False
 
         return self.state.metrics.get(self.monitor)
+
+    def wrap(self, module: TaskModule) -> Any:
+        """Compile and distributed wrapping, in one overridable place.
+
+        Override to swap the strategy without reimplementing fit() -- FSDP2 is
+        `fully_shard(module); return module`, since it shards in place and needs no
+        wrapper object. Whatever this returns is what the loop calls forward on, and
+        `raw` must still resolve to the TaskModule.
+
+        Both wrappers here must OWN the forward or they silently do nothing; see
+        _StepWrapper. Single-device eager training returns the module untouched.
+        """
+        wrapped: Any = module
+        if self.compile or get_world_size() > 1:
+            wrapped = _StepWrapper(module)
+        if self.compile:
+            wrapped = torch.compile(wrapped, mode=self.compile_mode)
+        if get_world_size() > 1:
+            wrapped = DistributedDataParallel(
+                wrapped, device_ids=[self.device.index] if self.device.type == "cuda" else None
+            )
+        return wrapped
 
     # -- one optimizer step (grad_accum micro-batches) ------------------------------
 
@@ -264,7 +347,12 @@ class Trainer:
                 else contextlib.nullcontext()
             )
             with sync, self.autocast():
-                out = self.raw.training_step(batch, self.state)
+                # Through the wrapper when there is one, never around it.
+                out = (
+                    self.module(batch, self.state)
+                    if self.module is not self.raw
+                    else self.raw.training_step(batch, self.state)
+                )
 
             if not manual:
                 self.backward(out["loss"] / self.grad_accum)

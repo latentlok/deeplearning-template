@@ -97,6 +97,27 @@ def move_to_device(obj: Any, device: torch.device, dtype: torch.dtype | None = N
     return obj
 
 
+def cast_module(module: Any, device: torch.device, dtype: torch.dtype) -> Any:
+    """Move and cast a module without destroying complex weights.
+
+    nn.Module.to(dtype=float32) casts complex parameters as well -- torch's _apply
+    converts anything is_floating_point() OR is_complex() -- so a complex64 spectral
+    weight silently becomes float32 and loses its imaginary part, with nothing but a
+    ComplexWarning. Complex follows the real dtype instead: float32 -> complex64,
+    float64 -> complex128.
+    """
+    complex_dtype = {torch.float32: torch.complex64, torch.float64: torch.complex128}.get(dtype)
+
+    def convert(t: torch.Tensor) -> torch.Tensor:
+        if t.is_complex():
+            return t.to(device=device, dtype=complex_dtype)
+        if t.is_floating_point():
+            return t.to(device=device, dtype=dtype)
+        return t.to(device=device)  # ints, bools, masks: move, never cast
+
+    return module._apply(convert)
+
+
 def infer_batch_size(batch: Any, default: int = 1) -> int:
     """Best-effort size of a batch, used to weight metric averages.
 
@@ -216,6 +237,39 @@ def get_world_size() -> int:
 
 def is_rank_zero() -> bool:
     return get_rank() == 0
+
+
+def get_local_rank() -> int:
+    return int(os.environ.get("LOCAL_RANK", 0))
+
+
+def resolve_device(spec: str = "auto") -> torch.device:
+    """ "auto" -> cuda:LOCAL_RANK when a GPU is present, else cpu.
+
+    The rank index is not cosmetic: torchrun starts one process per GPU and a bare
+    "cuda" lands every one of them on cuda:0. Architecture compatibility is
+    deliberately NOT probed -- on a mismatched box pass trainer.device=cpu.
+    """
+    if spec != "auto":
+        return torch.device(spec)
+    if torch.cuda.is_available():
+        return torch.device("cuda", get_local_rank() % torch.cuda.device_count())
+    return torch.device("cpu")
+
+
+def init_distributed(device: torch.device) -> bool:
+    """Join the process group. Returns True if this call created it.
+
+    torchrun sets RANK/WORLD_SIZE but never calls init_process_group for you, and
+    DistributedDataParallel refuses to construct without it -- so a multi-rank run
+    dies at the wrap with "Default process group has not been initialized".
+    """
+    if get_world_size() <= 1 or torch.distributed.is_initialized():
+        return False
+    if device.type == "cuda":
+        torch.cuda.set_device(device)
+    torch.distributed.init_process_group(backend="nccl" if device.type == "cuda" else "gloo")
+    return True
 
 
 def effective_batch_size(batch_size: int | None, grad_accum: int) -> int | None:
