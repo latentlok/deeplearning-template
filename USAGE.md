@@ -6,6 +6,8 @@ like this, see [ARCHITECTURE.md](ARCHITECTURE.md).
 - [Running a training run](#running-a-training-run)
 - [Configuration](#configuration)
 - [Checkpoints and resuming](#checkpoints-and-resuming)
+  - [Fine-tuning from a checkpoint](#fine-tuning-from-a-checkpoint-weights-only)
+  - [Freezing layers](#freezing-layers)
 - [Evaluation](#evaluation)
 - [Sweeps and multirun](#sweeps-and-multirun)
 - [Outputs and tracking](#outputs-and-tracking)
@@ -211,20 +213,118 @@ class MyData(DataModule):
 ### Fine-tuning from a checkpoint (weights only)
 
 An exact resume is not what you want for transfer or fine-tuning — there you want the
-weights with a *fresh* optimizer and step counter. That is `weights_only=True`, which
-is currently a Python-level call rather than a CLI flag:
+weights with a *fresh* optimizer and step counter. That is `weights_only=True`, which is
+a Python-level call rather than a CLI flag.
+
+The idiomatic place for it is your model's `__init__`, so it stays configurable and the
+whole thing still runs through `dlt.train` unchanged:
 
 ```python
-import hydra
+# src/dlt/project/mymodel.py
+from pathlib import Path
 from dlt.core.checkpoint import load_checkpoint
-from dlt.core.trainer import Trainer
 
-module = hydra.utils.instantiate(cfg.model)
-load_checkpoint("outputs/pinn/<run>/ckpt/best", module, weights_only=True)
 
-trainer = Trainer(max_steps=5000, monitor="val/loss")
-trainer.fit(module, datamodule)      # fresh optimizer, step starts at 0
+class MyModel(TaskModule):
+    def __init__(self, hidden_dim: int = 64, lr: float = 1e-4,
+                 init_from: str | None = None):
+        super().__init__()
+        self.net = ...
+        self.lr = lr
+        if init_from:                       # weights only: fresh optimizer, step 0
+            load_checkpoint(Path(init_from), self, weights_only=True)
 ```
+
+```yaml
+# configs/model/mymodel.yaml
+_target_: dlt.project.mymodel.MyModel
+hidden_dim: 64
+lr: 1e-4
+init_from: null
+```
+
+```bash
+uv run python -m dlt.train model=mymodel \
+    model.init_from=outputs/pretrain/<run>/ckpt/best \
+    model.lr=1e-5
+```
+
+`load_checkpoint(..., weights_only=True)` reads `model.safetensors` and runs your
+`load_extra` hook, and skips `state.pt` entirely — no optimizer, no scheduler, no
+`TrainState`. Contrast with `resume=`, which restores everything and continues the same
+run. Use `resume=` to continue an interrupted run; use `init_from` to start a new one
+from someone else's weights.
+
+If the architectures differ, load the pieces yourself instead — `load_checkpoint`
+expects the state dict to match:
+
+```python
+from safetensors.torch import load_file
+sd = load_file(Path(init_from) / "model.safetensors")
+self.encoder.load_state_dict({k[len("encoder."):]: v
+                              for k, v in sd.items() if k.startswith("encoder.")})
+```
+
+### Freezing layers
+
+Freezing is plain PyTorch — the template needs no support for it — but there are two
+things to get right, and the second one bites silently.
+
+**1. Freeze the parameters, and keep them out of the optimizer.**
+
+```python
+for p in self.encoder.parameters():
+    p.requires_grad_(False)
+
+def configure_optimizers(self):
+    return OptimSpec.of(torch.optim.AdamW(
+        filter(lambda p: p.requires_grad, self.parameters()), lr=self.lr))
+```
+
+`requires_grad_(False)` alone is enough to stop the weights changing, but filtering the
+optimizer avoids allocating momentum buffers for parameters that will never move.
+
+**2. Override `train()` if the frozen part has BatchNorm or Dropout.**
+
+The Trainer calls `.train()` on your module at the start of every step. So setting
+`self.encoder.eval()` once in `__init__` does **not** stick — it is flipped back
+immediately, and BatchNorm running statistics drift for the rest of training. The
+weights stay frozen, so nothing errors; your frozen encoder just quietly stops producing
+the same outputs it did at step 0.
+
+The fix is the standard PyTorch idiom, and it works because the Trainer's `.train()`
+call goes through your override:
+
+```python
+def train(self, mode: bool = True):
+    super().train(mode)
+    self.encoder.eval()        # frozen part stays in eval regardless
+    return self
+```
+
+Verified behaviour with both pieces in place — frozen weights unchanged, BN statistics
+unchanged, head trains normally, and the encoder is still in eval mode after 15 steps.
+Without the `train()` override, BN statistics drift while the weights stay put.
+
+Everything else already tolerates frozen parameters: gradient clipping skips parameters
+with no gradient, DDP only reduces parameters with `requires_grad=True`, checkpoints save
+and restore frozen weights like any other, and `tests/test_contracts.py` passes as long
+as *something* remains trainable.
+
+**Unfreezing partway through** (a common fine-tuning schedule) belongs in
+`training_step`, where you have the step count:
+
+```python
+def training_step(self, batch, state):
+    if state.global_step == self.unfreeze_at:
+        for p in self.encoder.parameters():
+            p.requires_grad_(True)
+    ...
+```
+
+Note that parameters filtered out of the optimizer at construction stay out of it. To
+unfreeze into a live optimizer you must also `add_param_group`, or build the optimizer
+over all parameters up front and rely on `requires_grad` alone to gate the updates.
 
 ### Checkpoint format
 
