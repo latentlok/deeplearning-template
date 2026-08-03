@@ -66,6 +66,4 @@ data and loss — delete the ones you don't need:
 
 ## Licence
 
-Not yet chosen. A public repo with no `LICENSE` file is "all rights reserved" by
-default, which is unhelpful for something meant to be forked — MIT or Apache-2.0 is the
-usual pick for a template.
+[MIT](LICENSE).

@@ -273,6 +273,11 @@ class Trainer:
             acc.update({f"train/{k}": v for k, v in out.items() if k != "batch_size"}, weight)
             self.state.samples_seen += int(weight)
 
+        # Gradients are alive HERE and gone immediately after, because clip_and_step
+        # ends with zero_grad(set_to_none=True). Anything that inspects gradients must
+        # run on this hook -- on_train_batch_end is too late and sees None.
+        self._emit("on_before_optimizer_step")
+
         if not manual:
             for opt in self.optimizers:
                 self.clip_and_step(opt)

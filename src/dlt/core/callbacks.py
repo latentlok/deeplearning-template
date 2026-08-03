@@ -37,6 +37,12 @@ class Callback:
     def on_epoch_end(
         self, trainer: Any, module: TaskModule, state: TrainState, **kw: Any
     ) -> None: ...
+    def on_before_optimizer_step(
+        self, trainer: Any, module: TaskModule, state: TrainState, **kw: Any
+    ) -> None:
+        """Fires while gradients still exist. Use this, not on_train_batch_end, for
+        anything that reads .grad -- clip_and_step zeroes them straight after."""
+
     def on_train_batch_end(
         self, trainer: Any, module: TaskModule, state: TrainState, **kw: Any
     ) -> None: ...
@@ -146,12 +152,19 @@ class GradStats(Callback):
     Expensive, hence `every`. Complex parameters are split into abs/real/imag by the
     TensorBoard logger rather than passed through -- add_histogram does not reject
     complex, it silently discards the imaginary part.
+
+    Runs on on_before_optimizer_step, not on_train_batch_end: clip_and_step ends with
+    zero_grad(set_to_none=True), so by the end of the batch every .grad is None and
+    this would silently report a global norm of 0.0 forever.
+
+    In manual_optimization the module does its own stepping, so gradients may already
+    be cleared by the time this fires -- read them in your own training_step instead.
     """
 
     def __init__(self, every: int = 500, histograms: bool = True) -> None:
         self.every, self.histograms = every, histograms
 
-    def on_train_batch_end(
+    def on_before_optimizer_step(
         self, trainer: Any, module: TaskModule, state: TrainState, **kw: Any
     ) -> None:
         if not self.every or state.global_step % self.every:

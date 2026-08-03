@@ -213,6 +213,105 @@ def test_resume_restores_step_and_optimizer_state(tmp_path) -> None:
     )
 
 
+def test_grad_stats_sees_live_gradients(tmp_path) -> None:
+    """Regression: GradStats ran on on_train_batch_end, which fires after
+    clip_and_step's zero_grad(set_to_none=True). Every .grad was None, so it logged a
+    global norm of 0.0 and zero histograms -- a diagnostic that silently reports no
+    gradient problems forever.
+    """
+    from dlt.core.callbacks import GradStats
+
+    class Recorder:
+        def __init__(self):
+            self.scalars, self.histograms = [], []
+
+        def log_scalars(self, metrics, step):
+            self.scalars.append(metrics)
+
+        def log_histogram(self, tag, values, step):
+            self.histograms.append(tag)
+
+    rec = Recorder()
+    cfg = load(["experiment=e0"])
+    trainer = Trainer(
+        max_steps=4,
+        val_every=0,
+        log_every=0,
+        device="cpu",
+        callbacks=[GradStats(every=1)],
+        logger=rec,
+    )
+    trainer.fit(hydra.utils.instantiate(cfg.model), hydra.utils.instantiate(cfg.data))
+
+    norms = [d["grad/global_norm"] for d in rec.scalars if "grad/global_norm" in d]
+    assert norms, "GradStats logged no global norm at all"
+    assert all(n > 0 for n in norms), f"gradients were already cleared: {norms}"
+    assert rec.histograms, "GradStats logged no histograms"
+
+
+def test_early_stopping_fires_when_metric_stops_improving() -> None:
+    from dlt.core.callbacks import EarlyStopping
+
+    trainer, _ = _fit(
+        ["experiment=e0"],
+        max_steps=100,
+        val_every=5,
+        log_every=0,
+        monitor="val/loss",
+        monitor_mode="max",  # loss decreases, so "max" never improves
+        callbacks=[EarlyStopping(patience=2)],
+    )
+    assert trainer.state.should_stop
+    assert trainer.state.global_step < 100, "early stopping did not cut the run short"
+
+
+def test_save_extra_load_extra_roundtrip(tmp_path) -> None:
+    """Non-tensor state (tokenizers, vocabs) -- safetensors holds tensors only."""
+    import json
+
+    from dlt.core.checkpoint import load_checkpoint, save_checkpoint
+
+    cfg = load(["experiment=e0"])
+    module = hydra.utils.instantiate(cfg.model)
+    module.vocab = {"a": 1, "b": 2}
+    module.save_extra = lambda d: (d / "vocab.json").write_text(json.dumps(module.vocab))
+    save_checkpoint(tmp_path / "ck", module)
+    assert (tmp_path / "ck" / "extra" / "vocab.json").exists()
+
+    fresh = hydra.utils.instantiate(cfg.model)
+    seen = {}
+    fresh.load_extra = lambda d: seen.update(json.loads((d / "vocab.json").read_text()))
+    load_checkpoint(tmp_path / "ck", fresh)
+    assert seen == {"a": 1, "b": 2}
+
+
+def test_datamodule_state_is_round_tripped(tmp_path) -> None:
+    """If a DataModule defines state_dict/load_state_dict, resume restores data position."""
+    from dlt.core.checkpoint import load_checkpoint, save_checkpoint
+
+    cfg = load(["experiment=e0"])
+    base = hydra.utils.instantiate(cfg.data)
+
+    class Stateful(type(base)):
+        restored = None
+
+        def state_dict(self):
+            return {"consumed": 4242}
+
+        def load_state_dict(self, sd):
+            self.restored = sd.get("consumed")
+
+    dm = Stateful()
+    dm.setup("fit")
+    module = hydra.utils.instantiate(cfg.model)
+    save_checkpoint(tmp_path / "ck", module, datamodule=dm)
+
+    fresh = Stateful()
+    fresh.setup("fit")
+    load_checkpoint(tmp_path / "ck", hydra.utils.instantiate(cfg.model), datamodule=fresh)
+    assert fresh.restored == 4242
+
+
 def test_trainstate_roundtrips() -> None:
     s = TrainState(global_step=7, epoch=2, samples_seen=99, metrics={"a": 1.0})
     t = TrainState()

@@ -20,6 +20,8 @@ dist/
 # Tooling
 .pytest_cache/
 .ruff_cache/
+# graphify: the graph itself is committed, its cache is not
+graphify-out/cache/
 .ipynb_checkpoints/
 .DS_Store
 
