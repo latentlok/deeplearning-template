@@ -3,8 +3,10 @@
 Everything here is verified against the shipped examples. For *why* the design looks
 like this, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
+- [Where things live](#where-things-live)
 - [Running a training run](#running-a-training-run)
 - [Configuration](#configuration)
+- [Your data](#your-data)
 - [Checkpoints and resuming](#checkpoints-and-resuming)
   - [Fine-tuning from a checkpoint](#fine-tuning-from-a-checkpoint-weights-only)
   - [Freezing layers](#freezing-layers)
@@ -22,19 +24,41 @@ like this, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 
+## Where things live
+
+```
+train.py  eval.py     entrypoints. `python train.py ...`
+models/               one file per model. A TaskModule: architecture, loss, three methods.
+dataset/              loader.py (yours) + examples.py (the shipped demos)
+utils/                offline tools: stats.py, runs.py, aggregate_seeds.py
+configs/              one directory per config group
+engine/               the loop, checkpointing, tracking. Rarely opened.
+outputs/              one directory per run
+```
+
+The split between `models/` and `dataset/` is the usual shape of a project: **one
+dataset, many models tried against it.** A model file holds nothing data-shaped; a
+dataset file holds nothing model-shaped.
+
+The split between `dataset/` and `utils/` is by *when* code runs. `dataset/` is the
+per-batch hot path. `utils/` is offline analysis that runs once and writes a file.
+That line is what keeps a full-dataset scan out of every training start.
+
+---
+
 ## Running a training run
 
 ```bash
-uv run python -m dlt.train                      # defaults (mlp + synthetic data)
-uv run python -m dlt.train experiment=e0        # a named experiment
-uv run python -m dlt.train experiment=forecast
-uv run python -m dlt.train experiment=pinn
+uv run python train.py                      # defaults (mlp + synthetic data)
+uv run python train.py experiment=e0        # a named experiment
+uv run python train.py experiment=forecast
+uv run python train.py experiment=pinn
 ```
 
 Override anything from the command line using dotted paths:
 
 ```bash
-uv run python -m dlt.train experiment=forecast \
+uv run python train.py experiment=forecast \
     model.hidden_dim=128 \
     trainer.max_steps=5000 \
     data.batch_size=64 \
@@ -67,7 +91,7 @@ configs/
 Swap a group with `group=name`:
 
 ```bash
-uv run python -m dlt.train model=pinn data=collocation
+uv run python train.py model=pinn data=collocation
 ```
 
 ### Experiment configs
@@ -95,7 +119,7 @@ trainer:
 ```
 
 ```bash
-uv run python -m dlt.train experiment=my_run
+uv run python train.py experiment=my_run
 ```
 
 ### Trainer options
@@ -119,36 +143,145 @@ Everything is in **steps**, not epochs. If you think in epochs, set
 
 ---
 
+## Your data
+
+### It lives outside the repo
+
+Point `DL_DATA` at it once:
+
+```bash
+export DL_DATA=/mnt/data/myproject
+```
+
+Everything reads `${paths.data_root}`, which reads that variable (falling back to
+`./data`). Override per run with `paths.data_root=/somewhere/else`. The expected
+layout:
+
+```
+$DL_DATA/
+├── train/  x.npy  y.npy      # or x.zarr / y.zarr, or x.pt
+├── val/    x.npy  y.npy
+└── stats.json                # written by utils/stats.py
+```
+
+```bash
+uv run python train.py data=folder model=mymodel
+```
+
+### The dataloader is `dataset/loader.py`
+
+`FolderData` opens those arrays **lazily** — `.npy` through a numpy memmap, `.zarr`
+through zarr's own chunked indexing — so a 40 GB training set costs no RAM at startup.
+Three functions are the ones you actually rewrite:
+
+| | |
+|---|---|
+| `_open(path)` | how one shard is read. Suffix dispatch; add your format here. |
+| `ArrayPairs.__getitem__` | what one sample is |
+| `_collate(samples)` | what one batch is |
+
+Samples are returned in their stored dtype; the Trainer casts floating-point tensors
+when it moves the batch to the device, so the same file serves an fp32 and an fp64 run.
+
+Anything that *changes* the data — augmentation, masking, mixup — goes in
+`__getitem__`, `_collate`, or `training_step`. Never in a callback.
+
+For a dataset that doesn't fit this shape, write a new `DataModule` in `dataset/` and
+point a config at it; `FolderData` has no privileged status.
+
+### Statistics: computed once, offline
+
+Bounds and moments are computed by a separate command and written next to the data:
+
+```bash
+uv run python utils/stats.py                      # uses $DL_DATA
+uv run python utils/stats.py --root /mnt/data/proj --axis 1
+```
+
+That writes `stats.json` (`lower`, `upper`, `mean`, `std`, per channel). The chain
+from there:
+
+```
+train split → stats.json → FolderData.stats → model buffers → checkpoint → inference
+```
+
+The model picks them up in `on_data_ready`, which the Trainer calls once after
+`setup("fit")`:
+
+```python
+def __init__(self, in_dim: int = 8, ...):
+    ...
+    # BUFFERS, not attributes: buffers are in state_dict(), so they are written into
+    # every checkpoint and restored with the weights.
+    self.register_buffer("lower", torch.zeros(in_dim))
+    self.register_buffer("upper", torch.ones(in_dim))
+
+def on_data_ready(self, datamodule):
+    if stats := getattr(datamodule, "stats", None):
+        self.lower.copy_(torch.as_tensor(stats["lower"], dtype=self.lower.dtype))
+        self.upper.copy_(torch.as_tensor(stats["upper"], dtype=self.upper.dtype))
+```
+
+Three rules, each of which is a silent bug when broken:
+
+1. **Fit statistics on the train split only.** Anything else leaks val into train.
+2. **Never compute them in `setup()`.** It costs minutes per run, and the val split
+   would normalise against different numbers than the train split did.
+3. **Keep them in buffers.** Then inference cannot use different bounds than training,
+   because they arrive inside the same file as the weights.
+
+`eval.py` deliberately does *not* call `on_data_ready` — an evaluation takes its bounds
+from the checkpoint. On resume the hook runs *before* the checkpoint loads, so the
+checkpointed values win.
+
+---
+
 ## Checkpoints and resuming
 
 ### What gets written
 
-Checkpointing is a callback (`configs/callbacks/default.yaml`). By default it writes
-`last/` every `save_every` steps and at the end of the run, and `best/` whenever the
-monitored metric improves:
+Checkpointing is a callback (`configs/callbacks/default.yaml`), and it writes four
+different things because they answer four different questions:
 
 ```
 outputs/e0/2026-08-03_14-43-01_b11a8d/ckpt/
-├── best/
-│   ├── model.safetensors    weights (fast, zero-copy, no pickle execution risk)
-│   ├── state.pt             optimizers, schedulers, TrainState, RNG, dataloader state
-│   └── extra/               non-tensor state via your save_extra hook
-└── last/
-    ├── model.safetensors
-    ├── state.pt
-    └── extra/
+├── last/                  rolling resume point, overwritten every `last_every` steps
+│   ├── model.safetensors  weights (fast, zero-copy, no pickle execution risk)
+│   ├── state.pt           optimizers, schedulers, TrainState, RNG, dataloader state
+│   └── extra/             non-tensor state via your save_extra hook
+├── step_00001000/         permanent snapshot every `every_steps`, pruned to `keep_last`
+├── best/                  full state at the best monitored metric — RESUME from here
+└── best_weights/          weights + extra only, no optimizer — SHIP this
 ```
 
 ```yaml
 callbacks:
   checkpoint:
     dirpath: ${hydra:runtime.output_dir}/ckpt
-    save_every: 500        # steps; 0 disables periodic saves
-    save_last: true
-    save_best: true
-    monitor: null          # null -> uses trainer.monitor
     fmt: safetensors       # safetensors | torch | a _target_ WeightFormat
+
+    save_last: true
+    last_every: 500        # steps; 0 -> written only at the end of the run
+
+    every_steps: 0         # permanent step-tagged snapshots; 0 disables them
+    keep_last: 3           # how many to retain; 0 keeps every one
+
+    save_best: true        # ckpt/best/
+    save_best_weights: true # ckpt/best_weights/
+    monitor: null          # null -> uses trainer.monitor
 ```
+
+Turn snapshots on when you care about *when* a run went wrong — `last/` has already
+been overwritten by the time you notice, and `best/` only knows about its own metric:
+
+```bash
+uv run python train.py experiment=mine \
+    callbacks.checkpoint.every_steps=2000 callbacks.checkpoint.keep_last=5
+```
+
+`best_weights/` is roughly a third the size of `best/` (no Adam moments, no RNG, no
+step counter) and cannot be resumed from — which is the point. Load it for inference,
+pass `best/` or `last/` to `resume`.
 
 ### Exact resume
 
@@ -156,15 +289,15 @@ Point `resume` at a **checkpoint directory** (not a file). No `+` prefix is need
 `resume` is declared in `train.yaml`:
 
 ```bash
-uv run python -m dlt.train experiment=e0 \
+uv run python train.py experiment=e0 \
     resume=outputs/e0/2026-08-03_14-43-01_b11a8d/ckpt/last
 ```
 
 You'll see confirmation in the log:
 
 ```
-[dlt.core.trainer][INFO] - resuming from outputs/e0/.../ckpt/last
-[dlt.core.trainer][INFO] - resumed at step 500 (epoch 499)
+[engine.trainer][INFO] - resuming from outputs/e0/.../ckpt/last
+[engine.trainer][INFO] - resumed at step 500 (epoch 499)
 ```
 
 Training then continues **from that step** toward `max_steps`. To train further, raise
@@ -172,7 +305,7 @@ Training then continues **from that step** toward `max_steps`. To train further,
 correct but looks like nothing happened:
 
 ```bash
-uv run python -m dlt.train experiment=e0 \
+uv run python train.py experiment=e0 \
     resume=outputs/e0/<run>/ckpt/last trainer.max_steps=5000
 ```
 
@@ -217,12 +350,12 @@ weights with a *fresh* optimizer and step counter. That is `weights_only=True`, 
 a Python-level call rather than a CLI flag.
 
 The idiomatic place for it is your model's `__init__`, so it stays configurable and the
-whole thing still runs through `dlt.train` unchanged:
+whole thing still runs through `train.py` unchanged:
 
 ```python
-# src/dlt/project/mymodel.py
+# models/mymodel.py
 from pathlib import Path
-from dlt.core.checkpoint import load_checkpoint
+from engine.checkpoint import load_checkpoint
 
 
 class MyModel(TaskModule):
@@ -237,14 +370,14 @@ class MyModel(TaskModule):
 
 ```yaml
 # configs/model/mymodel.yaml
-_target_: dlt.project.mymodel.MyModel
+_target_: models.mymodel.MyModel
 hidden_dim: 64
 lr: 1e-4
 init_from: null
 ```
 
 ```bash
-uv run python -m dlt.train model=mymodel \
+uv run python train.py model=mymodel \
     model.init_from=outputs/pretrain/<run>/ckpt/best \
     model.lr=1e-5
 ```
@@ -334,12 +467,12 @@ it supports a fixed dtype set — measured on safetensors 0.8.0 / torch 2.13.0:
 it refuses, you get a message naming the fix rather than a silent conversion:
 
 ```bash
-uv run python -m dlt.train experiment=mine callbacks.checkpoint.fmt=torch
+uv run python train.py experiment=mine callbacks.checkpoint.fmt=torch
 ```
 
 `torch` format handles every dtype. If you need something specific — packing complex as
 real, quantised weights, sharded writes — subclass `WeightFormat` and point the config
-at it; nothing in `core/` changes:
+at it; nothing in `engine/` changes:
 
 ```yaml
 callbacks:
@@ -375,18 +508,31 @@ ride along inside `model.safetensors` automatically and need no hooks at all.
 optimizer or step counter) and runs one pass:
 
 ```bash
-uv run python -m dlt.eval ckpt=outputs/e0/<run>/ckpt/best
-uv run python -m dlt.eval ckpt=outputs/e0/<run>/ckpt/last model=mlp data=synthetic
+uv run python eval.py ckpt=outputs/e0/<run>/ckpt/best_weights
+uv run python eval.py ckpt=outputs/e0/<run>/ckpt/last model=mlp data=synthetic
 ```
 
 Use `step=rollout_step` to evaluate free-running instead of teacher-forced:
 
 ```bash
-uv run python -m dlt.eval ckpt=outputs/forecast/<run>/ckpt/best step=rollout_step
+uv run python eval.py ckpt=outputs/forecast/<run>/ckpt/best step=rollout_step
 ```
 
-The model and data configs must match what produced the checkpoint. Eval writes its own
-run directory under `outputs/eval/` with its own `tb/`, `metrics.jsonl` and log.
+The model and data configs must match what produced the checkpoint — pass the same
+`experiment=<name>` you trained with.
+
+Output lands **inside the run that produced the checkpoint**:
+
+```
+outputs/e0/2026-08-03_14-43-01_b11a8d/
+└── eval/2026-08-08_00-28-01/    eval.log, metrics.jsonl, tb/, .hydra/
+```
+
+`configs/eval.yaml` derives that path from `ckpt` with the `ckpt_run_dir` resolver, so
+an evaluation can never end up filed away from the weights that produced it.
+
+Note that `on_data_ready` is **not** called during eval: normalisation statistics come
+out of the checkpoint, not out of whatever data happens to be mounted today.
 
 ---
 
@@ -395,8 +541,8 @@ run directory under `outputs/eval/` with its own `tb/`, `metrics.jsonl` and log.
 Hydra's `-m` flag runs the cross-product of comma-separated overrides:
 
 ```bash
-uv run python -m dlt.train -m experiment=pinn seed=1,2,3,4,5
-uv run python -m dlt.train -m model.hidden_dim=32,64,128 model.lr=1e-3,1e-4
+uv run python train.py -m experiment=pinn seed=1,2,3,4,5
+uv run python train.py -m model.hidden_dim=32,64,128 model.lr=1e-3,1e-4
 ```
 
 Output lands in `outputs/<exp>/<timestamp>_sweep/{0,1,2,...}/`.
@@ -404,7 +550,7 @@ Output lands in `outputs/<exp>/<timestamp>_sweep/{0,1,2,...}/`.
 Then aggregate across seeds — a single-seed number is not a result:
 
 ```bash
-uv run python scripts/aggregate_seeds.py outputs/pinn/2026-08-03_14-22-05_sweep
+uv run python utils/aggregate_seeds.py outputs/pinn/2026-08-03_14-22-05_sweep
 ```
 
 ```
@@ -415,7 +561,7 @@ val/mae               5         2.501      0.051047
 ```
 
 **No HPO library is shipped.** `train.py` returns the monitored metric, which is the
-entire coupling surface a sweeper needs — adding Optuna later touches nothing in `src/`.
+entire coupling surface a sweeper needs — adding Optuna later touches nothing in `engine/`.
 
 Note that Hydra's basic launcher runs sweep jobs **sequentially in one process**. dtype
 and seed are therefore set unconditionally on every job; if you add global state of your
@@ -454,7 +600,7 @@ TensorBoard isn't always viewable; `train.log` and `metrics.jsonl` are what keep
 headless run legible:
 
 ```bash
-./scripts/tb.sh                       # tensorboard --logdir outputs
+make tb                       # tensorboard --logdir outputs
 jq -s '.[-1]' outputs/e0/<run>/metrics.jsonl
 tail -f outputs/e0/<run>/train.log
 ```
@@ -470,11 +616,11 @@ sortable by hyperparameter there. Each run also embeds its own resolved config u
 There is no shared index file to corrupt — the table is *derived* by scanning:
 
 ```bash
-uv run python scripts/runs.py                            # newest first
-uv run python scripts/runs.py --exp pinn --sort val/loss
-uv run python scripts/runs.py --where model.lr=0.005
-uv run python scripts/runs.py --status failed            # crashed runs stay visible
-uv run python scripts/runs.py --json
+uv run python utils/runs.py                            # newest first
+uv run python utils/runs.py --exp pinn --sort val/loss
+uv run python utils/runs.py --where model.lr=0.005
+uv run python utils/runs.py --status failed            # crashed runs stay visible
+uv run python utils/runs.py --json
 ```
 
 ```
@@ -496,14 +642,15 @@ with `model.lr=5e-3`.
 
 ## Adding your own model
 
-Two files. Nothing in `core/` changes.
+Two files. Nothing in `engine/` changes, and nothing in `dataset/` either — a new model
+reuses the datamodule you already have.
 
-**1.** `src/dlt/project/mymodel.py` — implement three methods:
+**1.** `models/mymodel.py` — implement three methods:
 
 ```python
 import torch
 from torch import Tensor, nn
-from dlt.core.base import DataModule, OptimSpec, TaskModule, TrainState
+from engine.base import DataModule, OptimSpec, TaskModule, TrainState
 
 
 class MyModel(TaskModule):
@@ -530,13 +677,13 @@ class MyModel(TaskModule):
 **2.** `configs/model/mymodel.yaml`:
 
 ```yaml
-_target_: dlt.project.mymodel.MyModel
+_target_: models.mymodel.MyModel
 hidden_dim: 64
 lr: 1e-3
 ```
 
 ```bash
-uv run python -m dlt.train model=mymodel data=synthetic
+uv run python train.py model=mymodel data=synthetic
 ```
 
 `tests/test_contracts.py` picks the new config up automatically and checks that it
@@ -594,8 +741,8 @@ These are **orthogonal** axes, not one setting. `dtype` is what the model lives 
 `amp` is an autocast wrapper on top of fp32.
 
 ```bash
-uv run python -m dlt.train experiment=mine dtype=float32 amp=bf16
-uv run python -m dlt.train experiment=pinn  dtype=float64 amp=none
+uv run python train.py experiment=mine dtype=float32 amp=bf16
+uv run python train.py experiment=pinn  dtype=float64 amp=none
 ```
 
 | | |
@@ -630,7 +777,7 @@ def rollout_step(self, batch, state) -> dict[str, Tensor] | None:
 ```
 
 ```bash
-uv run python -m dlt.train experiment=forecast trainer.rollout_every=1000
+uv run python train.py experiment=forecast trainer.rollout_every=1000
 ```
 
 Metrics arrive namespaced `rollout/...`, or `rollout/h24/...` with multiple loaders.
@@ -640,7 +787,7 @@ generalise — and put the output in the run's `artifacts/` so it can never drif
 weights that produced it. The helper works outside Hydra, i.e. from a notebook:
 
 ```python
-from dlt.core.tracking import artifacts_dir
+from engine.tracking import artifacts_dir
 
 d = artifacts_dir("outputs/pinn/2026-08-03_14-22-05_a3f9c2", "rollout_h1000")
 torch.save(trajectory, d / "traj.pt")
@@ -689,8 +836,8 @@ trainer:
 ## Debugging
 
 ```bash
-uv run python -m dlt.train experiment=mine debug=fast_dev   # 2 steps, no checkpoints
-uv run python -m dlt.train experiment=mine debug=overfit    # overfit a few samples
+uv run python train.py experiment=mine debug=fast_dev   # 2 steps, no checkpoints
+uv run python train.py experiment=mine debug=overfit    # overfit a few samples
 ```
 
 **Run `debug=overfit` first when something is wrong.** It trains on a handful of
@@ -702,7 +849,7 @@ expensive. Uncomment in `configs/callbacks/default.yaml`:
 
 ```yaml
 grad_stats:
-  _target_: dlt.core.callbacks.GradStats
+  _target_: engine.callbacks.GradStats
   every: 500
 ```
 
@@ -712,7 +859,7 @@ on a non-finite loss), `Timer`, `LRMonitor`.
 For a full Hydra traceback rather than its abbreviated one:
 
 ```bash
-HYDRA_FULL_ERROR=1 uv run python -m dlt.train experiment=mine
+HYDRA_FULL_ERROR=1 uv run python train.py experiment=mine
 ```
 
 ---
@@ -724,7 +871,7 @@ gated to rank zero, and DDP wrapping plus `no_sync()` on non-final accumulation
 micro-steps are handled for you:
 
 ```bash
-uv run torchrun --nproc_per_node=4 -m dlt.train experiment=mine
+uv run torchrun --nproc_per_node=4 train.py experiment=mine
 ```
 
 Single-device is the same code with `world_size == 1`. Add a `DistributedSampler` in

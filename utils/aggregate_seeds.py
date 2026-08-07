@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Mean +- std across a seed sweep, because a single-seed number is not a result.
 
-python -m dlt.train -m experiment=pinn seed=1,2,3,4,5
-python scripts/aggregate_seeds.py outputs/pinn/2026-08-03_14-22-05_sweep
+python train.py -m experiment=pinn seed=1,2,3,4,5
+python utils/aggregate_seeds.py outputs/pinn/2026-08-03_14-22-05_sweep
 """
 
 from __future__ import annotations

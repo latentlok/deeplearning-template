@@ -1,4 +1,4 @@
-_target_: dlt.project.pinn.PINN
+_target_: models.pinn.PINN
 hidden_dim: 32
 depth: 3
 lr: 1e-3
@@ -7,7 +7,7 @@ lr: 1e-3
 # averaged over hundreds of collocation points and the boundary over one, so untuned
 # the net learns u ~ 0, which satisfies du/dx = -u perfectly and ignores u(0)=1.
 weighting:
-  _target_: dlt.project.pinn.GradNormWeights
+  _target_: models.pinn.GradNormWeights
   names: [residual, boundary]
   reference: residual
   every: 100

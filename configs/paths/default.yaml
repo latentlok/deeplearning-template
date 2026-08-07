@@ -1,10 +1,20 @@
-# root_dir is the launch directory. All *data* paths resolve from it rather than from
-# CWD, which is what stops the classic "my relative path broke inside the run dir".
-root_dir: ${hydra:runtime.cwd}
-data_dir: ${paths.root_dir}/data
+# Where things live. The data is NOT in the repo.
+#
+# Both paths are plain strings and must NOT chain to ${hydra:...}:
+#   * output_root feeds hydra.sweep.dir, which resolves BEFORE HydraConfig exists --
+#     a hydra-resolver there fails on --multirun ("HydraConfig was not set") while
+#     working fine for single runs.
+#   * data_root is read by the test suite through hydra.compose(), where HydraConfig
+#     is likewise unset.
+# chdir stays false, so CWD is the launch directory and a relative path is unambiguous.
 
-# output_root is deliberately RELATIVE and must not chain to ${hydra:...}.
-# hydra.sweep.dir is resolved before HydraConfig exists, so a hydra-resolver here
-# fails on --multirun ("HydraConfig was not set") while working fine for single runs.
-# chdir=false keeps CWD at the launch directory, so relative is unambiguous.
+# The dataset root: an external disk, an NFS mount, a synced S3 prefix -- anywhere but
+# here. Set it once in your shell and every config follows:
+#
+#     export DL_DATA=/mnt/data/myproject
+#
+# Falls back to ./data so a fresh clone still runs. Override per run with
+# paths.data_root=/somewhere/else.
+data_root: ${oc.env:DL_DATA,data}
+
 output_root: outputs

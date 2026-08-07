@@ -8,10 +8,10 @@ import hydra
 import pytest
 import torch
 
-from dlt.core.base import TrainState
-from dlt.core.tracking import JSONLLogger, MultiLogger, RunMeta, artifacts_dir
-from dlt.core.trainer import Trainer
-from dlt.core.utils import MetricAccumulator, ScheduledValue
+from engine.base import TrainState
+from engine.tracking import JSONLLogger, MultiLogger, RunMeta, artifacts_dir
+from engine.trainer import Trainer
+from engine.utils import MetricAccumulator, ScheduledValue
 from tests.conftest import load
 
 
@@ -187,12 +187,85 @@ def test_scaler_stats_are_buffers_and_ride_the_checkpoint() -> None:
     assert module.state_dict()["mean"].item() == pytest.approx(3.0)
 
 
+def test_on_data_ready_hands_the_datamodule_scaler_to_the_model() -> None:
+    """Regression: SeriesData fitted a scaler that nothing ever read, so the model
+    normalised with mean=0/std=1 and the fitted statistics were dead code."""
+    cfg = load(["experiment=forecast"])
+    module = hydra.utils.instantiate(cfg.model)
+    dm = hydra.utils.instantiate(cfg.data)
+    assert (module.mean.item(), module.std.item()) == (0.0, 1.0), "precondition"
+
+    Trainer(max_steps=1, val_every=0, log_every=0, device="cpu").fit(module, dm)
+
+    assert module.mean.item() == pytest.approx(dm.scaler[0], rel=1e-5)
+    assert module.std.item() == pytest.approx(dm.scaler[1], rel=1e-5)
+    assert module.std.item() != 1.0, "the scaler never reached the model"
+
+
+def test_checkpointed_stats_beat_freshly_computed_ones_on_resume(tmp_path) -> None:
+    """Ordering claim in fit(): on_data_ready runs BEFORE the checkpoint loads, so a
+    resumed run keeps the statistics it trained with rather than today's data's."""
+    from engine.checkpoint import save_checkpoint
+
+    cfg = load(["experiment=forecast"])
+    saved = hydra.utils.instantiate(cfg.model)
+    saved.set_scaler(3.0, 2.0)
+    save_checkpoint(tmp_path / "ck", saved, state=TrainState())
+
+    fresh = hydra.utils.instantiate(cfg.model)
+    dm = hydra.utils.instantiate(cfg.data)
+    Trainer(max_steps=1, val_every=0, log_every=0, device="cpu").fit(
+        fresh, dm, resume=tmp_path / "ck"
+    )
+
+    assert fresh.mean.item() == pytest.approx(3.0), "the datamodule overwrote the checkpoint"
+
+
+def test_step_snapshots_are_step_tagged_and_pruned(tmp_path) -> None:
+    """every_steps keeps permanent snapshots; keep_last bounds the disk they use."""
+    from engine.callbacks import Checkpoint
+
+    ckpt = tmp_path / "ckpt"
+    cb = Checkpoint(
+        dirpath=ckpt,
+        every_steps=2,
+        keep_last=2,
+        last_every=0,
+        save_best=False,
+        save_best_weights=False,
+    )
+    _fit(["experiment=e0"], max_steps=10, val_every=0, log_every=0, callbacks=[cb])
+
+    # steps 2,4,6,8,10 were written; only the newest two survive.
+    assert sorted(p.name for p in ckpt.glob("step_*")) == ["step_00000008", "step_00000010"]
+    # Zero padding is load-bearing: sorted() must agree with numeric order past step 10.
+    assert sorted(["step_00000009", "step_00000010"]) == ["step_00000009", "step_00000010"]
+
+
+def test_best_weights_carries_no_optimizer_state_and_still_loads(tmp_path) -> None:
+    """The inference artifact. Optimizer moments are ~2x the weights and are exactly
+    what you do not want to ship."""
+    from engine.callbacks import Checkpoint
+    from engine.checkpoint import load_checkpoint
+
+    ckpt = tmp_path / "ckpt"
+    cb = Checkpoint(dirpath=ckpt, every_steps=0, last_every=0, save_last=False)
+    _fit(["experiment=e0"], max_steps=4, val_every=2, log_every=0, callbacks=[cb])
+
+    assert (ckpt / "best" / "state.pt").exists(), "best/ must stay resumable"
+    assert (ckpt / "best_weights" / "model.safetensors").exists()
+    assert not (ckpt / "best_weights" / "state.pt").exists()
+
+    fresh = hydra.utils.instantiate(load(["experiment=e0"]).model)
+    load_checkpoint(ckpt / "best_weights", fresh)  # no state.pt -> must not raise
+
+
 def test_resume_restores_step_and_optimizer_state(tmp_path) -> None:
     """Regression: resume used to load into optimizers that fit() then replaced, so a
     resumed run silently continued with a cold optimizer -- no error, just different
     training. Adam momentum must survive, not just the weights and the step counter.
     """
-    from dlt.core.checkpoint import save_checkpoint
+    from engine.checkpoint import save_checkpoint
 
     trainer, _ = _fit(["experiment=e0"], max_steps=10, val_every=0, log_every=0)
     save_checkpoint(
@@ -219,7 +292,7 @@ def test_grad_stats_sees_live_gradients(tmp_path) -> None:
     global norm of 0.0 and zero histograms -- a diagnostic that silently reports no
     gradient problems forever.
     """
-    from dlt.core.callbacks import GradStats
+    from engine.callbacks import GradStats
 
     class Recorder:
         def __init__(self):
@@ -250,7 +323,7 @@ def test_grad_stats_sees_live_gradients(tmp_path) -> None:
 
 
 def test_early_stopping_fires_when_metric_stops_improving() -> None:
-    from dlt.core.callbacks import EarlyStopping
+    from engine.callbacks import EarlyStopping
 
     trainer, _ = _fit(
         ["experiment=e0"],
@@ -269,7 +342,7 @@ def test_save_extra_load_extra_roundtrip(tmp_path) -> None:
     """Non-tensor state (tokenizers, vocabs) -- safetensors holds tensors only."""
     import json
 
-    from dlt.core.checkpoint import load_checkpoint, save_checkpoint
+    from engine.checkpoint import load_checkpoint, save_checkpoint
 
     cfg = load(["experiment=e0"])
     module = hydra.utils.instantiate(cfg.model)
@@ -287,7 +360,7 @@ def test_save_extra_load_extra_roundtrip(tmp_path) -> None:
 
 def test_datamodule_state_is_round_tripped(tmp_path) -> None:
     """If a DataModule defines state_dict/load_state_dict, resume restores data position."""
-    from dlt.core.checkpoint import load_checkpoint, save_checkpoint
+    from engine.checkpoint import load_checkpoint, save_checkpoint
 
     cfg = load(["experiment=e0"])
     base = hydra.utils.instantiate(cfg.data)

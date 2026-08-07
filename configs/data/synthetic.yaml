@@ -1,4 +1,4 @@
-_target_: dlt.project.mlp.SyntheticData
+_target_: dataset.examples.SyntheticData
 in_dim: 8
 out_dim: 1
 n_train: 512

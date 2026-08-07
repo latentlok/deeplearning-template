@@ -1,4 +1,4 @@
-_target_: dlt.project.forecast.SeriesData
+_target_: dataset.examples.SeriesData
 length: 2000
 window: 16 # must match model.window
 horizons: [8, 24] # val_dataloader returns a dict -> val/h8/mae, val/h24/mae

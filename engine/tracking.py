@@ -26,7 +26,7 @@ from typing import Any
 
 import torch
 
-from dlt.core.utils import git_info, is_rank_zero
+from engine.utils import git_info, is_rank_zero
 
 log = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ def artifacts_dir(run_dir: str | Path, name: str | None = None) -> Path:
     Deliberately usable *outside* Hydra, because manual inference happens in a
     notebook, not in a @hydra.main job:
 
-        from dlt.core.tracking import artifacts_dir
+        from engine.tracking import artifacts_dir
         d = artifacts_dir("outputs/pinn/2026-08-03_14-22-05_a3f9c2", "rollout_h1000")
         torch.save(traj, d / "traj.pt")
 

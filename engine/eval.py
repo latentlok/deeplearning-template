@@ -1,8 +1,18 @@
 """Evaluation entrypoint: load a checkpoint, run one pass, log the metrics.
 
+    python eval.py ckpt=outputs/pinn/2026-08-03_14-22-05_a3f9c2/ckpt/best_weights
+
+Output lands in <that run>/eval/<timestamp>/, NOT in a global outputs/eval/ tree --
+the metrics stay next to the config and the weights that produced them. The run
+directory is derived from `ckpt` by the ckpt_run_dir resolver in configs/eval.yaml.
+
 Deliberately thin. Long-horizon rollout testing is too model-specific to generalise,
 so it stays yours -- write a script, and put its output in the run's artifacts/ dir
-via dlt.core.tracking.artifacts_dir so it cannot drift from the weights that made it.
+via engine.tracking.artifacts_dir so it cannot drift from the weights that made it.
+
+Note what is NOT called here: module.on_data_ready(). An evaluation takes its
+normalisation statistics from the checkpoint. Recomputing them from whatever data is
+mounted today is the exact train/inference desync that hook exists to prevent.
 """
 
 from __future__ import annotations
@@ -14,17 +24,17 @@ import hydra
 from hydra.core.hydra_config import HydraConfig
 from omegaconf import DictConfig
 
-from dlt.core.checkpoint import load_checkpoint
-from dlt.core.tracking import ConsoleLogger, JSONLLogger, MultiLogger, TensorBoardLogger
-from dlt.core.utils import register_resolvers, resolve_precision, seed_everything, set_default_dtype
+from engine.checkpoint import load_checkpoint
+from engine.tracking import ConsoleLogger, JSONLLogger, MultiLogger, TensorBoardLogger
+from engine.utils import register_resolvers, resolve_precision, seed_everything, set_default_dtype
 
 register_resolvers()
 
 log = logging.getLogger(__name__)
 
 
-@hydra.main(version_base="1.3", config_path="../../configs", config_name="eval")
-def main(cfg: DictConfig) -> dict[str, float]:
+def run(cfg: DictConfig) -> dict[str, float]:
+    """The body of an evaluation. @hydra.main lives on ../eval.py -- see engine/train.py."""
     if not cfg.get("ckpt"):
         raise ValueError("set ckpt=<path to a checkpoint directory>, e.g. .../ckpt/best")
 
@@ -66,7 +76,3 @@ def main(cfg: DictConfig) -> dict[str, float]:
         return trainer.state.metrics
     finally:
         logger.close()
-
-
-if __name__ == "__main__":
-    main()

@@ -13,6 +13,9 @@ perfectly and ignores the boundary. You can watch that happen in TensorBoard.
 The gradient-loss mechanism works because requires_grad is set BEFORE the forward
 pass, in the step method -- the module is the thing that knows it needs derivatives.
 A (pred, target) loss signature would make this structurally impossible.
+
+Its data half is CollocationData in dataset/examples.py -- collocation points are
+torch.rand, so there is nothing to download.
 """
 
 from __future__ import annotations
@@ -21,9 +24,8 @@ from abc import ABC, abstractmethod
 
 import torch
 from torch import Tensor, nn
-from torch.utils.data import DataLoader, Dataset
 
-from dlt.core.base import DataModule, OptimSpec, TaskModule, TrainState
+from engine.base import OptimSpec, TaskModule, TrainState
 
 # ---------------------------------------------------------------------------
 # The weighting seam. An nn.Module, not a function -- that is load-bearing:
@@ -31,7 +33,7 @@ from dlt.core.base import DataModule, OptimSpec, TaskModule, TrainState
 #   * update() can own its own optimizer and run an inner loop
 #   * as a submodule it is CHECKPOINTED and RESUMED automatically. Resume with
 #     silently reset loss weights and your continued run is not the run you think.
-# It lives here rather than in core/ because weighting is a per-project concern.
+# It lives here rather than in engine/ because weighting is a per-project concern.
 # ---------------------------------------------------------------------------
 
 
@@ -175,52 +177,3 @@ class PINN(TaskModule):
 
     def configure_optimizers(self) -> OptimSpec:
         return OptimSpec.of(torch.optim.AdamW(self.parameters(), lr=self.lr))
-
-
-class _Collocation(Dataset):
-    """Resamples collocation points on every access, so each epoch sees new points."""
-
-    def __init__(self, n: int, x_max: float, fixed: bool = False, seed: int = 0) -> None:
-        self.n, self.x_max, self.fixed = n, x_max, fixed
-        self.points = torch.rand(n, 1) * x_max if fixed else None
-
-    def __len__(self) -> int:
-        return self.n
-
-    def __getitem__(self, i: int) -> Tensor:
-        if self.points is not None:
-            return self.points[i]
-        return torch.rand(1) * self.x_max
-
-
-class CollocationData(DataModule):
-    def __init__(
-        self,
-        n_train: int = 1024,
-        n_val: int = 256,
-        x_max: float = 2.0,
-        batch_size: int = 128,
-        num_workers: int = 0,
-    ) -> None:
-        self.n_train, self.n_val, self.x_max = n_train, n_val, x_max
-        self.batch_size, self.num_workers = batch_size, num_workers
-
-    def setup(self, stage: str) -> None:
-        self.train_ds = _Collocation(self.n_train, self.x_max, fixed=False)
-        # Validation points are FIXED, so the metric is comparable across evaluations.
-        self.val_ds = _Collocation(self.n_val, self.x_max, fixed=True)
-
-    def _loader(self, ds: Dataset, shuffle: bool) -> DataLoader:
-        return DataLoader(
-            ds,
-            batch_size=self.batch_size,
-            shuffle=shuffle,
-            num_workers=self.num_workers,
-            collate_fn=lambda b: {"x": torch.stack(b)},
-        )
-
-    def train_dataloader(self) -> DataLoader:
-        return self._loader(self.train_ds, shuffle=True)
-
-    def val_dataloader(self) -> DataLoader:
-        return self._loader(self.val_ds, shuffle=False)

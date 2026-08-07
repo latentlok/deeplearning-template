@@ -2,17 +2,15 @@
 
 This example exists to get the *timeseries-specific* patterns right, not to be an
 interesting model. TCNs and Transformers are plain nn.Modules -- swap `self.net` and
-everything here still holds. What actually bites in timeseries is data and state:
+everything here still holds. Its data half lives in dataset/examples.py (SeriesData).
 
-  1. Scaler statistics are nn.Module BUFFERS. Fitted on train only, they must match
-     the weights at inference; as buffers they ride along in the checkpoint
-     automatically and cannot desync.
-  2. The split is TEMPORAL, never random. A shuffled split leaks future into past and
-     the val loss lies to you.
-  3. Training is teacher-forced (with scheduled sampling), evaluation rolls out
+  1. Scaler statistics are nn.Module BUFFERS, fitted on train only and handed over in
+     on_data_ready. As buffers they ride along in the checkpoint automatically, so the
+     model cannot be loaded against a scaler it did not train with.
+  2. Training is teacher-forced (with scheduled sampling), evaluation rolls out
      free-running. Validating *with* teacher forcing is a classic silent bug: val loss
      looks excellent, the model deploys badly, nothing errors.
-  4. Multi-horizon evaluation uses the dict-of-loaders contract, so metrics arrive as
+  3. Multi-horizon evaluation uses the dict-of-loaders contract, so metrics arrive as
      val/h8/mae and val/h24/mae.
 
 Footgun worth knowing: the Trainer resets nothing on your module between batches.
@@ -24,10 +22,9 @@ from __future__ import annotations
 
 import torch
 from torch import Tensor, nn
-from torch.utils.data import DataLoader, Dataset
 
-from dlt.core.base import DataModule, OptimSpec, TaskModule, TrainState
-from dlt.core.utils import ScheduledValue
+from engine.base import DataModule, OptimSpec, TaskModule, TrainState
+from engine.utils import ScheduledValue
 
 
 class Forecaster(TaskModule):
@@ -56,6 +53,15 @@ class Forecaster(TaskModule):
     def set_scaler(self, mean: float, std: float) -> None:
         self.mean.fill_(mean)
         self.std.fill_(max(std, 1e-8))
+
+    def on_data_ready(self, datamodule: DataModule) -> None:
+        """Take the scaler the datamodule fitted on the TRAIN split.
+
+        Without this hook the datamodule computes a scaler nobody reads and the model
+        normalises with mean=0, std=1 -- a bug that costs accuracy and raises nothing.
+        """
+        if (scaler := getattr(datamodule, "scaler", None)) is not None:
+            self.set_scaler(*scaler)
 
     def _norm(self, x: Tensor) -> Tensor:
         return (x - self.mean) / self.std
@@ -121,76 +127,3 @@ class Forecaster(TaskModule):
         opt = torch.optim.AdamW(self.parameters(), lr=self.lr)
         sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=1000)
         return OptimSpec.of(opt, sched, interval="step")
-
-
-class _Windows(Dataset):
-    def __init__(self, series: Tensor, window: int, horizon: int) -> None:
-        self.series, self.window, self.horizon = series, window, horizon
-        self.n = len(series) - window - horizon + 1
-        if self.n <= 0:
-            raise ValueError(
-                f"series of length {len(series)} is too short for window={window} horizon={horizon}"
-            )
-
-    def __len__(self) -> int:
-        return self.n
-
-    def __getitem__(self, i: int) -> Tensor:
-        return self.series[i : i + self.window + self.horizon]
-
-
-class SeriesData(DataModule):
-    """Synthetic series: sin + trend + noise. Nothing to download.
-
-    val_dataloader returns a DICT keyed by horizon, so metrics come out namespaced
-    val/h8/mae and val/h24/mae.
-    """
-
-    def __init__(
-        self,
-        length: int = 2000,
-        window: int = 16,
-        horizons: tuple[int, ...] = (8, 24),
-        train_frac: float = 0.7,
-        batch_size: int = 32,
-        noise: float = 0.05,
-        num_workers: int = 0,
-        seed: int = 0,
-    ) -> None:
-        self.length, self.window, self.horizons = length, window, tuple(horizons)
-        self.train_frac, self.batch_size = train_frac, batch_size
-        self.noise, self.num_workers, self.seed = noise, num_workers, seed
-        self.scaler: tuple[float, float] = (0.0, 1.0)
-
-    def setup(self, stage: str) -> None:
-        g = torch.Generator().manual_seed(self.seed)
-        t = torch.arange(self.length, dtype=torch.get_default_dtype())
-        series = torch.sin(t * 0.1) + 0.3 * torch.sin(t * 0.031) + 0.0005 * t
-        series = series + self.noise * torch.randn(self.length, generator=g)
-
-        # TEMPORAL split. Never shuffle before splitting -- that leaks future into past.
-        cut = int(self.length * self.train_frac)
-        self.train_series, self.val_series = series[:cut], series[cut:]
-
-        # Scaler fitted on TRAIN ONLY, for the same reason.
-        self.scaler = (float(self.train_series.mean()), float(self.train_series.std()))
-
-        self.train_horizon = min(self.horizons)
-        self.train_ds = _Windows(self.train_series, self.window, self.train_horizon)
-        self.val_ds = {h: _Windows(self.val_series, self.window, h) for h in self.horizons}
-
-    def _loader(self, ds: Dataset, horizon: int, shuffle: bool) -> DataLoader:
-        return DataLoader(
-            ds,
-            batch_size=self.batch_size,
-            shuffle=shuffle,
-            num_workers=self.num_workers,
-            collate_fn=lambda b: {"seq": torch.stack(b), "horizon": horizon},
-        )
-
-    def train_dataloader(self) -> DataLoader:
-        return self._loader(self.train_ds, self.train_horizon, shuffle=True)
-
-    def val_dataloader(self) -> dict[str, DataLoader]:
-        # Validation is never shuffled -- order is meaningful here.
-        return {f"h{h}": self._loader(ds, h, shuffle=False) for h, ds in self.val_ds.items()}

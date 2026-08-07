@@ -3,7 +3,7 @@
 Handoff notes. Everything here is either **untested** (not known-broken) or a
 **deliberate omission** — the distinction matters, so don't "fix" the second group.
 
-State as of commit `b45734a`: 61 tests pass, lint clean, three examples run end to end,
+State as of the layout migration: 74 tests pass, lint clean, three examples run end to end,
 fresh clone reproduces bit-identically. Read `CLAUDE.md` first, then `ARCHITECTURE.md`.
 
 ## Getting running on a new machine
@@ -12,8 +12,8 @@ fresh clone reproduces bit-identically. Read `CLAUDE.md` first, then `ARCHITECTU
 git clone https://github.com/latentlok/deeplearning-template.git
 cd deeplearning-template
 uv sync --extra dev          # .python-version pins 3.13; uv fetches it if needed
-uv run pytest tests/ -q      # expect 61 passed
-uv run python -m dlt.train experiment=e0
+uv run pytest tests/ -q      # expect 74 passed
+uv run python train.py experiment=e0
 ```
 
 If `uv sync` resolves to Python 3.14 you will get `ValueError: badly formed help string`
@@ -31,17 +31,17 @@ sm_75, so `torch.cuda.is_available()` returns True but any matmul dies with
 On real hardware, run and report:
 
 ```bash
-uv run python -m dlt.train experiment=forecast                    # device=auto -> cuda
-uv run python -m dlt.train experiment=e0 amp=bf16                 # autocast + GradScaler
-uv run python -m dlt.train experiment=e0 trainer.compile=true     # torch.compile
-uv run torchrun --nproc_per_node=2 -m dlt.train experiment=e0     # DDP
+uv run python train.py experiment=forecast                    # device=auto -> cuda
+uv run python train.py experiment=e0 amp=bf16                 # autocast + GradScaler
+uv run python train.py experiment=e0 trainer.compile=true     # torch.compile
+uv run torchrun --nproc_per_node=2 train.py experiment=e0     # DDP
 ```
 
 Specific things to check, because they are where the untested code is:
 
 - **DDP**: exactly one TensorBoard event file, one `ckpt/` and one `run_meta.json` — no
-  duplicated console output. Rank-zero gating is in `core/utils.is_rank_zero`.
-- **DDP + `grad_accum > 1`**: `no_sync()` on non-final micro-steps (`core/trainer.py`,
+  duplicated console output. Rank-zero gating is in `engine/utils.is_rank_zero`.
+- **DDP + `grad_accum > 1`**: `no_sync()` on non-final micro-steps (`engine/trainer.py`,
   `train_step`). Verify loss curves match single-device at the same effective batch.
 - **`amp=fp16`**: `GradScaler` is enabled only for fp16, not bf16. Check for inf/NaN.
 - **PINN under DDP**: expected to be poor — DDP handles double-backward badly. Prefer
@@ -68,7 +68,7 @@ tensor. Then try `dtype=float64` and confirm the checkpoint error names
 
 ## 3. `notebooks/explore_run.ipynb` was planned and never written
 
-Deliberately skipped — a stub notebook is noise, and `scripts/runs.py` plus
+Deliberately skipped — a stub notebook is noise, and `utils/runs.py` plus
 `metrics.jsonl` cover the actual need. Write one only if a real workflow wants it.
 
 ## 4. Weights-only fine-tuning has no CLI flag
@@ -76,7 +76,7 @@ Deliberately skipped — a stub notebook is noise, and `scripts/runs.py` plus
 By decision, not oversight. `resume=<dir>` does an exact resume; fine-tuning from
 someone else's weights is `load_checkpoint(..., weights_only=True)`, documented in
 `USAGE.md` as an `init_from` argument on your model so it stays configurable and still
-runs through `dlt.train`. Don't add a flag unless asked.
+runs through `train.py`. Don't add a flag unless asked.
 
 ## 5. No DataModule implements `state_dict()` / `load_state_dict()`
 
@@ -100,12 +100,15 @@ dependencies before then.
 
 ## 7. The committed code graph goes stale
 
-`graphify-out/graph.json` (465 nodes, 1092 edges) is a build artifact committed for
+`.graphify/graph.json` (564 nodes, 1293 edges) is a build artifact committed for
 convenience. Refresh after any code change:
 
 ```bash
-graphify update . --no-cluster        # ~2s, LLM-free, nothing leaves the machine
+make graph        # graphify update . --no-cluster, then moves the result into .graphify/
 ```
+
+The tool always writes to `./graphify-out`; the Makefile target moves it so the repo
+root stays clean, and `graphify-out/` is gitignored in case you run it by hand.
 
 Semantic clustering was **deliberately not run**. Never invoke `graphify extract`,
 `label` or `cluster-only` without an explicit `--backend`: bare, graphify picks one from
@@ -114,12 +117,16 @@ ships the code off-box.
 
 ## 8. Smaller known edges
 
-- `scripts/runs.py --where` matches the override string **literally**, so
+- `utils/runs.py --where` matches the override string **literally**, so
   `model.lr=0.005` will not match a run launched as `model.lr=5e-3`.
 - `EarlyStopping` and `GradStats` are implemented and tested but commented out in
   `configs/callbacks/default.yaml` — enable per experiment.
-- `data/raw`, `data/processed`, `data/cache` are gitignored, so a fresh clone has no
-  `data/` tree. Nothing shipped needs it (all three examples are synthetic).
+- A fresh clone has no `data/` tree, and none of the three examples needs one -- they
+  are all synthetic. Real data lives at `$DL_DATA`, outside the repo.
+- `dataset/loader.py` is tested against `.npy` only. The `.zarr` branch is written but
+  **never executed** (zarr is not a dependency); the `.pt` branch likewise.
+- `FolderData` has only been run with `num_workers=0`, though `configs/data/folder.yaml`
+  defaults to 4. Memmap handles crossing a fork are the thing to watch there.
 
 ---
 
@@ -127,11 +134,11 @@ ships the code off-box.
 
 - **HPO / sweeper.** No Optuna, no plugin. `train.py` returns the monitored metric,
   which is the whole coupling surface one needs; adding it later touches nothing in
-  `src/`.
+  `engine/`.
 - **FSDP2 / model parallelism.** DDP only.
 - **Architecture-compatibility probing in `device: auto`.** Explicitly descoped.
-- **Model-specific machinery in `core/`** (FNO, GNO, Transolver…). The whole design is
-  fork-per-model-family; `core/` stays general and the fork adds what it needs. Extension
+- **Model-specific machinery in `engine/`** (FNO, GNO, Transolver…). The whole design is
+  fork-per-model-family; `engine/` stays general and the fork adds what it needs. Extension
   points: subclass `Trainer`, `Logger`, `WeightFormat`, or `Callback`.
 
 ## Two bugs already found and fixed — worth knowing the pattern

@@ -25,8 +25,8 @@ from typing import Any
 
 import torch
 
-from dlt.core.base import DataModule, TaskModule, TrainState
-from dlt.core.utils import is_rank_zero
+from engine.base import DataModule, TaskModule, TrainState
+from engine.utils import is_rank_zero
 
 log = logging.getLogger(__name__)
 
@@ -64,7 +64,7 @@ class SafetensorsFormat(WeightFormat):
             raise RuntimeError(
                 f"safetensors could not save these weights ({type(e).__name__}: {e}). "
                 "Usually an unsupported dtype. Either set `checkpoint.format` to "
-                "dlt.core.checkpoint.TorchFormat (handles every torch dtype), or "
+                "engine.checkpoint.TorchFormat (handles every torch dtype), or "
                 "subclass WeightFormat for dtype-specific handling."
             ) from e
 
@@ -111,7 +111,14 @@ def save_checkpoint(
     state: TrainState | None = None,
     datamodule: DataModule | None = None,
     fmt: str | WeightFormat = "safetensors",
+    weights_only: bool = False,
 ) -> Path:
+    """`weights_only=True` writes the weights and extra/ but no state.pt.
+
+    That is the inference artifact: no optimizer moments, no RNG, no step counter --
+    typically a third the size and impossible to accidentally resume from. extra/ is
+    still written, because a tokenizer or scaler config is needed to *use* the model.
+    """
     d = Path(directory)
     if not is_rank_zero():
         return d
@@ -119,6 +126,12 @@ def save_checkpoint(
 
     writer = resolve_format(fmt)
     writer.save(module, d / writer.filename)
+
+    if weights_only:
+        extra = d / EXTRA
+        extra.mkdir(parents=True, exist_ok=True)
+        module.save_extra(extra)
+        return d
 
     torch.save(
         {

@@ -1,4 +1,4 @@
-_target_: dlt.core.Trainer
+_target_: engine.Trainer
 
 # The loop is STEP-FIRST. max_steps is primary; epochs are a derived convenience, and
 # len(dataloader) is never called so streaming datasets work.

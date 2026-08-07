@@ -13,14 +13,16 @@ training_step. Likewise EMA of a target encoder -- for JEPA-style methods that u
 from __future__ import annotations
 
 import logging
+import shutil
 import time
 from pathlib import Path
 from typing import Any
 
 import torch
 
-from dlt.core.base import TaskModule, TrainState
-from dlt.core.checkpoint import save_checkpoint
+from engine.base import TaskModule, TrainState
+from engine.checkpoint import save_checkpoint
+from engine.utils import is_rank_zero
 
 log = logging.getLogger(__name__)
 
@@ -55,23 +57,49 @@ class Callback:
 
 
 class Checkpoint(Callback):
-    """Writes `last/` every save_every steps, and `best/` whenever the monitored
-    metric improves."""
+    """Four kinds of checkpoint, because they answer different questions.
+
+        ckpt/last/            rolling resume point, overwritten every `last_every`
+        ckpt/step_00001000/   permanent snapshot every `every_steps`, pruned to `keep_last`
+        ckpt/best/            full state at the best monitored metric -- resume from here
+        ckpt/best_weights/    the same weights with NO optimizer state -- ship this
+
+    `best/` and `best_weights/` are both written because they are different artifacts:
+    one continues training, the other is what you load for inference. Keeping only the
+    full one means every deployment drags optimizer moments around; keeping only the
+    weights means a crashed run cannot pick up from its best point.
+
+    Snapshots are step-tagged and permanent so a divergence at step 40k can be traced
+    back through steps that `last/` has long since overwritten.
+    """
 
     def __init__(
         self,
         dirpath: str | Path = "ckpt",
         monitor: str | None = None,
-        save_every: int = 0,
+        every_steps: int = 0,
+        keep_last: int = 3,
+        last_every: int = 500,
         save_last: bool = True,
         save_best: bool = True,
+        save_best_weights: bool = True,
         fmt: Any = "safetensors",
     ) -> None:
         self.dirpath = Path(dirpath)
-        self.monitor, self.save_every = monitor, save_every
-        self.save_last, self.save_best, self.fmt = save_last, save_best, fmt
+        self.monitor = monitor
+        self.every_steps, self.keep_last = every_steps, keep_last
+        self.last_every, self.save_last = last_every, save_last
+        self.save_best, self.save_best_weights = save_best, save_best_weights
+        self.fmt = fmt
 
-    def _save(self, trainer: Any, module: TaskModule, state: TrainState, tag: str) -> None:
+    def _save(
+        self,
+        trainer: Any,
+        module: TaskModule,
+        state: TrainState,
+        tag: str,
+        weights_only: bool = False,
+    ) -> None:
         save_checkpoint(
             self.dirpath / tag,
             module,
@@ -80,22 +108,43 @@ class Checkpoint(Callback):
             state=state,
             datamodule=getattr(trainer, "datamodule", None),
             fmt=self.fmt,
+            weights_only=weights_only,
         )
+
+    def _prune(self) -> None:
+        """Keep the newest `keep_last` step snapshots. keep_last=0 keeps every one.
+
+        Sorted by name, which is why the step is zero-padded -- lexical order and
+        numeric order must not disagree at step 10000.
+        """
+        if not self.keep_last or not is_rank_zero():
+            return
+        snaps = sorted(p for p in self.dirpath.glob("step_*") if p.is_dir())
+        for old in snaps[: -self.keep_last]:
+            shutil.rmtree(old, ignore_errors=True)
+            log.info("pruned old checkpoint %s", old.name)
 
     def on_train_batch_end(
         self, trainer: Any, module: TaskModule, state: TrainState, **kw: Any
     ) -> None:
-        if self.save_every and state.global_step % self.save_every == 0 and self.save_last:
+        step = state.global_step
+        if self.save_last and self.last_every and step % self.last_every == 0:
             self._save(trainer, module, state, "last")
+        if self.every_steps and step % self.every_steps == 0:
+            self._save(trainer, module, state, f"step_{step:08d}")
+            self._prune()
 
     def on_val_end(self, trainer: Any, module: TaskModule, state: TrainState, **kw: Any) -> None:
         key = self.monitor or trainer.monitor
         value = state.metrics.get(key)
-        if value is None or not self.save_best:
+        if value is None or not (self.save_best or self.save_best_weights):
             return
         if trainer.is_better(value):
             state.best_metric = value
-            self._save(trainer, module, state, "best")
+            if self.save_best:
+                self._save(trainer, module, state, "best")
+            if self.save_best_weights:
+                self._save(trainer, module, state, "best_weights", weights_only=True)
             log.info("new best %s=%.6g at step %d", key, value, state.global_step)
 
     def on_fit_end(self, trainer: Any, module: TaskModule, state: TrainState, **kw: Any) -> None:

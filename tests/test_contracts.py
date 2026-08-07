@@ -14,8 +14,8 @@ import hydra
 import pytest
 import torch
 
-from dlt.core.base import OptimSpec, TaskModule, TrainState
-from dlt.core.utils import move_to_device
+from engine.base import OptimSpec, TaskModule, TrainState
+from engine.utils import move_to_device
 from tests.conftest import config_names, load
 
 # model config -> data config it should be tested against.
@@ -102,7 +102,7 @@ def test_checkpoint_roundtrip(name: str, tmp_path) -> None:
     so they cannot desync from the weights across a save/load."""
     module, datamodule = _build(name)
     spec = module.configure_optimizers()
-    from dlt.core.checkpoint import load_checkpoint, save_checkpoint
+    from engine.checkpoint import load_checkpoint, save_checkpoint
 
     batch = _first_batch(datamodule)
     ctx = torch.enable_grad() if module.eval_requires_grad else torch.no_grad()

@@ -7,10 +7,10 @@ so there is no shared append-and-rewrite file to corrupt under concurrent multir
 Scanning a few thousand runs takes about a second, which is a good trade for deleting
 a race condition.
 
-    python scripts/runs.py                          # everything, newest first
-    python scripts/runs.py --exp pinn --sort val/loss
-    python scripts/runs.py --where optimizer.lr=3e-4
-    python scripts/runs.py --status failed
+    python utils/runs.py                          # everything, newest first
+    python utils/runs.py --exp pinn --sort val/loss
+    python utils/runs.py --where optimizer.lr=3e-4
+    python utils/runs.py --status failed
 """
 
 from __future__ import annotations

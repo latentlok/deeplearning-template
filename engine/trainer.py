@@ -19,8 +19,8 @@ from typing import Any
 import torch
 from torch.nn.parallel import DistributedDataParallel
 
-from dlt.core.base import DataModule, OptimSpec, TaskModule, TrainState
-from dlt.core.utils import (
+from engine.base import DataModule, OptimSpec, TaskModule, TrainState
+from engine.utils import (
     MetricAccumulator,
     effective_batch_size,
     get_world_size,
@@ -156,6 +156,9 @@ class Trainer:
         module.trainer = self
 
         datamodule.setup("fit")
+        # The only data -> model handoff. Before .to() and before resume, so a
+        # checkpoint's stored statistics overwrite whatever the data just reported.
+        module.on_data_ready(datamodule)
         module.to(device=self.device, dtype=self.param_dtype)
 
         spec = module.configure_optimizers()
@@ -170,7 +173,7 @@ class Trainer:
         # away and the run would continue with a cold optimizer -- no error, just
         # different training.
         if resume:
-            from dlt.core.checkpoint import load_checkpoint
+            from engine.checkpoint import load_checkpoint
 
             log.info("resuming from %s", resume)
             load_checkpoint(

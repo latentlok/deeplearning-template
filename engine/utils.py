@@ -286,11 +286,40 @@ def run_hash(overrides: str = "", length: int = 6) -> str:
     return hashlib.blake2b(key.encode(), digest_size=length // 2 + 1).hexdigest()[:length]
 
 
+def ckpt_run_dir(ckpt: Any) -> str:
+    """The run directory that produced a checkpoint.
+
+        outputs/pinn/2026-08-03_14-22-05_a3f9c2/ckpt/best  ->
+        outputs/pinn/2026-08-03_14-22-05_a3f9c2
+
+    Used by eval.yaml so an evaluation writes INTO the run it evaluated, next to the
+    config and the weights that produced it. A separate outputs/eval/<timestamp>/ tree
+    is orphaned the moment you have two runs of the same experiment: the numbers are
+    real but nothing on disk says which weights made them.
+
+    Walks up to the nearest ancestor named `ckpt`; anything else (a hand-placed
+    checkpoint, a downloaded one) falls back to the checkpoint's own parent, which is
+    still beside the weights rather than in a global bucket.
+    """
+    if not ckpt or str(ckpt) == "???":
+        raise ValueError(
+            "eval needs a checkpoint: eval.py ckpt=outputs/<exp>/<run>/ckpt/best "
+            "(the output directory is derived from it)"
+        )
+    p = Path(str(ckpt)).expanduser()
+    for parent in p.parents:
+        if parent.name == "ckpt":
+            return str(parent.parent)
+    return str(p.parent)
+
+
 def register_resolvers() -> None:
     """Must run before @hydra.main composes.
 
-    use_cache=True is REQUIRED: without it each interpolation re-evaluates and one run
-    scatters across several directories. replace=True keeps same-process multirun and
-    repeated test imports from raising on re-registration.
+    use_cache=True is REQUIRED for run_hash: without it each interpolation
+    re-evaluates and one run scatters across several directories. ckpt_run_dir is a
+    pure function of its argument, so it needs no cache. replace=True keeps
+    same-process multirun and repeated test imports from raising on re-registration.
     """
     OmegaConf.register_new_resolver("run_hash", run_hash, use_cache=True, replace=True)
+    OmegaConf.register_new_resolver("ckpt_run_dir", ckpt_run_dir, replace=True)

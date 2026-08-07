@@ -1,5 +1,16 @@
 # Training entrypoint config.
 #
+# Every group below is a directory in configs/, and every key in it is reachable from
+# the command line by its dotted path:
+#
+#   python train.py model=pinn data=collocation      # swap a whole group
+#   python train.py model.hidden_dim=256             # one key inside a group
+#   python train.py experiment=forecast trainer.max_steps=5000
+#   python train.py --cfg job                        # print the composed config
+#
+# An experiment file is the saved version of a command line you would otherwise
+# retype -- configs/experiment/<name>.yaml, one per thing you actually run.
+#
 # `_self_` comes first so that group defaults, and then `experiment`, override the
 # globals set here. `experiment` is last because its files use `# @package _global_`
 # to reach across every group.
@@ -25,7 +36,8 @@ dtype: float32 # float32 | float64
 amp: none # none | fp16 | bf16
 
 # Path to a checkpoint directory for an exact resume, e.g.
-#   +resume=outputs/pinn/2026-08-03_14-22-05_a3f9c2/ckpt/last
+#   resume=outputs/pinn/2026-08-03_14-22-05_a3f9c2/ckpt/last
+# Use last/ or best/ (full state), never best_weights/ -- that one has no optimizer.
 resume: null
 
 hydra:

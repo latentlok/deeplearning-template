@@ -1,28 +1,42 @@
 # Callbacks OBSERVE; they never own the update. Anything that changes your results
 # belongs in training_step, not here.
+
 checkpoint:
-  _target_: dlt.core.callbacks.Checkpoint
+  _target_: engine.callbacks.Checkpoint
   dirpath: ${hydra:runtime.output_dir}/ckpt
-  save_every: 500
-  save_last: true
-  save_best: true
   fmt: safetensors # safetensors | torch, or a _target_ WeightFormat for custom dtypes
 
+  # ckpt/last/ -- the crash-resume point, overwritten in place.
+  save_last: true
+  last_every: 500 # steps; 0 -> written only at the end of the run
+
+  # ckpt/step_00001000/ -- permanent, step-tagged snapshots. 0 disables them.
+  # Set this when you care about *when* a run went wrong: last/ has already been
+  # overwritten by the time you notice, and best/ only knows about its own metric.
+  every_steps: 0
+  keep_last: 3 # how many snapshots to retain; 0 keeps every one
+
+  # ckpt/best/ full state (resume from here) and ckpt/best_weights/ weights only
+  # (load this for inference -- no optimizer moments, no step counter, no RNG).
+  save_best: true
+  save_best_weights: true
+  monitor: null # null -> trainer.monitor
+
 lr_monitor:
-  _target_: dlt.core.callbacks.LRMonitor
+  _target_: engine.callbacks.LRMonitor
 
 timer:
-  _target_: dlt.core.callbacks.Timer
+  _target_: engine.callbacks.Timer
 
 nan_guard:
-  _target_: dlt.core.callbacks.NaNGuard
+  _target_: engine.callbacks.NaNGuard
 
 # Expensive; enable when diagnosing. Complex params are split into abs/real/imag by
 # the TB logger, because add_histogram silently discards the imaginary part.
 # grad_stats:
-#   _target_: dlt.core.callbacks.GradStats
+#   _target_: engine.callbacks.GradStats
 #   every: 500
 
 # early_stopping:
-#   _target_: dlt.core.callbacks.EarlyStopping
+#   _target_: engine.callbacks.EarlyStopping
 #   patience: 10

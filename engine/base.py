@@ -147,6 +147,24 @@ class TaskModule(nn.Module, ABC):
 
     # -- optional, all no-op by default -------------------------------------------
 
+    def on_data_ready(self, datamodule: DataModule) -> None:
+        """Called once in fit(), after datamodule.setup("fit") and before the weights
+        move to the device. The one place a model may read from its data.
+
+        This exists for statistics the model must OWN rather than recompute:
+        normalisation bounds, a channel mean/std, a vocab size. Copy them into
+        buffers here and they ride inside the checkpoint, so inference cannot
+        silently use different bounds than training did.
+
+            def on_data_ready(self, dm):
+                self.lower.copy_(torch.as_tensor(dm.stats["lower"]))
+
+        NOT called by eval.py -- an evaluation loads its bounds from the checkpoint,
+        and recomputing them from whatever data is mounted is exactly the desync this
+        prevents. On resume it is called BEFORE the checkpoint loads, so checkpointed
+        values win.
+        """
+
     def rollout_step(self, batch: Batch, state: TrainState) -> dict[str, Tensor] | None:
         """Free-running / autoregressive evaluation. Define it and set `rollout_every`.
 

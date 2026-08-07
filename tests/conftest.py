@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from hydra import compose, initialize_config_dir
 
-from dlt.core.utils import register_resolvers
+from engine.utils import register_resolvers
 
 REPO = Path(__file__).resolve().parents[1]
 CONFIGS = REPO / "configs"

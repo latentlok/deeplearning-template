@@ -13,7 +13,7 @@ import hydra
 from hydra.core.hydra_config import HydraConfig
 from omegaconf import DictConfig, OmegaConf
 
-from dlt.core.tracking import (
+from engine.tracking import (
     ConsoleLogger,
     JSONLLogger,
     MultiLogger,
@@ -21,7 +21,7 @@ from dlt.core.tracking import (
     TensorBoardLogger,
     flatten_config,
 )
-from dlt.core.utils import (
+from engine.utils import (
     config_hash,
     register_resolvers,
     resolve_precision,
@@ -48,8 +48,14 @@ def build_logger(cfg: DictConfig, run_dir: Path) -> MultiLogger:
     return MultiLogger(loggers)
 
 
-@hydra.main(version_base="1.3", config_path="../../configs", config_name="train")
-def main(cfg: DictConfig) -> float | None:
+def run(cfg: DictConfig) -> float | None:
+    """The body of a training run. @hydra.main lives on ../train.py, not here.
+
+    Hydra derives its config search path from the module that owns the decorated
+    function: only when that module is `__main__` does it use the file's directory.
+    Decorate an imported function and it looks for a `configs` PACKAGE instead and
+    fails with "Primary config module 'configs' not found".
+    """
     run_dir = Path(HydraConfig.get().runtime.output_dir)
 
     # dtype and amp are orthogonal axes; validate the pair before anything is built so
@@ -98,7 +104,3 @@ def main(cfg: DictConfig) -> float | None:
         raise
     finally:
         logger.close()
-
-
-if __name__ == "__main__":
-    main()

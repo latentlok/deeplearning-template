@@ -18,7 +18,24 @@ It works with anything that satisfies four assumptions:
 4. Progress is measured in steps.
 
 `batch` is never inspected, model outputs are a free dict, and steps return arbitrary
-scalars. Roughly 1,100 lines total, ~780 of which you never rewrite.
+scalars. Roughly 1,400 lines total, ~1,000 of which you never rewrite.
+
+## Layout
+
+Your code is at the top level. The orchestration is hidden in `engine/`.
+
+```
+train.py  eval.py     the two entrypoints
+models/                your models — one file per model, each a TaskModule
+dataset/               your dataloaders — loader.py reads $DL_DATA/{train,val}
+utils/                 offline analysis: dataset statistics, run tables, seed aggregation
+configs/               one group per directory; experiment/ holds saved recipes
+engine/                the loop, checkpointing, logging. You should never need to open it.
+outputs/<exp>/<run>/   everything a run produced: logs, metrics, tb/, ckpt/, eval/
+```
+
+The dataset itself lives **outside** the repo — set `DL_DATA` once and every config
+follows it.
 
 ## Install
 
@@ -37,8 +54,8 @@ Hydra's lazy `--shell-completion` help object. Lift it when hydra-core 1.4 ships
 Verify:
 
 ```bash
-uv run pytest tests/ -q                    # 57 tests
-uv run python -m dlt.train experiment=e0   # ~20-step smoke run
+uv run pytest tests/ -q                # 74 tests
+uv run python train.py experiment=e0   # ~20-step smoke run
 ```
 
 The default `trainer.device: auto` uses CUDA when available. Note that
@@ -56,14 +73,17 @@ or pass `trainer.device=cpu`.
 
 ## What ships
 
-Three self-contained examples in `src/dlt/project/`, each one file holding its model,
-data and loss — delete the ones you don't need:
+Three examples in `models/`, with their data in `dataset/examples.py` — delete the ones
+you don't need:
 
 | | |
 |---|---|
-| `mlp.py` | two-layer net on random tensors; the fast smoke and contract test |
+| `mlp.py` | two-layer net; the fast smoke and contract test, and the file to copy |
 | `forecast.py` | windowed forecasting: scaler-as-buffers, temporal split, teacher forcing vs free-running rollout, multi-horizon eval |
 | `pinn.py` | `du/dx = -u` with a gradient loss and gradient-adaptive term weighting; converges against the analytic `e^(-x)` |
+
+Plus `dataset/loader.py` — a real dataloader over `$DL_DATA/{train,val}` (`.npy`,
+`.zarr`, `.pt`), which is the file you rewrite for your own data.
 
 ## Licence
 

@@ -8,7 +8,7 @@ Read this before extending. It is short on purpose.
 construction rather than a confusing failure mid-training. **The ABCs fix only the
 boundary; every internal is yours.**
 
-### `TaskModule` — `core/base.py`
+### `TaskModule` — `engine/base.py`
 
 ```python
 class TaskModule(nn.Module, ABC):
@@ -20,11 +20,12 @@ class TaskModule(nn.Module, ABC):
     def configure_optimizers(self) -> OptimSpec                  # 1..N optimizers
 
     # optional, no-op by default
+    def on_data_ready(self, datamodule) -> None                  # data statistics -> buffers
     def rollout_step(self, batch, state) -> dict | None          # free-running eval
     def save_extra(self, dir) / load_extra(self, dir)            # tokenizers, vocabs
 ```
 
-### `DataModule` — `core/base.py`
+### `DataModule` — `engine/base.py`
 
 ```python
 class DataModule(ABC):
@@ -67,9 +68,31 @@ services callable — `self.trainer.backward(loss)` and
 `self.trainer.clip_and_step(opt)` — so taking control of one thing doesn't cost you AMP
 scaling, gradient accumulation, clipping and DDP sync all at once.
 
+## The one place data reaches the model
+
+`on_data_ready(datamodule)` is called once inside `fit()`, after `setup("fit")` and
+**before** the weights move to the device or a checkpoint loads. It exists for
+statistics the model must *own* — normalisation bounds, a channel mean/std, a vocab
+size — which belong in **buffers**, so they are written into every checkpoint and
+restored with the weights.
+
+```
+train split → utils/stats.py → stats.json → DataModule.stats → model buffers → checkpoint
+```
+
+Two ordering decisions make that chain safe. Resume loads *after* the hook, so
+checkpointed statistics beat whatever today's data reports. And `eval.py` never calls
+the hook at all: an evaluation takes its bounds from the checkpoint, because
+recomputing them from whatever is mounted is precisely the desync being prevented —
+one that leaves predictions plausible rather than raising.
+
+Statistics are **read from a file, never computed in `setup()`**. Scanning costs
+minutes per run, and worse, the val split would normalise against different numbers
+than the train split.
+
 ## The loop
 
-`core/trainer.py`. One concrete class with small overridable methods — subclass and
+`engine/trainer.py`. One concrete class with small overridable methods — subclass and
 override `train_step` alone. No ABC hierarchy, which would force every trainer to
 reimplement the skeleton.
 
@@ -98,20 +121,50 @@ perturbation cannot be callbacks.** They belong in `collate_fn` or `training_ste
 Likewise EMA of a target encoder — for JEPA-style methods that update *is* the
 algorithm, and hiding it in a hook is exactly what this rule prevents.
 
+## What a run leaves on disk
+
+```
+outputs/<exp>/<timestamp>_<hash6>/
+    .hydra/            the exact composed config, written by Hydra
+    train.log  metrics.jsonl  tb/  run_meta.json
+    ckpt/
+        last/               rolling resume point, overwritten every `last_every`
+        step_00001000/      permanent snapshot every `every_steps`, pruned to `keep_last`
+        best/               full state at the best metric — resume from here
+        best_weights/       the same weights, no optimizer state — ship this
+    eval/<timestamp>/  every `eval.py` run against this checkpoint
+    artifacts/         yours, via engine.tracking.artifacts_dir
+```
+
+`best/` and `best_weights/` are both written because they answer different questions:
+one continues training, the other is loaded for inference. Keeping only the full one
+drags optimizer moments into every deployment; keeping only the weights means a
+crashed run cannot pick up from its best point.
+
+Step snapshots are permanent and step-tagged, so a divergence noticed at step 40k can
+be traced back through steps `last/` has long since overwritten. `keep_last` bounds
+what that costs.
+
+Evaluation writes **into the run it evaluated**, not a global `outputs/eval/` tree —
+`configs/eval.yaml` derives the directory from `ckpt` through the `ckpt_run_dir`
+resolver. A parallel eval tree is orphaned the moment an experiment has two runs: the
+numbers are real, and nothing on disk says which weights produced them.
+
 ## Extension points, all open
 
 | Want to change | Do this |
 |---|---|
 | the update rule | subclass `Trainer`, override `train_step` |
-| a tracking backend | subclass `Logger` in `core/tracking.py` |
+| a tracking backend | subclass `Logger` in `engine/tracking.py` |
 | checkpoint encoding | subclass `WeightFormat`, point `checkpoint.format` at it |
 | observation | add a `Callback` |
-| anything model-shaped | write a file in `project/` |
+| anything model-shaped | write a file in `models/` |
+| anything data-shaped | write a file in `dataset/` |
 
 The `WeightFormat` seam exists because `safetensors` supports a fixed dtype set —
 measured, not assumed: `complex64` round-trips, **`complex128` raises `KeyError`**. A
 model at `dtype: float64` with complex spectral weights therefore needs either
-`format: torch` or a custom format. Core stays general; the fork adds what it needs.
+`format: torch` or a custom format. `engine/` stays general; the fork adds what it needs.
 
 Related measured gotcha: `add_histogram` does **not** reject complex tensors — it
 silently casts to real and discards the imaginary part with only a `ComplexWarning`. A

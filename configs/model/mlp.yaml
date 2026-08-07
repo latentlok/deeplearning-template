@@ -1,4 +1,4 @@
-_target_: dlt.project.mlp.MLP
+_target_: models.mlp.MLP
 in_dim: 8
 hidden_dim: 32
 out_dim: 1

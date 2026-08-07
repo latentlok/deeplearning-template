@@ -1,0 +1,21 @@
+# Data on disk, outside the repo. The one you point at your own dataset.
+#
+#   <data_root>/train/x.npy   <data_root>/train/y.npy
+#   <data_root>/val/x.npy     <data_root>/val/y.npy
+#   <data_root>/stats.json    <- python utils/stats.py
+#
+# .zarr and .pt work in place of .npy; see dataset/loader.py::_open.
+_target_: dataset.loader.FolderData
+root: ${paths.data_root}
+
+train_split: train
+val_split: val
+inputs: x # <split>/x.npy
+targets: y # <split>/y.npy
+
+stats: null # null -> <root>/stats.json
+
+batch_size: 32
+num_workers: 4 # 0 while debugging: worker tracebacks are much worse
+pin_memory: false # true is worth it on CUDA with pinned host memory to spare
+drop_last: false

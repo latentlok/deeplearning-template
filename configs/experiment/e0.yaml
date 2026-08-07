@@ -14,4 +14,6 @@ trainer:
 
 callbacks:
   checkpoint:
-    save_every: 10
+    last_every: 10
+    every_steps: 10 # a snapshot per 10 steps, so the smoke run exercises retention
+    keep_last: 2

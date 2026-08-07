@@ -1,4 +1,4 @@
-_target_: dlt.project.forecast.Forecaster
+_target_: models.forecast.Forecaster
 window: 16
 hidden_dim: 64
 lr: 1e-3
@@ -8,7 +8,7 @@ lr: 1e-3
 # `max(0., 1 - step/N)` precisely so you can sweep it:
 #   -m model.teacher_forcing.over_steps=500,2000
 teacher_forcing:
-  _target_: dlt.core.utils.ScheduledValue
+  _target_: engine.utils.ScheduledValue
   schedule: constant # constant | linear | cosine | exponential | inverse_sigmoid
   start: 1.0
   end: 0.0
