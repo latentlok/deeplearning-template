@@ -6,6 +6,7 @@ Guidance for Claude Code working in this repository.
 
 A minimal, **fork-first** PyTorch training template. It provides the loop, the logging
 and the plug points; everything model-shaped and data-shaped lives at the top level.
+~1,800 lines of code.
 
 ```
 train.py  eval.py   entrypoints. @hydra.main must stay HERE (see below).
@@ -27,7 +28,7 @@ code that assumes data is in the working tree.
 
 ```bash
 uv sync --extra dev                      # install (Python >=3.12,<3.14)
-uv run pytest tests/ -q                  # 74 tests
+uv run pytest tests/ -q                  # 76 tests
 uv run ruff check engine models dataset utils tests train.py eval.py   # must be clean
 uv run ruff format engine models dataset utils tests train.py eval.py
 uv run python train.py experiment=e0     # ~20-step smoke run
@@ -37,8 +38,23 @@ uv run python utils/stats.py --root $DL_DATA         # write stats.json
 ```
 
 There is no compatible GPU on the development machine (sm_61 vs a torch build starting
-at sm_75), so **verify on CPU** with `trainer.device=cpu` and do not claim GPU, DDP or
-`torch.compile` paths are tested.
+at sm_75), so **verify on CPU** with `trainer.device=cpu`.
+
+That is less limiting than it sounds — distributed runs fine on the `gloo` backend:
+
+```bash
+uv run torchrun --nproc_per_node=2 train.py experiment=e0 trainer.device=cpu
+```
+
+Verified this way: two-rank DDP, `no_sync()` under `grad_accum`, rank-zero gating,
+`torch.compile`, `amp=bf16`/`fp16`, and FSDP2 through `Trainer.wrap()`. **Still
+unverified, so do not claim it:** CUDA kernels, the `nccl` backend, multi-GPU device
+placement, and `GradScaler` on real fp16 hardware.
+
+Also unverified in `dataset/loader.py`: the `.zarr` and `.pt` branches of `_open`
+(only `.npy` is exercised — zarr is not a dependency), and `FolderData` with
+`num_workers > 0`, though `configs/data/folder.yaml` defaults to 4. Memmap handles
+crossing a fork are the thing to watch there.
 
 ## Architecture in one paragraph
 
@@ -50,8 +66,8 @@ that dict is logged automatically. Adding a model is two files: one in `models/`
 config in `configs/model/`.
 
 Read `ARCHITECTURE.md` before changing `engine/`. Read `USAGE.md` before changing a
-user-facing workflow. Read `UNRESOLVED.md` at the start of a session — it lists what is
-untested versus what is deliberately omitted, so you don't "fix" a decision.
+user-facing workflow. Read *Deliberately omitted* below before "fixing" anything that
+looks missing — most of it is a decision.
 
 ## Non-obvious constraints
 
@@ -97,6 +113,21 @@ Each of these was a bug at some point. Breaking one is silent, not loud.
 - **Freezing a submodule needs a `train()` override**, not just `.eval()` in `__init__` —
   the Trainer calls `.train()` every step, so BatchNorm statistics otherwise drift while
   the weights stay frozen.
+- **Whatever `Trainer.wrap()` returns must own the forward.** DDP and `torch.compile`
+  only act on graphs built inside their own `forward`. Calling `raw.training_step()`
+  directly walks past both: DDP's reducer never runs `prepare_for_backward`, so nothing
+  is all-reduced and the ranks silently train into different models, and compile traces
+  zero graphs. Hence `_StepWrapper`, and hence `train_step` calling `self.module(...)`.
+- **`wrap()` must run before `configure_optimizers()`.** FSDP2 replaces every
+  `Parameter` with a sharded `DTensor`; an optimizer built first holds the pre-shard
+  objects, which never receive a gradient. The run trains, logs a loss and updates
+  nothing.
+- **Move modules with `cast_module`, never `module.to(dtype=...)`.** `Module._apply`
+  casts anything `is_floating_point() OR is_complex()`, so `.to(float32)` flattens a
+  `complex64` weight to real and discards the imaginary part with only a warning.
+- **Rank-gate logger *construction*, not just its calls.** `MultiLogger` drops writes
+  off rank zero, but `SummaryWriter.__init__` creates its event file immediately, so
+  every rank left a phantom run in `tb/`.
 
 ## Measured library behaviour
 
@@ -107,9 +138,17 @@ Verified on torch 2.13.0 / safetensors 0.8.0 — do not re-derive from memory:
 - `add_histogram` does **not** reject complex tensors — it silently casts to real and
   discards the imaginary part with a `ComplexWarning`. `TensorBoardLogger` splits complex
   into abs/real/imag deliberately.
+- `nn.Module.to(dtype)` casts complex parameters too — `_apply` converts anything
+  `is_floating_point()` **or** `is_complex()` — so a real dtype silently destroys a
+  complex weight. `cast_module` maps complex to the matching complex dtype instead.
+- `fully_shard`'s default device mesh picks the *accelerator*, so on a one-GPU box it
+  fails with `invalid device ordinal`. Pass an explicit `init_device_mesh("cpu", ...)`
+  to exercise FSDP2 locally.
+- A `DTensor` has no accessible storage pointer, so safetensors cannot save sharded
+  weights. The existing `checkpoint.format=torch` / `WeightFormat` seam covers it.
 - hydra-core 1.3.4 breaks on Python 3.14 (argparse rejects its lazy `--shell-completion`
   help object). Hence `requires-python = ">=3.12,<3.14"`. Lift when hydra-core 1.4 is
-  stable.
+  stable — still `1.4.0.dev6` as of 2026-08-03, so the ceiling stays.
 
 ## Conventions
 
@@ -131,9 +170,31 @@ Verified on torch 2.13.0 / safetensors 0.8.0 — do not re-derive from memory:
 - Prefer a test that asserts something falsifiable over one that asserts "it ran". The
   PINN example exists because `e^(-x)` gives a metric that cannot be gamed.
 
+## Deliberately omitted — decisions, not gaps. Don't "fix" these.
+
+- **No HPO / sweeper.** `train.py` returns the monitored metric, which is the whole
+  coupling surface; adding Optuna later touches nothing in `engine/`.
+- **No FSDP or model parallelism in `engine/`.** DDP is what ships. FSDP2 is *reachable*
+  without engine edits — subclass `Trainer` and override `wrap()`; verified on gloo/CPU,
+  weights update and ranks stay in sync. Sharded checkpoints need a `WeightFormat`.
+- **No architecture-compatibility probing in `device: auto`.** On a mismatched box pass
+  `trainer.device=cpu`.
+- **No model-specific machinery in `engine/`** (FNO, GNO, Transolver…). Fork per model
+  family; extend via `Trainer`, `Logger`, `WeightFormat`, `Callback`.
+- **No `notebooks/explore_run.ipynb`.** A stub notebook is noise; `utils/runs.py` plus
+  `metrics.jsonl` cover the real need.
+- **No weights-only CLI flag.** `resume=<dir>` is an exact resume. Fine-tuning from
+  someone else's weights is `load_checkpoint(..., weights_only=True)` behind an
+  `init_from` argument on your model, so it stays configurable — recipe in `USAGE.md`.
+- **No DataModule implements `state_dict()`/`load_state_dict()`.** The mechanism is
+  tested; no shipped example uses it, so resume restores model and optimizer while the
+  loader restarts from the top, and the Trainer says so. Only bites streaming runs.
+- `EarlyStopping` and `GradStats` are implemented and tested but commented out in
+  `configs/callbacks/default.yaml` — enable per experiment.
+
 ## Code graph
 
-`.graphify/graph.json` is a committed structural index (564 nodes, 1293 edges) for
+`.graphify/graph.json` is a committed structural index for
 locating code without reading files. It is **stale after any code change** — refresh it
 with the structural, LLM-free command:
 

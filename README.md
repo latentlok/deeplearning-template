@@ -18,7 +18,7 @@ It works with anything that satisfies four assumptions:
 4. Progress is measured in steps.
 
 `batch` is never inspected, model outputs are a free dict, and steps return arbitrary
-scalars. Roughly 1,400 lines total, ~1,000 of which you never rewrite.
+scalars. Roughly 1,800 lines of code, ~1,300 of which you never rewrite.
 
 ## Layout
 
@@ -54,7 +54,7 @@ Hydra's lazy `--shell-completion` help object. Lift it when hydra-core 1.4 ships
 Verify:
 
 ```bash
-uv run pytest tests/ -q                # 74 tests
+uv run pytest tests/ -q                # 76 tests
 uv run python train.py experiment=e0   # ~20-step smoke run
 ```
 
@@ -69,7 +69,6 @@ or pass `trainer.device=cpu`.
   evaluation, sweeps, adding your own model.
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** — the two contracts, the loop, and why each
   design decision is the way it is.
-- **[UNRESOLVED.md](UNRESOLVED.md)** — what is untested versus deliberately omitted.
 
 ## What ships
 

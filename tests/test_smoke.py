@@ -385,6 +385,133 @@ def test_datamodule_state_is_round_tripped(tmp_path) -> None:
     assert fresh.restored == 4242
 
 
+def _ddp_worker(rank: int, world: int, port: int, out: str) -> None:
+    """One rank of the DDP regression test. Module level so spawn can pickle it."""
+    import os
+
+    os.environ.update(
+        RANK=str(rank),
+        WORLD_SIZE=str(world),
+        LOCAL_RANK=str(rank),
+        MASTER_ADDR="127.0.0.1",
+        MASTER_PORT=str(port),
+    )
+    from engine.trainer import Trainer
+    from dataset.examples import SyntheticData
+    from models.mlp import MLP
+
+    torch.manual_seed(0)  # identical init; only the DATA differs per rank
+    module = MLP()
+    dm = SyntheticData(n_train=128, n_val=32, batch_size=16, seed=100 + rank)
+    Trainer(max_steps=3, val_every=0, log_every=0, device="cpu").fit(module, dm)
+    torch.save(torch.cat([p.detach().flatten() for p in module.parameters()]), f"{out}/{rank}.pt")
+
+
+def test_ddp_ranks_actually_all_reduce(tmp_path) -> None:
+    """Regression: the Trainer wrapped the module in DDP and then called
+    self.raw.training_step, walking straight past DistributedDataParallel.forward. The
+    reducer's prepare_for_backward never ran, so NOTHING was ever all-reduced and the
+    ranks silently trained into different models -- no error, and a healthy loss curve
+    on every rank. no_sync() was decorative.
+
+    Feeding each rank different data is what makes this falsifiable: identical data
+    gives identical gradients and the test passes either way.
+    """
+    import socket
+
+    import torch.multiprocessing as mp
+
+    with socket.socket() as s:
+        s.bind(("", 0))
+        port = s.getsockname()[1]
+
+    mp.spawn(_ddp_worker, args=(2, port, str(tmp_path)), nprocs=2, join=True)
+    a, b = torch.load(tmp_path / "0.pt"), torch.load(tmp_path / "1.pt")
+    assert torch.equal(a, b), f"ranks diverged: max |a-b| = {(a - b).abs().max().item()}"
+
+
+def test_complex_weights_are_split_in_histograms_and_named_in_checkpoint_errors(
+    tmp_path,
+) -> None:
+    """The complex path was reasoned about but never executed: no shipped model has
+    complex weights, so neither the histogram split nor the dtype error had ever run.
+
+    add_histogram does NOT reject complex -- it casts to real and silently drops the
+    imaginary part -- so a single tag here would mean diagnostics that quietly tell
+    half the truth. safetensors 0.8.0 round-trips complex64 but raises KeyError on
+    complex128, which is why the error has to name the escape hatch.
+    """
+    from engine.base import OptimSpec, TaskModule
+    from engine.callbacks import GradStats
+    from engine.checkpoint import SafetensorsFormat
+    from engine.tracking import TensorBoardLogger
+
+    class Spectral(TaskModule):
+        def __init__(self, dtype=torch.complex64):
+            super().__init__()
+            self.w = torch.nn.Parameter(torch.randn(8, 1, dtype=dtype))
+
+        def training_step(self, batch, state):
+            return {"loss": (batch["x"].to(self.w.dtype) @ self.w).abs().pow(2).mean()}
+
+        validation_step = training_step
+
+        def configure_optimizers(self):
+            return OptimSpec.of(torch.optim.Adam(self.parameters(), lr=1e-3))
+
+    class RecordingWriter:
+        def __init__(self):
+            self.tags = []
+
+        def add_histogram(self, tag, values, step):
+            assert not values.is_complex(), f"{tag} reached add_histogram still complex"
+            self.tags.append(tag)
+
+        def add_scalar(self, *a, **kw): ...
+        def flush(self): ...
+        def close(self): ...
+
+    logger = TensorBoardLogger(tmp_path / "tb")
+    logger.writer = RecordingWriter()
+
+    cfg = load(["experiment=e0"])
+    trainer = Trainer(
+        max_steps=2,
+        val_every=0,
+        log_every=0,
+        device="cpu",
+        callbacks=[GradStats(every=1)],
+        logger=logger,
+    )
+    import warnings
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        trainer.fit(Spectral(), hydra.utils.instantiate(cfg.data))
+
+    # Nothing on this path may quietly drop the imaginary half -- not the dtype cast in
+    # fit(), not the grad norm in GradStats, not the histograms.
+    dropped = [str(w.message) for w in caught if "imaginary" in str(w.message)]
+    assert not dropped, dropped
+
+    # fit() casts the module to param_dtype, and Module.to(float32) converts complex
+    # parameters too -- which would drop the imaginary part before training even began.
+    assert trainer.raw.w.is_complex(), "fit() flattened a complex parameter to real"
+
+    tags = set(logger.writer.tags)
+    assert {"weights/w/abs", "weights/w/real", "weights/w/imag"} <= tags, tags
+    assert {"grads/w/abs", "grads/w/real", "grads/w/imag"} <= tags, tags
+    assert "weights/w" not in tags, "complex tensor was logged as a single real histogram"
+
+    SafetensorsFormat().save(trainer.raw, tmp_path / "c64.safetensors")
+    restored = Spectral()
+    SafetensorsFormat().load(restored, tmp_path / "c64.safetensors")
+    assert torch.equal(restored.w.detach(), trainer.raw.w.detach())
+
+    with pytest.raises(RuntimeError, match="checkpoint.format"):
+        SafetensorsFormat().save(Spectral(torch.complex128), tmp_path / "c128.safetensors")
+
+
 def test_trainstate_roundtrips() -> None:
     s = TrainState(global_step=7, epoch=2, samples_seen=99, metrics={"a": 1.0})
     t = TrainState()

@@ -80,7 +80,7 @@ def main() -> None:
         runs = [r for r in runs if r.get("status") == args.status]
     for cond in args.where:
         key, _, val = cond.partition("=")
-        runs = [r for r in runs if r["overrides"].get(key) == val]
+        runs = [r for r in runs if _matches(r["overrides"].get(key), val)]
 
     if args.sort:
         runs = [r for r in runs if args.sort in (r.get("metrics") or {})]
@@ -118,6 +118,23 @@ def main() -> None:
     for row in rows:
         print(line(row))
     print(f"\n{len(runs)} run(s). '*' marks a dirty working tree.")
+
+
+def _matches(have: str | None, want: str) -> bool:
+    """Literal match first, then numeric.
+
+    Overrides are stored as the strings you typed, so a literal-only comparison makes
+    `--where model.lr=0.005` silently return nothing for a run launched as
+    `model.lr=5e-3` -- the same number, spelled differently.
+    """
+    if have is None:
+        return False
+    if have == want:
+        return True
+    try:
+        return float(have) == float(want)
+    except ValueError:
+        return False
 
 
 def _fmt(v: Any) -> str:

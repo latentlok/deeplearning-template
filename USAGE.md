@@ -129,7 +129,7 @@ max_steps: 2000        # primary — the loop is step-first
 max_epochs: null       # optional cap, checked at epoch boundaries
 grad_accum: 1          # effective batch = batch_size x grad_accum x world_size
 clip_grad: null
-device: auto           # auto | cpu | cuda | cuda:0
+device: auto           # auto | cpu | cuda | cuda:0; auto -> cuda:LOCAL_RANK, else cpu
 compile: false         # torch.compile; off by default, it obscures tracebacks
 log_every: 50          # steps
 val_every: 200         # steps
@@ -764,6 +764,14 @@ is fine for small physics models and painful at scale.
 Per-module overrides need no template support: call `.double()` or `.to(dtype)` in your
 module's `__init__`. Global default, local freedom.
 
+**Complex weights follow the real dtype** — `float32` gives `complex64`, `float64` gives
+`complex128` — and are never flattened to real. This needs saying because
+`nn.Module.to(float32)` casts complex parameters too: torch's `_apply` converts anything
+`is_floating_point()` *or* `is_complex()`, so the obvious implementation would discard
+the imaginary part of every spectral weight and emit nothing but a `ComplexWarning`. The
+Trainer moves modules with `cast_module` instead. Note `dtype=float64` plus complex
+weights means `complex128`, which safetensors cannot write — see *Checkpoint format*.
+
 ---
 
 ## Rollouts and manual inference
@@ -874,14 +882,43 @@ micro-steps are handled for you:
 uv run torchrun --nproc_per_node=4 train.py experiment=mine
 ```
 
-Single-device is the same code with `world_size == 1`. Add a `DistributedSampler` in
-your DataModule when `world_size > 1`.
+Single-device is the same code with `world_size == 1`. **Add a `DistributedSampler` in
+your DataModule when `world_size > 1`** — without one every rank draws the same batches
+and you pay N devices for one device's worth of data. The Trainer warns when it sees a
+train loader without one.
 
-**Not verified on hardware** — this project's development machine has no compatible GPU,
-so the distributed and `torch.compile` paths are written but untested. Treat them as
-first things to check on a real multi-GPU box. Note also that DDP handles
-double-backward poorly, so models with `create_graph=True` physics losses are better run
-single-device.
+### Swapping the strategy
+
+`Trainer.wrap()` is the single place where compile and distributed wrapping happen.
+Override it and nothing else changes:
+
+```python
+class FSDPTrainer(Trainer):
+    def wrap(self, module):
+        fully_shard(module)      # FSDP2 shards in place; no wrapper object
+        return module
+```
+
+Two rules make this work, and both are load-bearing:
+
+- **Whatever `wrap()` returns must own the forward.** DDP and `torch.compile` only act
+  on graphs built inside their own `forward`; calling `module.training_step` directly
+  walks past both — DDP silently stops all-reducing and compile traces nothing.
+- **`wrap()` runs before `configure_optimizers()`**, because FSDP2 replaces every
+  `Parameter` with a sharded `DTensor`. Build the optimizer first and it holds the
+  pre-shard tensors, which never receive a gradient: the run trains, logs a loss, and
+  updates nothing.
+
+Sharded weights do not go through `safetensors` — a `DTensor` has no accessible storage
+pointer. Use `checkpoint.format=torch` (per-rank) or subclass `WeightFormat` around
+`torch.distributed.checkpoint`. The error names the escape hatch.
+
+**Verified on CPU/gloo only.** Two-rank DDP, `no_sync()` with `grad_accum`, rank-zero
+gating, `torch.compile`, `amp=bf16`/`fp16` and FSDP2 via `wrap()` are all exercised on
+this project's machine, which has no compatible GPU. What that does *not* cover: CUDA
+kernels, the `nccl` backend, multi-GPU device placement and `GradScaler` on real fp16
+hardware. Note also that DDP handles double-backward poorly, so models with
+`create_graph=True` physics losses are better run single-device.
 
 ---
 

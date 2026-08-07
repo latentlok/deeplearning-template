@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "engine/callbacks.py": {
-    "mtime": 1786128447.2194757,
-    "ast_hash": "9891ca6fd70346cc04dab021c887cadd",
+    "mtime": 1786130094.0534422,
+    "ast_hash": "14a35a67e38b36a31f778cf3ac2c0727",
     "semantic_hash": ""
   },
   "engine/checkpoint.py": {
@@ -45,18 +45,18 @@
     "semantic_hash": ""
   },
   "engine/train.py": {
-    "mtime": 1786129395.546618,
-    "ast_hash": "016f61ab1d8ac46424970569486f6ea9",
+    "mtime": 1786130094.0534422,
+    "ast_hash": "fa033cd8134814955541a6ff81de95a5",
     "semantic_hash": ""
   },
   "engine/trainer.py": {
-    "mtime": 1786128413.9454715,
-    "ast_hash": "b1fde7c373fc9d7d5d6701342e256856",
+    "mtime": 1786130107.8279865,
+    "ast_hash": "7b0d38f7f6367cfda0b7d9862049a26d",
     "semantic_hash": ""
   },
   "engine/utils.py": {
-    "mtime": 1786128459.4914775,
-    "ast_hash": "ddfe8930aae2bd30ce401e50a8185bed",
+    "mtime": 1786130094.0538902,
+    "ast_hash": "69b778ea5f4150a4d24169838929947f",
     "semantic_hash": ""
   },
   "eval.py": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "tests/test_smoke.py": {
-    "mtime": 1786128864.5965307,
-    "ast_hash": "9bfab850df06e59ae41303adc66bb505",
+    "mtime": 1786130094.054302,
+    "ast_hash": "daa0c487640770110fa8ed808a411d2f",
     "semantic_hash": ""
   },
   "train.py": {
@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "utils/runs.py": {
-    "mtime": 1786128662.711504,
-    "ast_hash": "811412d8a53cc14a2b6dc0e555aa26f5",
+    "mtime": 1786130094.0544462,
+    "ast_hash": "369340a0b4aace6a4cffc02496d51522",
     "semantic_hash": ""
   },
   "utils/stats.py": {
@@ -145,33 +145,48 @@
     "semantic_hash": ""
   },
   "ARCHITECTURE.md": {
-    "mtime": 1786129202.2609653,
-    "ast_hash": "e556a911d28a48fcdc08bf3c692c402a",
+    "mtime": 1786130127.2606695,
+    "ast_hash": "ce9bbb9c8bb8efa3e6c85c7a09b4b5b0",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1786129356.0351198,
-    "ast_hash": "5ebca69e0bf1e08dab980d90e3e715eb",
+    "mtime": 1786130168.0236242,
+    "ast_hash": "405957866c083f7bf31bfd34caabdaa6",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1786129172.1781247,
-    "ast_hash": "280e44fe4661dc7c9001882c56b488a0",
-    "semantic_hash": ""
-  },
-  "UNRESOLVED.md": {
-    "mtime": 1786129319.480597,
-    "ast_hash": "2e6cc37e8e21bfd04cf5466526f1a87c",
+    "mtime": 1786130119.5498176,
+    "ast_hash": "8d6be5bef8e08c7e676b7967e6476259",
     "semantic_hash": ""
   },
   "USAGE.md": {
-    "mtime": 1786129289.332589,
-    "ast_hash": "cba668d3b9587941748cae605a84bca2",
+    "mtime": 1786130094.0532408,
+    "ast_hash": "b7b34c8a1a5f710ff534688d5bca4039",
     "semantic_hash": ""
   },
   "configs/callbacks/default.yaml": {
     "mtime": 1786128727.9425128,
     "ast_hash": "8d38b38a22e152c81464d5241dbddcb1",
+    "semantic_hash": ""
+  },
+  "configs/data/collocation.yaml": {
+    "mtime": 1786128403.1785715,
+    "ast_hash": "d3b062b16f13d7f0382dce041815f8f7",
+    "semantic_hash": ""
+  },
+  "configs/data/folder.yaml": {
+    "mtime": 1786128718.6805115,
+    "ast_hash": "d71189a3e54ebd00285df7a09ab62cf1",
+    "semantic_hash": ""
+  },
+  "configs/data/series.yaml": {
+    "mtime": 1786128403.1805735,
+    "ast_hash": "ff7728e1ed341462cc8166a2a41c71a0",
+    "semantic_hash": ""
+  },
+  "configs/data/synthetic.yaml": {
+    "mtime": 1786128403.1795843,
+    "ast_hash": "769c42db76576e1f487a7aeae0229fb4",
     "semantic_hash": ""
   },
   "configs/debug/fast_dev.yaml": {

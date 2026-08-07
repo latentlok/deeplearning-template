@@ -222,7 +222,10 @@ class GradStats(Callback):
         for name, p in module.named_parameters():
             if p.grad is None:
                 continue
-            total += float(p.grad.detach().float().norm() ** 2)
+            # .float() on a complex grad discards the imaginary part, so the norm
+            # would silently be the real part's. abs() first keeps the magnitude.
+            g = p.grad.detach()
+            total += float((g.abs() if g.is_complex() else g).float().norm() ** 2)
             if self.histograms and trainer.logger is not None:
                 trainer.logger.log_histogram(f"weights/{name}", p.detach(), state.global_step)
                 trainer.logger.log_histogram(f"grads/{name}", p.grad.detach(), state.global_step)
