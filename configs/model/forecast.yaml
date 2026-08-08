@@ -1,7 +1,9 @@
 _target_: models.forecast.Forecaster
 window: 16
 hidden_dim: 64
-lr: 1e-3
+
+optim: ${optim}
+sched: ${oc.select:sched,null}
 
 # Scheduled sampling. Default is pure teacher forcing (constant 1.0). Anneal it to 0
 # to close the train/deploy gap -- and note this is an object rather than an inline

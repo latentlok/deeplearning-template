@@ -20,8 +20,12 @@ bug if you carry state unintentionally.
 
 from __future__ import annotations
 
+from collections.abc import Callable
+from typing import Any
+
 import torch
 from torch import Tensor, nn
+from torch.optim import Optimizer
 
 from engine.base import DataModule, OptimSpec, TaskModule, TrainState
 from engine.utils import ScheduledValue
@@ -34,12 +38,16 @@ class Forecaster(TaskModule):
         self,
         window: int = 16,
         hidden_dim: int = 64,
+        optim: Callable[..., Optimizer] | None = None,
+        sched: Callable[..., Any] | None = None,
         lr: float = 1e-3,
         teacher_forcing: ScheduledValue | None = None,
     ) -> None:
         super().__init__()
         self.window = window
-        self.lr = lr
+        # Factories from configs/optim/ and configs/sched/; `lr` is the fallback for
+        # direct construction only.
+        self.optim, self.sched, self.lr = optim, sched, lr
         # Default is pure teacher forcing. Anneal it to 0 for scheduled sampling --
         # `-m teacher_forcing.over_steps=500,2000` is why this is an object and not
         # an inline `max(0., 1 - step/2000)`.
@@ -124,6 +132,10 @@ class Forecaster(TaskModule):
         }
 
     def configure_optimizers(self) -> OptimSpec:
-        opt = torch.optim.AdamW(self.parameters(), lr=self.lr)
-        sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=1000)
+        opt = (
+            self.optim(self.parameters())
+            if self.optim is not None
+            else torch.optim.AdamW(self.parameters(), lr=self.lr)
+        )
+        sched = self.sched(opt) if self.sched is not None else None
         return OptimSpec.of(opt, sched, interval="step")

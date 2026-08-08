@@ -81,8 +81,8 @@ you don't need:
 | `forecast.py` | windowed forecasting: scaler-as-buffers, temporal split, teacher forcing vs free-running rollout, multi-horizon eval |
 | `pinn.py` | `du/dx = -u` with a gradient loss and gradient-adaptive term weighting; converges against the analytic `e^(-x)` |
 
-Plus `dataset/loader.py` — a real dataloader over `$DL_DATA/{train,val}` (`.npy`,
-`.zarr`, `.pt`), which is the file you rewrite for your own data.
+Plus `dataset/loader.py` — a real dataloader over a zarr group of named variables at
+`$DL_DATA/{train,val}.zarr`, which is the file you rewrite for your own data.
 
 ## Licence
 

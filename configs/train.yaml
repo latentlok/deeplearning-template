@@ -19,6 +19,8 @@ defaults:
   - paths: default
   - model: mlp
   - data: synthetic
+  - optim: adamw
+  - sched: null # optional: sched=cosine, sched=step
   - trainer: default
   - callbacks: default
   - tracking: default

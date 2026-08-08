@@ -1,0 +1,11 @@
+# The optimizer, built without its params. `_partial_: true` makes hydra return a
+# factory; the model calls it with self.parameters() in configure_optimizers.
+#
+#   python train.py optim=sgd
+#   python train.py optim.lr=3e-4
+#   python train.py -m optim.lr=1e-4,3e-4,1e-3
+_target_: torch.optim.AdamW
+_partial_: true
+lr: 1e-3
+weight_decay: 0.0
+betas: [0.9, 0.999]

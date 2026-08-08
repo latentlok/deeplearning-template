@@ -9,6 +9,10 @@ defaults:
   - paths: default
   - model: mlp
   - data: synthetic
+  # Present so model configs can interpolate ${optim}. Evaluation never builds an
+  # optimizer, so which one this is has no effect on the numbers.
+  - optim: adamw
+  - sched: null
   - trainer: default
   - tracking: default
   - experiment: null

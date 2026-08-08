@@ -323,11 +323,11 @@
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_open",
-      "label": "_open()",
+      "id": "dataset_loader_open_group",
+      "label": "open_group()",
       "file_type": "code",
       "source_file": "dataset/loader.py",
-      "source_location": "L48",
+      "source_location": "L60",
       "_origin": "ast"
     },
     {
@@ -347,48 +347,16 @@
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_find",
-      "label": "_find()",
+      "id": "dataset_loader_pick",
+      "label": "pick()",
       "file_type": "code",
       "source_file": "dataset/loader.py",
-      "source_location": "L66",
+      "source_location": "L78",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_arraypairs",
-      "label": "ArrayPairs",
-      "file_type": "code",
-      "source_file": "dataset/loader.py",
-      "source_location": "L77",
-      "_origin": "ast"
-    },
-    {
-      "id": "dataset_loader_py_dataset",
-      "label": "Dataset",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast"
-    },
-    {
-      "id": "dataset_loader_arraypairs_init",
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "dataset/loader.py",
-      "source_location": "L80",
-      "_origin": "ast"
-    },
-    {
-      "id": "dataset_loader_arraypairs_len",
-      "label": ".__len__()",
-      "file_type": "code",
-      "source_file": "dataset/loader.py",
-      "source_location": "L85",
-      "_origin": "ast"
-    },
-    {
-      "id": "dataset_loader_arraypairs_getitem",
-      "label": ".__getitem__()",
+      "id": "dataset_loader_row",
+      "label": "row()",
       "file_type": "code",
       "source_file": "dataset/loader.py",
       "source_location": "L88",
@@ -403,51 +371,99 @@
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_folderdata",
-      "label": "FolderData",
+      "id": "dataset_loader_common_length",
+      "label": "_common_length()",
       "file_type": "code",
       "source_file": "dataset/loader.py",
-      "source_location": "L98",
+      "source_location": "L93",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_folderdata_init",
+      "id": "dataset_loader_zarrrows",
+      "label": "ZarrRows",
+      "file_type": "code",
+      "source_file": "dataset/loader.py",
+      "source_location": "L103",
+      "_origin": "ast"
+    },
+    {
+      "id": "dataset_loader_py_dataset",
+      "label": "Dataset",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
+      "id": "dataset_loader_zarrrows_init",
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "dataset/loader.py",
-      "source_location": "L101",
+      "source_location": "L107",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_folderdata_split",
+      "id": "dataset_loader_zarrrows_len",
+      "label": ".__len__()",
+      "file_type": "code",
+      "source_file": "dataset/loader.py",
+      "source_location": "L114",
+      "_origin": "ast"
+    },
+    {
+      "id": "dataset_loader_zarrrows_getitem",
+      "label": ".__getitem__()",
+      "file_type": "code",
+      "source_file": "dataset/loader.py",
+      "source_location": "L117",
+      "_origin": "ast"
+    },
+    {
+      "id": "dataset_loader_zarrdata",
+      "label": "ZarrData",
+      "file_type": "code",
+      "source_file": "dataset/loader.py",
+      "source_location": "L121",
+      "_origin": "ast"
+    },
+    {
+      "id": "dataset_loader_zarrdata_init",
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "dataset/loader.py",
+      "source_location": "L124",
+      "_origin": "ast"
+    },
+    {
+      "id": "dataset_loader_zarrdata_split",
       "label": "._split()",
       "file_type": "code",
       "source_file": "dataset/loader.py",
-      "source_location": "L128",
+      "source_location": "L149",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_folderdata_load_stats",
+      "id": "dataset_loader_zarrdata_load_stats",
       "label": "._load_stats()",
       "file_type": "code",
       "source_file": "dataset/loader.py",
-      "source_location": "L137",
+      "source_location": "L152",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_folderdata_setup",
+      "id": "dataset_loader_zarrdata_setup",
       "label": ".setup()",
       "file_type": "code",
       "source_file": "dataset/loader.py",
-      "source_location": "L151",
+      "source_location": "L177",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_folderdata_loader",
+      "id": "dataset_loader_zarrdata_loader",
       "label": "._loader()",
       "file_type": "code",
       "source_file": "dataset/loader.py",
-      "source_location": "L159",
+      "source_location": "L183",
       "_origin": "ast"
     },
     {
@@ -459,19 +475,27 @@
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_folderdata_train_dataloader",
+      "id": "dataset_loader_zarrdata_train_dataloader",
       "label": ".train_dataloader()",
       "file_type": "code",
       "source_file": "dataset/loader.py",
-      "source_location": "L173",
+      "source_location": "L195",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_folderdata_val_dataloader",
+      "id": "dataset_loader_zarrdata_val_dataloader",
       "label": ".val_dataloader()",
       "file_type": "code",
       "source_file": "dataset/loader.py",
-      "source_location": "L177",
+      "source_location": "L199",
+      "_origin": "ast"
+    },
+    {
+      "id": "dataset_loader_assemble",
+      "label": "_assemble()",
+      "file_type": "code",
+      "source_file": "dataset/loader.py",
+      "source_location": "L204",
       "_origin": "ast"
     },
     {
@@ -479,63 +503,87 @@
       "label": "_collate()",
       "file_type": "code",
       "source_file": "dataset/loader.py",
-      "source_location": "L182",
+      "source_location": "L215",
       "_origin": "ast"
     },
     {
       "id": "dataset_loader_rationale_1",
-      "label": "The dataloader you rewrite. Reads data that lives OUTSIDE the repo.  Expected la",
+      "label": "The dataloader you rewrite. Reads a zarr group that lives OUTSIDE the repo.  Exp",
       "file_type": "rationale",
       "source_file": "dataset/loader.py",
       "source_location": "L1",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_rationale_49",
-      "label": "Open one array lazily. Suffix dispatch -- add your format here.      Returns any",
+      "id": "dataset_loader_rationale_61",
+      "label": "Open a zarr group read-only, with errors that say what to fix.",
       "file_type": "rationale",
       "source_file": "dataset/loader.py",
-      "source_location": "L49",
+      "source_location": "L61",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_rationale_67",
-      "label": "<dir>/<stem>.{npy,zarr,pt} -- whichever exists.",
+      "id": "dataset_loader_rationale_79",
+      "label": "Look up each named variable, listing what is in the store on a miss.",
       "file_type": "rationale",
       "source_file": "dataset/loader.py",
-      "source_location": "L67",
+      "source_location": "L79",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_rationale_78",
-      "label": "One (inputs, targets) pair per index. Both arrays must agree on length.",
+      "id": "dataset_loader_rationale_89",
+      "label": "Row i of every variable, concatenated into one flat vector.",
       "file_type": "rationale",
       "source_file": "dataset/loader.py",
-      "source_location": "L78",
+      "source_location": "L89",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_rationale_99",
-      "label": "<root>/train and <root>/val, each holding one inputs array and one targets array",
+      "id": "dataset_loader_rationale_94",
+      "label": "Every variable must span the same number of rows. A mismatch means the store was",
       "file_type": "rationale",
       "source_file": "dataset/loader.py",
-      "source_location": "L99",
+      "source_location": "L94",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_rationale_138",
-      "label": "Statistics are READ, never computed. See the module docstring.",
+      "id": "dataset_loader_rationale_104",
+      "label": "One row per index. THIS is the class to rewrite for a different sampling scheme:",
       "file_type": "rationale",
       "source_file": "dataset/loader.py",
-      "source_location": "L138",
+      "source_location": "L104",
       "_origin": "ast"
     },
     {
-      "id": "dataset_loader_rationale_183",
+      "id": "dataset_loader_rationale_122",
+      "label": "<root>/train.zarr and <root>/val.zarr, each a group of named variables.",
+      "file_type": "rationale",
+      "source_file": "dataset/loader.py",
+      "source_location": "L122",
+      "_origin": "ast"
+    },
+    {
+      "id": "dataset_loader_rationale_153",
+      "label": "Read stats.json and assemble it into the vectors the model wants.          On di",
+      "file_type": "rationale",
+      "source_file": "dataset/loader.py",
+      "source_location": "L153",
+      "_origin": "ast"
+    },
+    {
+      "id": "dataset_loader_rationale_205",
+      "label": "Concatenate one statistic across the named variables, in config order.",
+      "file_type": "rationale",
+      "source_file": "dataset/loader.py",
+      "source_location": "L205",
+      "_origin": "ast"
+    },
+    {
+      "id": "dataset_loader_rationale_216",
       "label": "List of samples -> one batch. Augmentation and masking belong HERE (or in     tr",
       "file_type": "rationale",
       "source_file": "dataset/loader.py",
-      "source_location": "L183",
+      "source_location": "L216",
       "_origin": "ast"
     },
     {
@@ -2671,7 +2719,7 @@
       "label": "Forecaster",
       "file_type": "code",
       "source_file": "models/forecast.py",
-      "source_location": "L30",
+      "source_location": "L34",
       "_origin": "ast"
     },
     {
@@ -2679,7 +2727,23 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "models/forecast.py",
-      "source_location": "L33",
+      "source_location": "L37",
+      "_origin": "ast"
+    },
+    {
+      "id": "models_forecast_py_optimizer",
+      "label": "Optimizer",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
+      "id": "models_forecast_py_any",
+      "label": "Any",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
       "_origin": "ast"
     },
     {
@@ -2687,7 +2751,7 @@
       "label": ".set_scaler()",
       "file_type": "code",
       "source_file": "models/forecast.py",
-      "source_location": "L53",
+      "source_location": "L61",
       "_origin": "ast"
     },
     {
@@ -2695,7 +2759,7 @@
       "label": ".on_data_ready()",
       "file_type": "code",
       "source_file": "models/forecast.py",
-      "source_location": "L57",
+      "source_location": "L65",
       "_origin": "ast"
     },
     {
@@ -2703,7 +2767,7 @@
       "label": "._norm()",
       "file_type": "code",
       "source_file": "models/forecast.py",
-      "source_location": "L66",
+      "source_location": "L74",
       "_origin": "ast"
     },
     {
@@ -2719,7 +2783,7 @@
       "label": "._denorm()",
       "file_type": "code",
       "source_file": "models/forecast.py",
-      "source_location": "L69",
+      "source_location": "L77",
       "_origin": "ast"
     },
     {
@@ -2727,7 +2791,7 @@
       "label": ".forward()",
       "file_type": "code",
       "source_file": "models/forecast.py",
-      "source_location": "L72",
+      "source_location": "L80",
       "_origin": "ast"
     },
     {
@@ -2735,7 +2799,7 @@
       "label": "._unroll()",
       "file_type": "code",
       "source_file": "models/forecast.py",
-      "source_location": "L78",
+      "source_location": "L86",
       "_origin": "ast"
     },
     {
@@ -2743,7 +2807,7 @@
       "label": ".training_step()",
       "file_type": "code",
       "source_file": "models/forecast.py",
-      "source_location": "L95",
+      "source_location": "L103",
       "_origin": "ast"
     },
     {
@@ -2751,7 +2815,7 @@
       "label": ".validation_step()",
       "file_type": "code",
       "source_file": "models/forecast.py",
-      "source_location": "L105",
+      "source_location": "L113",
       "_origin": "ast"
     },
     {
@@ -2759,7 +2823,7 @@
       "label": ".rollout_step()",
       "file_type": "code",
       "source_file": "models/forecast.py",
-      "source_location": "L115",
+      "source_location": "L123",
       "_origin": "ast"
     },
     {
@@ -2767,7 +2831,7 @@
       "label": ".configure_optimizers()",
       "file_type": "code",
       "source_file": "models/forecast.py",
-      "source_location": "L126",
+      "source_location": "L134",
       "_origin": "ast"
     },
     {
@@ -2779,51 +2843,51 @@
       "_origin": "ast"
     },
     {
-      "id": "models_forecast_rationale_31",
+      "id": "models_forecast_rationale_35",
       "label": "One-step-ahead model applied recursively. window -> next value.",
       "file_type": "rationale",
       "source_file": "models/forecast.py",
-      "source_location": "L31",
+      "source_location": "L35",
       "_origin": "ast"
     },
     {
-      "id": "models_forecast_rationale_58",
+      "id": "models_forecast_rationale_66",
       "label": "Take the scaler the datamodule fitted on the TRAIN split.          Without this",
       "file_type": "rationale",
       "source_file": "models/forecast.py",
-      "source_location": "L58",
+      "source_location": "L66",
       "_origin": "ast"
     },
     {
-      "id": "models_forecast_rationale_73",
+      "id": "models_forecast_rationale_81",
       "label": "(B, window) raw units -> (B,) raw units.",
       "file_type": "rationale",
       "source_file": "models/forecast.py",
-      "source_location": "L73",
+      "source_location": "L81",
       "_origin": "ast"
     },
     {
-      "id": "models_forecast_rationale_79",
+      "id": "models_forecast_rationale_87",
       "label": "Roll `horizon` steps. tf_ratio=1 is pure teacher forcing, 0 is free-running.",
       "file_type": "rationale",
       "source_file": "models/forecast.py",
-      "source_location": "L79",
+      "source_location": "L87",
       "_origin": "ast"
     },
     {
-      "id": "models_forecast_rationale_106",
+      "id": "models_forecast_rationale_114",
       "label": "Teacher-forced and cheap -- run every val_every.",
       "file_type": "rationale",
       "source_file": "models/forecast.py",
-      "source_location": "L106",
+      "source_location": "L114",
       "_origin": "ast"
     },
     {
-      "id": "models_forecast_rationale_116",
+      "id": "models_forecast_rationale_124",
       "label": "Free-running -- what deployment actually looks like. Expensive, so it runs",
       "file_type": "rationale",
       "source_file": "models/forecast.py",
-      "source_location": "L116",
+      "source_location": "L124",
       "_origin": "ast"
     },
     {
@@ -2839,7 +2903,7 @@
       "label": "MLP",
       "file_type": "code",
       "source_file": "models/mlp.py",
-      "source_location": "L19",
+      "source_location": "L36",
       "_origin": "ast"
     },
     {
@@ -2847,7 +2911,23 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "models/mlp.py",
-      "source_location": "L20",
+      "source_location": "L37",
+      "_origin": "ast"
+    },
+    {
+      "id": "models_mlp_py_optimizer",
+      "label": "Optimizer",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
+      "id": "models_mlp_py_any",
+      "label": "Any",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
       "_origin": "ast"
     },
     {
@@ -2855,7 +2935,7 @@
       "label": ".on_data_ready()",
       "file_type": "code",
       "source_file": "models/mlp.py",
-      "source_location": "L43",
+      "source_location": "L61",
       "_origin": "ast"
     },
     {
@@ -2863,7 +2943,7 @@
       "label": ".forward()",
       "file_type": "code",
       "source_file": "models/mlp.py",
-      "source_location": "L55",
+      "source_location": "L74",
       "_origin": "ast"
     },
     {
@@ -2879,7 +2959,7 @@
       "label": ".training_step()",
       "file_type": "code",
       "source_file": "models/mlp.py",
-      "source_location": "L59",
+      "source_location": "L78",
       "_origin": "ast"
     },
     {
@@ -2887,7 +2967,7 @@
       "label": ".validation_step()",
       "file_type": "code",
       "source_file": "models/mlp.py",
-      "source_location": "L63",
+      "source_location": "L83",
       "_origin": "ast"
     },
     {
@@ -2895,7 +2975,7 @@
       "label": ".configure_optimizers()",
       "file_type": "code",
       "source_file": "models/mlp.py",
-      "source_location": "L70",
+      "source_location": "L92",
       "_origin": "ast"
     },
     {
@@ -2907,11 +2987,19 @@
       "_origin": "ast"
     },
     {
-      "id": "models_mlp_rationale_44",
+      "id": "models_mlp_rationale_62",
       "label": "Called once by the Trainer, after datamodule.setup(\"fit\").          `stats` is a",
       "file_type": "rationale",
       "source_file": "models/mlp.py",
-      "source_location": "L44",
+      "source_location": "L62",
+      "_origin": "ast"
+    },
+    {
+      "id": "models_mlp_rationale_75",
+      "label": "Raw units in, raw units out. This is what inference calls.",
+      "file_type": "rationale",
+      "source_file": "models/mlp.py",
+      "source_location": "L75",
       "_origin": "ast"
     },
     {
@@ -2927,7 +3015,7 @@
       "label": "Weighting",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L40",
+      "source_location": "L43",
       "_origin": "ast"
     },
     {
@@ -2943,7 +3031,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L41",
+      "source_location": "L44",
       "_origin": "ast"
     },
     {
@@ -2951,7 +3039,7 @@
       "label": ".w()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L46",
+      "source_location": "L49",
       "_origin": "ast"
     },
     {
@@ -2967,7 +3055,7 @@
       "label": ".update()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L50",
+      "source_location": "L53",
       "_origin": "ast"
     },
     {
@@ -2975,7 +3063,7 @@
       "label": ".combine()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L52",
+      "source_location": "L55",
       "_origin": "ast"
     },
     {
@@ -2983,7 +3071,7 @@
       "label": ".as_metrics()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L55",
+      "source_location": "L58",
       "_origin": "ast"
     },
     {
@@ -2991,7 +3079,7 @@
       "label": "StaticWeights",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L59",
+      "source_location": "L62",
       "_origin": "ast"
     },
     {
@@ -2999,7 +3087,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L60",
+      "source_location": "L63",
       "_origin": "ast"
     },
     {
@@ -3007,7 +3095,7 @@
       "label": ".update()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L65",
+      "source_location": "L68",
       "_origin": "ast"
     },
     {
@@ -3015,7 +3103,7 @@
       "label": "GradNormWeights",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L69",
+      "source_location": "L72",
       "_origin": "ast"
     },
     {
@@ -3023,7 +3111,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L82",
+      "source_location": "L85",
       "_origin": "ast"
     },
     {
@@ -3031,7 +3119,7 @@
       "label": "._blend()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L96",
+      "source_location": "L99",
       "_origin": "ast"
     },
     {
@@ -3039,7 +3127,7 @@
       "label": ".update()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L102",
+      "source_location": "L105",
       "_origin": "ast"
     },
     {
@@ -3047,7 +3135,7 @@
       "label": "PINN",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L122",
+      "source_location": "L125",
       "_origin": "ast"
     },
     {
@@ -3055,7 +3143,23 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L126",
+      "source_location": "L129",
+      "_origin": "ast"
+    },
+    {
+      "id": "models_pinn_py_optimizer",
+      "label": "Optimizer",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
+      "id": "models_pinn_py_any",
+      "label": "Any",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
       "_origin": "ast"
     },
     {
@@ -3063,7 +3167,7 @@
       "label": ".forward()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L143",
+      "source_location": "L150",
       "_origin": "ast"
     },
     {
@@ -3071,7 +3175,7 @@
       "label": "._terms()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L146",
+      "source_location": "L153",
       "_origin": "ast"
     },
     {
@@ -3079,7 +3183,7 @@
       "label": ".training_step()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L156",
+      "source_location": "L163",
       "_origin": "ast"
     },
     {
@@ -3087,7 +3191,7 @@
       "label": ".validation_step()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L166",
+      "source_location": "L173",
       "_origin": "ast"
     },
     {
@@ -3095,7 +3199,7 @@
       "label": ".configure_optimizers()",
       "file_type": "code",
       "source_file": "models/pinn.py",
-      "source_location": "L178",
+      "source_location": "L185",
       "_origin": "ast"
     },
     {
@@ -3107,19 +3211,19 @@
       "_origin": "ast"
     },
     {
-      "id": "models_pinn_rationale_66",
+      "id": "models_pinn_rationale_69",
       "label": "No-op. Weights are whatever you configured.",
       "file_type": "rationale",
       "source_file": "models/pinn.py",
-      "source_location": "L66",
+      "source_location": "L69",
       "_origin": "ast"
     },
     {
-      "id": "models_pinn_rationale_70",
+      "id": "models_pinn_rationale_73",
       "label": "Wang-style learning-rate annealing: balance terms by gradient magnitude.",
       "file_type": "rationale",
       "source_file": "models/pinn.py",
-      "source_location": "L70",
+      "source_location": "L73",
       "_origin": "ast"
     },
     {
@@ -3214,11 +3318,43 @@
       "_origin": "ast"
     },
     {
+      "id": "tests_test_configs_test_optim_builds_an_optimizer",
+      "label": "test_optim_builds_an_optimizer()",
+      "file_type": "code",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L37",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_configs_test_sched_builds_against_an_optimizer",
+      "label": "test_sched_builds_against_an_optimizer()",
+      "file_type": "code",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L48",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_configs_test_the_model_takes_its_optimizer_from_the_optim_group",
+      "label": "test_the_model_takes_its_optimizer_from_the_optim_group()",
+      "file_type": "code",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L56",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_configs_test_no_scheduler_unless_one_is_asked_for",
+      "label": "test_no_scheduler_unless_one_is_asked_for()",
+      "file_type": "code",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L67",
+      "_origin": "ast"
+    },
+    {
       "id": "tests_test_configs_test_debug_composes",
       "label": "test_debug_composes()",
       "file_type": "code",
       "source_file": "tests/test_configs.py",
-      "source_location": "L37",
+      "source_location": "L78",
       "_origin": "ast"
     },
     {
@@ -3226,7 +3362,7 @@
       "label": "test_run_dir_template_is_grouped_and_hashed()",
       "file_type": "code",
       "source_file": "tests/test_configs.py",
-      "source_location": "L41",
+      "source_location": "L82",
       "_origin": "ast"
     },
     {
@@ -3234,7 +3370,7 @@
       "label": "test_paths_never_chain_to_a_hydra_resolver()",
       "file_type": "code",
       "source_file": "tests/test_configs.py",
-      "source_location": "L58",
+      "source_location": "L99",
       "_origin": "ast"
     },
     {
@@ -3242,7 +3378,7 @@
       "label": "test_eval_writes_into_the_run_that_produced_the_checkpoint()",
       "file_type": "code",
       "source_file": "tests/test_configs.py",
-      "source_location": "L70",
+      "source_location": "L111",
       "_origin": "ast"
     },
     {
@@ -3250,7 +3386,7 @@
       "label": "test_ckpt_run_dir_walks_up_to_the_run()",
       "file_type": "code",
       "source_file": "tests/test_configs.py",
-      "source_location": "L81",
+      "source_location": "L122",
       "_origin": "ast"
     },
     {
@@ -3258,7 +3394,7 @@
       "label": "test_run_hash_is_stable_and_override_sensitive()",
       "file_type": "code",
       "source_file": "tests/test_configs.py",
-      "source_location": "L93",
+      "source_location": "L134",
       "_origin": "ast"
     },
     {
@@ -3266,7 +3402,7 @@
       "label": "test_amp_requires_fp32()",
       "file_type": "code",
       "source_file": "tests/test_configs.py",
-      "source_location": "L103",
+      "source_location": "L144",
       "_origin": "ast"
     },
     {
@@ -3278,35 +3414,59 @@
       "_origin": "ast"
     },
     {
-      "id": "tests_test_configs_rationale_42",
+      "id": "tests_test_configs_rationale_38",
+      "label": "optim configs are _partial_: they instantiate to a factory, and only become an",
+      "file_type": "rationale",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L38",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_configs_rationale_57",
+      "label": "The whole point of the group: `optim=sgd` must reach the built optimizer without",
+      "file_type": "rationale",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L57",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_configs_rationale_68",
+      "label": "`sched: null` is the default, and oc.select must resolve it to None rather than",
+      "file_type": "rationale",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L68",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_configs_rationale_83",
       "label": "outputs/<exp>/<timestamp>_<hash6>.      The unresolved template is asserted, not",
       "file_type": "rationale",
       "source_file": "tests/test_configs.py",
-      "source_location": "L42",
+      "source_location": "L83",
       "_origin": "ast"
     },
     {
-      "id": "tests_test_configs_rationale_59",
+      "id": "tests_test_configs_rationale_100",
       "label": "${hydra:...} resolves only inside a launched job. hydra.sweep.dir is built     b",
       "file_type": "rationale",
       "source_file": "tests/test_configs.py",
-      "source_location": "L59",
+      "source_location": "L100",
       "_origin": "ast"
     },
     {
-      "id": "tests_test_configs_rationale_71",
+      "id": "tests_test_configs_rationale_112",
       "label": "A global outputs/eval/ tree is orphaned the moment an experiment has two runs:",
       "file_type": "rationale",
       "source_file": "tests/test_configs.py",
-      "source_location": "L71",
+      "source_location": "L112",
       "_origin": "ast"
     },
     {
-      "id": "tests_test_configs_rationale_104",
+      "id": "tests_test_configs_rationale_145",
       "label": "The dtype/amp pair is validated at startup, not deep in a backward pass.",
       "file_type": "rationale",
       "source_file": "tests/test_configs.py",
-      "source_location": "L104",
+      "source_location": "L145",
       "_origin": "ast"
     },
     {
@@ -3430,27 +3590,91 @@
       "_origin": "ast"
     },
     {
-      "id": "tests_test_data_make_dataset",
-      "label": "_make_dataset()",
+      "id": "tests_test_data_write_store",
+      "label": "_write_store()",
       "file_type": "code",
       "source_file": "tests/test_data.py",
-      "source_location": "L21",
+      "source_location": "L30",
       "_origin": "ast"
     },
     {
-      "id": "tests_test_data_test_folder_data_trains_end_to_end",
-      "label": "test_folder_data_trains_end_to_end()",
+      "id": "tests_test_data_py_ndarray",
+      "label": "ndarray",
       "file_type": "code",
-      "source_file": "tests/test_data.py",
-      "source_location": "L33",
+      "source_file": "",
+      "source_location": "",
       "_origin": "ast"
     },
     {
-      "id": "tests_test_data_test_missing_split_points_at_the_data_root",
-      "label": "test_missing_split_points_at_the_data_root()",
+      "id": "tests_test_data_make_root",
+      "label": "_make_root()",
       "file_type": "code",
       "source_file": "tests/test_data.py",
-      "source_location": "L41",
+      "source_location": "L49",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_write_stats",
+      "label": "_write_stats()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L55",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_a_sample_is_the_named_variables_at_that_row",
+      "label": "test_a_sample_is_the_named_variables_at_that_row()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L65",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_unnamed_variables_are_never_read",
+      "label": "test_unnamed_variables_are_never_read()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L76",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_input_order_follows_the_config",
+      "label": "test_input_order_follows_the_config()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L85",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_missing_variable_lists_what_the_store_has",
+      "label": "test_missing_variable_lists_what_the_store_has()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L98",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_pointing_at_an_array_instead_of_a_group_says_so",
+      "label": "test_pointing_at_an_array_instead_of_a_group_says_so()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L104",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_missing_store_points_at_the_data_root",
+      "label": "test_missing_store_points_at_the_data_root()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L111",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_variables_of_different_lengths_are_rejected",
+      "label": "test_variables_of_different_lengths_are_rejected()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L116",
       "_origin": "ast"
     },
     {
@@ -3458,15 +3682,31 @@
       "label": "test_stats_match_numpy()",
       "file_type": "code",
       "source_file": "tests/test_data.py",
-      "source_location": "L47",
+      "source_location": "L129",
       "_origin": "ast"
     },
     {
-      "id": "tests_test_data_test_stats_reach_the_model_and_then_the_checkpoint",
-      "label": "test_stats_reach_the_model_and_then_the_checkpoint()",
+      "id": "tests_test_data_test_stats_are_keyed_by_name_so_reordering_inputs_is_safe",
+      "label": "test_stats_are_keyed_by_name_so_reordering_inputs_is_safe()",
       "file_type": "code",
       "source_file": "tests/test_data.py",
-      "source_location": "L60",
+      "source_location": "L143",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_stats_for_an_unlisted_variable_is_a_clear_error",
+      "label": "test_stats_for_an_unlisted_variable_is_a_clear_error()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L157",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_stats_reach_the_model_buffers_and_then_the_checkpoint",
+      "label": "test_stats_reach_the_model_buffers_and_then_the_checkpoint()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L164",
       "_origin": "ast"
     },
     {
@@ -3474,7 +3714,39 @@
       "label": "test_no_stats_file_is_a_warning_not_a_crash()",
       "file_type": "code",
       "source_file": "tests/test_data.py",
-      "source_location": "L86",
+      "source_location": "L186",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_forward_takes_and_returns_raw_units",
+      "label": "test_forward_takes_and_returns_raw_units()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L200",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_normalisation_survives_a_checkpoint_round_trip",
+      "label": "test_normalisation_survives_a_checkpoint_round_trip()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L218",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_denorm_inverts_norm",
+      "label": "test_denorm_inverts_norm()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L237",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_test_a_constant_variable_does_not_divide_by_zero",
+      "label": "test_a_constant_variable_does_not_divide_by_zero()",
+      "file_type": "code",
+      "source_file": "tests/test_data.py",
+      "source_location": "L244",
       "_origin": "ast"
     },
     {
@@ -3486,35 +3758,91 @@
       "_origin": "ast"
     },
     {
-      "id": "tests_test_data_rationale_42",
-      "label": "The most common first failure is a mis-set DL_DATA, so the error says so.",
+      "id": "tests_test_data_rationale_31",
+      "label": "time + three features. feature_3 is a real function of the other two, so a model",
       "file_type": "rationale",
       "source_file": "tests/test_data.py",
-      "source_location": "L42",
+      "source_location": "L31",
       "_origin": "ast"
     },
     {
-      "id": "tests_test_data_rationale_48",
+      "id": "tests_test_data_rationale_77",
+      "label": "`time` is in the store. Nothing selected it, so it must not reach the batch.",
+      "file_type": "rationale",
+      "source_file": "tests/test_data.py",
+      "source_location": "L77",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_rationale_86",
+      "label": "Reordering `inputs` reorders the vector -- otherwise in_dim stays right and the",
+      "file_type": "rationale",
+      "source_file": "tests/test_data.py",
+      "source_location": "L86",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_rationale_105",
+      "label": "The common mistake; zarr's own ContainsArrayError never mentions groups.",
+      "file_type": "rationale",
+      "source_file": "tests/test_data.py",
+      "source_location": "L105",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_rationale_117",
+      "label": "Two variables written by different runs. Silent otherwise -- the shorter one",
+      "file_type": "rationale",
+      "source_file": "tests/test_data.py",
+      "source_location": "L117",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_rationale_130",
       "label": "Streaming accumulation must agree with the obvious one-shot computation.",
       "file_type": "rationale",
       "source_file": "tests/test_data.py",
-      "source_location": "L48",
+      "source_location": "L130",
       "_origin": "ast"
     },
     {
-      "id": "tests_test_data_rationale_61",
-      "label": "The chain this whole layout exists to protect:          train split -> stats.jso",
+      "id": "tests_test_data_rationale_144",
+      "label": "The reason the file is not a positional list: swap `inputs` and each variable",
       "file_type": "rationale",
       "source_file": "tests/test_data.py",
-      "source_location": "L61",
+      "source_location": "L144",
       "_origin": "ast"
     },
     {
-      "id": "tests_test_data_rationale_87",
+      "id": "tests_test_data_rationale_187",
       "label": "A missing stats.json must not block a first run; it leaves the identity.",
       "file_type": "rationale",
       "source_file": "tests/test_data.py",
-      "source_location": "L87",
+      "source_location": "L187",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_rationale_201",
+      "label": "The property inference depends on: feed physical units, get physical units.",
+      "file_type": "rationale",
+      "source_file": "tests/test_data.py",
+      "source_location": "L201",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_rationale_219",
+      "label": "Inference loads weights and nothing else -- no stats.json, no dataloader.",
+      "file_type": "rationale",
+      "source_file": "tests/test_data.py",
+      "source_location": "L219",
+      "_origin": "ast"
+    },
+    {
+      "id": "tests_test_data_rationale_245",
+      "label": "std is 0 for a constant column, which would normalise to inf.",
+      "file_type": "rationale",
+      "source_file": "tests/test_data.py",
+      "source_location": "L245",
       "_origin": "ast"
     },
     {
@@ -3738,7 +4066,7 @@
       "label": "test_ddp_ranks_actually_all_reduce()",
       "file_type": "code",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L409",
+      "source_location": "L410",
       "_origin": "ast"
     },
     {
@@ -3746,7 +4074,7 @@
       "label": "test_complex_weights_are_split_in_histograms_and_named_in_checkpoint_errors()",
       "file_type": "code",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L432",
+      "source_location": "L433",
       "_origin": "ast"
     },
     {
@@ -3754,7 +4082,7 @@
       "label": "test_trainstate_roundtrips()",
       "file_type": "code",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L514",
+      "source_location": "L515",
       "_origin": "ast"
     },
     {
@@ -3894,19 +4222,19 @@
       "_origin": "ast"
     },
     {
-      "id": "tests_test_smoke_rationale_410",
+      "id": "tests_test_smoke_rationale_411",
       "label": "Regression: the Trainer wrapped the module in DDP and then called     self.raw.t",
       "file_type": "rationale",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L410",
+      "source_location": "L411",
       "_origin": "ast"
     },
     {
-      "id": "tests_test_smoke_rationale_435",
+      "id": "tests_test_smoke_rationale_436",
       "label": "The complex path was reasoned about but never executed: no shipped model has",
       "file_type": "rationale",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L435",
+      "source_location": "L436",
       "_origin": "ast"
     },
     {
@@ -3987,6 +4315,94 @@
       "file_type": "rationale",
       "source_file": "utils/aggregate_seeds.py",
       "source_location": "L18",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_normalize",
+      "label": "normalize.py",
+      "file_type": "code",
+      "source_file": "utils/normalize.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_normalize_normalizer",
+      "label": "Normalizer",
+      "file_type": "code",
+      "source_file": "utils/normalize.py",
+      "source_location": "L20",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_normalize_normalizer_init",
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "utils/normalize.py",
+      "source_location": "L23",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_normalize_normalizer_fit",
+      "label": ".fit()",
+      "file_type": "code",
+      "source_file": "utils/normalize.py",
+      "source_location": "L28",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_normalize_normalizer_norm",
+      "label": ".norm()",
+      "file_type": "code",
+      "source_file": "utils/normalize.py",
+      "source_location": "L34",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_normalize_py_tensor",
+      "label": "Tensor",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_normalize_normalizer_denorm",
+      "label": ".denorm()",
+      "file_type": "code",
+      "source_file": "utils/normalize.py",
+      "source_location": "L37",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_normalize_normalizer_forward",
+      "label": ".forward()",
+      "file_type": "code",
+      "source_file": "utils/normalize.py",
+      "source_location": "L40",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_normalize_rationale_1",
+      "label": "Normalisation as a module, so it rides inside the checkpoint.  The numbers live",
+      "file_type": "rationale",
+      "source_file": "utils/normalize.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_normalize_rationale_21",
+      "label": "z-score in one direction, back out the other.",
+      "file_type": "rationale",
+      "source_file": "utils/normalize.py",
+      "source_location": "L21",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_normalize_rationale_29",
+      "label": "Copy in statistics computed offline. Never computes anything itself.",
+      "file_type": "rationale",
+      "source_file": "utils/normalize.py",
+      "source_location": "L29",
       "_origin": "ast"
     },
     {
@@ -4086,11 +4502,27 @@
       "_origin": "ast"
     },
     {
+      "id": "utils_stats_scalar_or_list",
+      "label": "_scalar_or_list()",
+      "file_type": "code",
+      "source_file": "utils/stats.py",
+      "source_location": "L80",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_stats_py_ndarray",
+      "label": "ndarray",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
       "id": "utils_stats_main",
       "label": "main()",
       "file_type": "code",
       "source_file": "utils/stats.py",
-      "source_location": "L92",
+      "source_location": "L85",
       "_origin": "ast"
     },
     {
@@ -4098,15 +4530,23 @@
       "label": "_short()",
       "file_type": "code",
       "source_file": "utils/stats.py",
-      "source_location": "L127",
+      "source_location": "L111",
       "_origin": "ast"
     },
     {
       "id": "utils_stats_rationale_47",
-      "label": "Streaming min / max / mean / std, reduced over every axis but `axis`.      Varia",
+      "label": "Streaming count / mean / std / min / max, reduced over rows (axis 0).      Varia",
       "file_type": "rationale",
       "source_file": "utils/stats.py",
       "source_location": "L47",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_stats_rationale_81",
+      "label": "A (T,) variable reads back as one number, not a one-element list.",
+      "file_type": "rationale",
+      "source_file": "utils/stats.py",
+      "source_location": "L81",
       "_origin": "ast"
     },
     {
@@ -4242,7 +4682,7 @@
       "label": "Architecture in one paragraph",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L59",
+      "source_location": "L64",
       "_origin": "ast"
     },
     {
@@ -4250,7 +4690,7 @@
       "label": "Non-obvious constraints",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L72",
+      "source_location": "L77",
       "_origin": "ast"
     },
     {
@@ -4258,7 +4698,7 @@
       "label": "Measured library behaviour",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L132",
+      "source_location": "L146",
       "_origin": "ast"
     },
     {
@@ -4266,7 +4706,7 @@
       "label": "Conventions",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L153",
+      "source_location": "L167",
       "_origin": "ast"
     },
     {
@@ -4274,7 +4714,7 @@
       "label": "Deliberately omitted — decisions, not gaps. Don't \"fix\" these.",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L173",
+      "source_location": "L195",
       "_origin": "ast"
     },
     {
@@ -4282,7 +4722,7 @@
       "label": "Code graph",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L195",
+      "source_location": "L217",
       "_origin": "ast"
     },
     {
@@ -4290,7 +4730,7 @@
       "label": "Working style for this repo",
       "file_type": "document",
       "source_file": "CLAUDE.md",
-      "source_location": "L213",
+      "source_location": "L235",
       "_origin": "ast"
     },
     {
@@ -4434,7 +4874,15 @@
       "label": "Statistics: computed once, offline",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L192",
+      "source_location": "L206",
+      "_origin": "ast"
+    },
+    {
+      "id": "usage_normalisation_lives_in_the_model_not_the_dataloader",
+      "label": "Normalisation lives in the model, not the dataloader",
+      "file_type": "document",
+      "source_file": "USAGE.md",
+      "source_location": "L232",
       "_origin": "ast"
     },
     {
@@ -4442,7 +4890,7 @@
       "label": "Checkpoints and resuming",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L239",
+      "source_location": "L281",
       "_origin": "ast"
     },
     {
@@ -4450,7 +4898,7 @@
       "label": "What gets written",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L241",
+      "source_location": "L283",
       "_origin": "ast"
     },
     {
@@ -4458,7 +4906,7 @@
       "label": "Exact resume",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L286",
+      "source_location": "L328",
       "_origin": "ast"
     },
     {
@@ -4466,7 +4914,7 @@
       "label": "Fine-tuning from a checkpoint (weights only)",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L346",
+      "source_location": "L388",
       "_origin": "ast"
     },
     {
@@ -4474,7 +4922,7 @@
       "label": "Freezing layers",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L401",
+      "source_location": "L443",
       "_origin": "ast"
     },
     {
@@ -4482,7 +4930,7 @@
       "label": "Checkpoint format",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L462",
+      "source_location": "L504",
       "_origin": "ast"
     },
     {
@@ -4490,7 +4938,7 @@
       "label": "Non-tensor state (tokenizers, vocabs, scalers)",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L484",
+      "source_location": "L526",
       "_origin": "ast"
     },
     {
@@ -4498,7 +4946,7 @@
       "label": "Evaluation",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L505",
+      "source_location": "L547",
       "_origin": "ast"
     },
     {
@@ -4506,7 +4954,7 @@
       "label": "Sweeps and multirun",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L539",
+      "source_location": "L581",
       "_origin": "ast"
     },
     {
@@ -4514,7 +4962,7 @@
       "label": "Outputs and tracking",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L572",
+      "source_location": "L614",
       "_origin": "ast"
     },
     {
@@ -4522,7 +4970,7 @@
       "label": "Finding and comparing runs",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L614",
+      "source_location": "L656",
       "_origin": "ast"
     },
     {
@@ -4530,7 +4978,7 @@
       "label": "Adding your own model",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L643",
+      "source_location": "L685",
       "_origin": "ast"
     },
     {
@@ -4538,7 +4986,7 @@
       "label": "Multiple optimizers, and schedulers that need metadata",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L694",
+      "source_location": "L736",
       "_origin": "ast"
     },
     {
@@ -4546,7 +4994,7 @@
       "label": "Custom data",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L708",
+      "source_location": "L750",
       "_origin": "ast"
     },
     {
@@ -4554,7 +5002,7 @@
       "label": "Multiple validation loaders",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L724",
+      "source_location": "L766",
       "_origin": "ast"
     },
     {
@@ -4562,7 +5010,7 @@
       "label": "Precision: dtype and amp",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L738",
+      "source_location": "L780",
       "_origin": "ast"
     },
     {
@@ -4570,7 +5018,7 @@
       "label": "Rollouts and manual inference",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L777",
+      "source_location": "L819",
       "_origin": "ast"
     },
     {
@@ -4578,7 +5026,7 @@
       "label": "Manual optimization",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L806",
+      "source_location": "L848",
       "_origin": "ast"
     },
     {
@@ -4586,7 +5034,7 @@
       "label": "Debugging",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L844",
+      "source_location": "L886",
       "_origin": "ast"
     },
     {
@@ -4594,7 +5042,7 @@
       "label": "Distributed",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L875",
+      "source_location": "L917",
       "_origin": "ast"
     },
     {
@@ -4602,7 +5050,7 @@
       "label": "Swapping the strategy",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L890",
+      "source_location": "L932",
       "_origin": "ast"
     },
     {
@@ -4610,7 +5058,7 @@
       "label": "Troubleshooting",
       "file_type": "document",
       "source_file": "USAGE.md",
-      "source_location": "L925",
+      "source_location": "L967",
       "_origin": "ast"
     }
   ],
@@ -5387,7 +5835,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L34",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -5398,7 +5846,18 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L35",
+      "source_location": "L46",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader",
+      "target": "collections_abc",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L47",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -5409,7 +5868,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L36",
+      "source_location": "L48",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -5420,7 +5879,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L37",
+      "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -5431,7 +5890,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L39",
+      "source_location": "L51",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -5442,7 +5901,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L40",
+      "source_location": "L52",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -5453,7 +5912,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L41",
+      "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -5464,118 +5923,67 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L43",
+      "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "dataset_loader",
-      "target": "dataset_loader_open",
+      "target": "dataset_loader_open_group",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L48",
+      "source_location": "L60",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_open",
+      "source": "dataset_loader_open_group",
       "target": "dataset_loader_py_path",
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L48",
+      "source_location": "L60",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_open",
+      "source": "dataset_loader_open_group",
       "target": "dataset_loader_py_any",
       "relation": "references",
       "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L48",
+      "source_location": "L60",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "dataset_loader",
-      "target": "dataset_loader_find",
+      "target": "dataset_loader_pick",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L66",
+      "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_find",
-      "target": "dataset_loader_py_path",
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "dataset/loader.py",
-      "source_location": "L66",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "dataset_loader",
-      "target": "dataset_loader_arraypairs",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "dataset/loader.py",
-      "source_location": "L77",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "dataset_loader_arraypairs",
-      "target": "dataset_loader_py_dataset",
-      "relation": "inherits",
-      "confidence": "EXTRACTED",
-      "source_file": "dataset/loader.py",
-      "source_location": "L77",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "dataset_loader_arraypairs",
-      "target": "dataset_loader_arraypairs_init",
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "dataset/loader.py",
-      "source_location": "L80",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "dataset_loader_arraypairs_init",
+      "source": "dataset_loader_pick",
       "target": "dataset_loader_py_any",
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L80",
+      "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_arraypairs",
-      "target": "dataset_loader_arraypairs_len",
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "dataset/loader.py",
-      "source_location": "L85",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "dataset_loader_arraypairs",
-      "target": "dataset_loader_arraypairs_getitem",
-      "relation": "method",
+      "source": "dataset_loader",
+      "target": "dataset_loader_row",
+      "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
       "source_location": "L88",
@@ -5583,8 +5991,8 @@
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_arraypairs_getitem",
-      "target": "dataset_loader_py_tensor",
+      "source": "dataset_loader_row",
+      "target": "dataset_loader_py_any",
       "relation": "references",
       "context": "generic_arg",
       "confidence": "EXTRACTED",
@@ -5594,158 +6002,283 @@
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader",
-      "target": "dataset_loader_folderdata",
-      "relation": "contains",
+      "source": "dataset_loader_row",
+      "target": "dataset_loader_py_tensor",
+      "relation": "references",
+      "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L98",
+      "source_location": "L88",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata",
+      "source": "dataset_loader",
+      "target": "dataset_loader_common_length",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L93",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_common_length",
+      "target": "dataset_loader_py_any",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L93",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader",
+      "target": "dataset_loader_zarrrows",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_zarrrows",
+      "target": "dataset_loader_py_dataset",
+      "relation": "inherits",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_zarrrows",
+      "target": "dataset_loader_zarrrows_init",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_zarrrows_init",
+      "target": "dataset_loader_py_any",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_zarrrows",
+      "target": "dataset_loader_zarrrows_len",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L114",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_zarrrows",
+      "target": "dataset_loader_zarrrows_getitem",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L117",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_zarrrows_getitem",
+      "target": "dataset_loader_py_tensor",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L117",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader",
+      "target": "dataset_loader_zarrdata",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_zarrdata",
       "target": "engine_base_datamodule",
       "relation": "inherits",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L98",
+      "source_location": "L121",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata",
-      "target": "dataset_loader_folderdata_init",
+      "source": "dataset_loader_zarrdata",
+      "target": "dataset_loader_zarrdata_init",
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L101",
+      "source_location": "L124",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_init",
+      "source": "dataset_loader_zarrdata_init",
       "target": "dataset_loader_py_path",
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L101",
+      "source_location": "L124",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata",
-      "target": "dataset_loader_folderdata_split",
+      "source": "dataset_loader_zarrdata",
+      "target": "dataset_loader_zarrdata_split",
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L128",
+      "source_location": "L149",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_split",
-      "target": "dataset_loader_arraypairs",
+      "source": "dataset_loader_zarrdata_split",
+      "target": "dataset_loader_zarrrows",
       "relation": "references",
       "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L128",
+      "source_location": "L149",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata",
-      "target": "dataset_loader_folderdata_load_stats",
+      "source": "dataset_loader_zarrdata",
+      "target": "dataset_loader_zarrdata_load_stats",
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L137",
+      "source_location": "L152",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata",
-      "target": "dataset_loader_folderdata_setup",
+      "source": "dataset_loader_zarrdata",
+      "target": "dataset_loader_zarrdata_setup",
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L151",
+      "source_location": "L177",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata",
-      "target": "dataset_loader_folderdata_loader",
+      "source": "dataset_loader_zarrdata",
+      "target": "dataset_loader_zarrdata_loader",
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L159",
+      "source_location": "L183",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_loader",
+      "source": "dataset_loader_zarrdata_loader",
       "target": "dataset_loader_py_dataset",
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L159",
+      "source_location": "L183",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_loader",
+      "source": "dataset_loader_zarrdata_loader",
       "target": "dataset_loader_py_dataloader",
       "relation": "references",
       "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L159",
+      "source_location": "L183",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata",
-      "target": "dataset_loader_folderdata_train_dataloader",
+      "source": "dataset_loader_zarrdata",
+      "target": "dataset_loader_zarrdata_train_dataloader",
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L173",
+      "source_location": "L195",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_train_dataloader",
+      "source": "dataset_loader_zarrdata_train_dataloader",
       "target": "dataset_loader_py_dataloader",
       "relation": "references",
       "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L173",
+      "source_location": "L195",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata",
-      "target": "dataset_loader_folderdata_val_dataloader",
+      "source": "dataset_loader_zarrdata",
+      "target": "dataset_loader_zarrdata_val_dataloader",
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L177",
+      "source_location": "L199",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_val_dataloader",
+      "source": "dataset_loader_zarrdata_val_dataloader",
       "target": "dataset_loader_py_dataloader",
       "relation": "references",
       "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L177",
+      "source_location": "L199",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader",
+      "target": "dataset_loader_assemble",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L204",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_assemble",
+      "target": "dataset_loader_py_path",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L204",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -5755,7 +6288,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L182",
+      "source_location": "L215",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -5766,117 +6299,150 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L182",
+      "source_location": "L215",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_init",
+      "source": "dataset_loader_zarrrows_init",
+      "target": "dataset_loader_pick",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_zarrrows_init",
+      "target": "dataset_loader_common_length",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L110",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_zarrrows_getitem",
+      "target": "dataset_loader_row",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L118",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_zarrdata_init",
       "target": "dataset_loader_py_path",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L116",
+      "source_location": "L139",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_split",
-      "target": "dataset_loader_arraypairs",
+      "source": "dataset_loader_zarrdata_split",
+      "target": "dataset_loader_zarrrows",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L135",
+      "source_location": "L150",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_split",
-      "target": "dataset_loader_open",
+      "source": "dataset_loader_zarrdata_split",
+      "target": "dataset_loader_open_group",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L135",
+      "source_location": "L150",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_split",
-      "target": "dataset_loader_find",
+      "source": "dataset_loader_zarrdata_load_stats",
+      "target": "dataset_loader_assemble",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L135",
+      "source_location": "L171",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_setup",
-      "target": "dataset_loader_folderdata_load_stats",
+      "source": "dataset_loader_zarrdata_setup",
+      "target": "dataset_loader_zarrdata_load_stats",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L152",
+      "source_location": "L178",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_setup",
-      "target": "dataset_loader_folderdata_split",
+      "source": "dataset_loader_zarrdata_setup",
+      "target": "dataset_loader_zarrdata_split",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L154",
+      "source_location": "L180",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_loader",
+      "source": "dataset_loader_zarrdata_loader",
       "target": "dataset_loader_py_dataloader",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L160",
+      "source_location": "L184",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_loader",
+      "source": "dataset_loader_zarrdata_loader",
       "target": "dataset_loader_collate",
       "relation": "indirect_call",
       "context": "argument",
       "confidence": "INFERRED",
       "source_file": "dataset/loader.py",
-      "source_location": "L167",
+      "source_location": "L191",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_train_dataloader",
-      "target": "dataset_loader_folderdata_loader",
+      "source": "dataset_loader_zarrdata_train_dataloader",
+      "target": "dataset_loader_zarrdata_loader",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L175",
+      "source_location": "L197",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata_val_dataloader",
-      "target": "dataset_loader_folderdata_loader",
+      "source": "dataset_loader_zarrdata_val_dataloader",
+      "target": "dataset_loader_zarrdata_loader",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L179",
+      "source_location": "L201",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -5891,62 +6457,92 @@
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_rationale_49",
-      "target": "dataset_loader_open",
+      "source": "dataset_loader_rationale_61",
+      "target": "dataset_loader_open_group",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L49",
+      "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_rationale_67",
-      "target": "dataset_loader_find",
+      "source": "dataset_loader_rationale_79",
+      "target": "dataset_loader_pick",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L67",
+      "source_location": "L79",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_rationale_78",
-      "target": "dataset_loader_arraypairs",
+      "source": "dataset_loader_rationale_89",
+      "target": "dataset_loader_row",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L78",
+      "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_rationale_99",
-      "target": "dataset_loader_folderdata",
+      "source": "dataset_loader_rationale_94",
+      "target": "dataset_loader_common_length",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L99",
+      "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_rationale_138",
-      "target": "dataset_loader_folderdata_load_stats",
+      "source": "dataset_loader_rationale_104",
+      "target": "dataset_loader_zarrrows",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L138",
+      "source_location": "L104",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_rationale_183",
+      "source": "dataset_loader_rationale_122",
+      "target": "dataset_loader_zarrdata",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L122",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_rationale_153",
+      "target": "dataset_loader_zarrdata_load_stats",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_rationale_205",
+      "target": "dataset_loader_assemble",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "dataset/loader.py",
+      "source_location": "L205",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "dataset_loader_rationale_216",
       "target": "dataset_loader_collate",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L183",
+      "source_location": "L216",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11674,8 +12270,8 @@
     },
     {
       "source": "models_forecast",
-      "target": "torch",
-      "relation": "imports",
+      "target": "collections_abc",
+      "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
@@ -11685,7 +12281,7 @@
     },
     {
       "source": "models_forecast",
-      "target": "torch",
+      "target": "typing",
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -11696,8 +12292,8 @@
     },
     {
       "source": "models_forecast",
-      "target": "engine_base",
-      "relation": "imports_from",
+      "target": "torch",
+      "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
@@ -11707,7 +12303,7 @@
     },
     {
       "source": "models_forecast",
-      "target": "engine_utils",
+      "target": "torch",
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -11718,11 +12314,44 @@
     },
     {
       "source": "models_forecast",
+      "target": "torch_optim",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "models/forecast.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_forecast",
+      "target": "engine_base",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "models/forecast.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_forecast",
+      "target": "engine_utils",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "models/forecast.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_forecast",
       "target": "models_forecast_forecaster",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L30",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11732,7 +12361,7 @@
       "relation": "inherits",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L30",
+      "source_location": "L34",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11742,7 +12371,29 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L33",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_forecast_forecaster_init",
+      "target": "models_forecast_py_optimizer",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "models/forecast.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_forecast_forecaster_init",
+      "target": "models_forecast_py_any",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "models/forecast.py",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11753,7 +12404,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L33",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11763,7 +12414,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L53",
+      "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11773,7 +12424,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L57",
+      "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11784,7 +12435,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L57",
+      "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11794,7 +12445,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L66",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11805,7 +12456,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L66",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11815,7 +12466,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L69",
+      "source_location": "L77",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11826,7 +12477,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L69",
+      "source_location": "L77",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11836,7 +12487,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L72",
+      "source_location": "L80",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11847,7 +12498,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L72",
+      "source_location": "L80",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11857,7 +12508,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L78",
+      "source_location": "L86",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11868,7 +12519,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L78",
+      "source_location": "L86",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11878,7 +12529,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L95",
+      "source_location": "L103",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11889,7 +12540,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L95",
+      "source_location": "L103",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11900,7 +12551,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L95",
+      "source_location": "L103",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11910,7 +12561,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L105",
+      "source_location": "L113",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11921,7 +12572,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L105",
+      "source_location": "L113",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11932,7 +12583,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L105",
+      "source_location": "L113",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11942,7 +12593,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L115",
+      "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11953,7 +12604,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L115",
+      "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11964,7 +12615,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L115",
+      "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11974,7 +12625,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L126",
+      "source_location": "L134",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11985,7 +12636,7 @@
       "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L126",
+      "source_location": "L134",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -11996,7 +12647,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L46",
+      "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12007,7 +12658,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L64",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12018,7 +12669,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L74",
+      "source_location": "L82",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12029,7 +12680,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L74",
+      "source_location": "L82",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12040,7 +12691,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L98",
+      "source_location": "L106",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12051,7 +12702,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L108",
+      "source_location": "L116",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12062,7 +12713,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L119",
+      "source_location": "L127",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12077,62 +12728,84 @@
       "_origin": "ast"
     },
     {
-      "source": "models_forecast_rationale_31",
+      "source": "models_forecast_rationale_35",
       "target": "models_forecast_forecaster",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L31",
+      "source_location": "L35",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "models_forecast_rationale_58",
+      "source": "models_forecast_rationale_66",
       "target": "models_forecast_forecaster_on_data_ready",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L58",
+      "source_location": "L66",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "models_forecast_rationale_73",
+      "source": "models_forecast_rationale_81",
       "target": "models_forecast_forecaster_forward",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L73",
+      "source_location": "L81",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "models_forecast_rationale_79",
+      "source": "models_forecast_rationale_87",
       "target": "models_forecast_forecaster_unroll",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L79",
+      "source_location": "L87",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "models_forecast_rationale_106",
+      "source": "models_forecast_rationale_114",
       "target": "models_forecast_forecaster_validation_step",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L106",
+      "source_location": "L114",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "models_forecast_rationale_116",
+      "source": "models_forecast_rationale_124",
       "target": "models_forecast_forecaster_rollout_step",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L116",
+      "source_location": "L124",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_mlp",
+      "target": "collections_abc",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "models/mlp.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_mlp",
+      "target": "typing",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "models/mlp.py",
+      "source_location": "L26",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12143,7 +12816,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L13",
+      "source_location": "L28",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12154,7 +12827,18 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L14",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_mlp",
+      "target": "torch_optim",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "models/mlp.py",
+      "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12165,7 +12849,18 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L16",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_mlp",
+      "target": "utils_normalize",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "models/mlp.py",
+      "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12175,7 +12870,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L19",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12185,7 +12880,7 @@
       "relation": "inherits",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L19",
+      "source_location": "L36",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12195,7 +12890,29 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L20",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_mlp_mlp_init",
+      "target": "models_mlp_py_optimizer",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "models/mlp.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_mlp_mlp_init",
+      "target": "models_mlp_py_any",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "models/mlp.py",
+      "source_location": "L37",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12205,7 +12922,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L43",
+      "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12216,7 +12933,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L43",
+      "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12226,7 +12943,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L55",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12237,7 +12954,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L55",
+      "source_location": "L74",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12247,7 +12964,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L59",
+      "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12258,7 +12975,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L59",
+      "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12269,7 +12986,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L59",
+      "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12279,7 +12996,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L63",
+      "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12290,7 +13007,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L63",
+      "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12301,7 +13018,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L63",
+      "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12311,7 +13028,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L70",
+      "source_location": "L92",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12322,7 +13039,7 @@
       "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L70",
+      "source_location": "L92",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12337,12 +13054,22 @@
       "_origin": "ast"
     },
     {
-      "source": "models_mlp_rationale_44",
+      "source": "models_mlp_rationale_62",
       "target": "models_mlp_mlp_on_data_ready",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L44",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_mlp_rationale_75",
+      "target": "models_mlp_mlp_forward",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "models/mlp.py",
+      "source_location": "L75",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12359,8 +13086,19 @@
     },
     {
       "source": "models_pinn",
-      "target": "torch",
-      "relation": "imports",
+      "target": "collections_abc",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "models/pinn.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_pinn",
+      "target": "typing",
+      "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
@@ -12371,17 +13109,17 @@
     {
       "source": "models_pinn",
       "target": "torch",
-      "relation": "imports_from",
+      "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L26",
+      "source_location": "L27",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "models_pinn",
-      "target": "engine_base",
+      "target": "torch",
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -12392,11 +13130,33 @@
     },
     {
       "source": "models_pinn",
+      "target": "torch_optim",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "models/pinn.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_pinn",
+      "target": "engine_base",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "models/pinn.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_pinn",
       "target": "models_pinn_weighting",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L40",
+      "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12406,7 +13166,7 @@
       "relation": "inherits",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L40",
+      "source_location": "L43",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12416,7 +13176,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L41",
+      "source_location": "L44",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12426,7 +13186,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L46",
+      "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12437,7 +13197,7 @@
       "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L46",
+      "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12447,7 +13207,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L50",
+      "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12458,7 +13218,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L50",
+      "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12469,7 +13229,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L50",
+      "source_location": "L53",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12479,7 +13239,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L52",
+      "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12490,7 +13250,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L52",
+      "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12500,7 +13260,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L55",
+      "source_location": "L58",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12511,7 +13271,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L55",
+      "source_location": "L58",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12521,7 +13281,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L59",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12531,7 +13291,7 @@
       "relation": "inherits",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L59",
+      "source_location": "L62",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12541,7 +13301,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L60",
+      "source_location": "L63",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12551,7 +13311,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L65",
+      "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12562,7 +13322,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L65",
+      "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12573,7 +13333,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L65",
+      "source_location": "L68",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12583,7 +13343,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L69",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12593,7 +13353,7 @@
       "relation": "inherits",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L69",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12603,7 +13363,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L82",
+      "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12613,7 +13373,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L96",
+      "source_location": "L99",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12623,7 +13383,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L102",
+      "source_location": "L105",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12634,7 +13394,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L102",
+      "source_location": "L105",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12645,7 +13405,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L102",
+      "source_location": "L105",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12655,7 +13415,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L122",
+      "source_location": "L125",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12665,7 +13425,7 @@
       "relation": "inherits",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L122",
+      "source_location": "L125",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12675,7 +13435,29 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L126",
+      "source_location": "L129",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_pinn_pinn_init",
+      "target": "models_pinn_py_optimizer",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "models/pinn.py",
+      "source_location": "L129",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_pinn_pinn_init",
+      "target": "models_pinn_py_any",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "models/pinn.py",
+      "source_location": "L129",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12686,7 +13468,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L126",
+      "source_location": "L129",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12696,7 +13478,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L143",
+      "source_location": "L150",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12707,7 +13489,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L143",
+      "source_location": "L150",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12717,7 +13499,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L146",
+      "source_location": "L153",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12728,7 +13510,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L146",
+      "source_location": "L153",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12738,7 +13520,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L156",
+      "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12749,7 +13531,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L156",
+      "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12760,7 +13542,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L156",
+      "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12770,7 +13552,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L166",
+      "source_location": "L173",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12781,7 +13563,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L166",
+      "source_location": "L173",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12792,7 +13574,7 @@
       "context": "generic_arg",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L166",
+      "source_location": "L173",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12802,7 +13584,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L178",
+      "source_location": "L185",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12813,7 +13595,7 @@
       "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L178",
+      "source_location": "L185",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12824,7 +13606,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L42",
+      "source_location": "L45",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12835,7 +13617,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L53",
+      "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12846,7 +13628,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L61",
+      "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12857,7 +13639,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L91",
+      "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12868,7 +13650,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L116",
+      "source_location": "L119",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12879,7 +13661,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L141",
+      "source_location": "L148",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12890,7 +13672,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L157",
+      "source_location": "L164",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12901,7 +13683,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L158",
+      "source_location": "L165",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12912,7 +13694,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L159",
+      "source_location": "L166",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12923,7 +13705,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L163",
+      "source_location": "L170",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12934,7 +13716,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L168",
+      "source_location": "L175",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -12949,22 +13731,22 @@
       "_origin": "ast"
     },
     {
-      "source": "models_pinn_rationale_66",
+      "source": "models_pinn_rationale_69",
       "target": "models_pinn_staticweights_update",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L66",
+      "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "models_pinn_rationale_70",
+      "source": "models_pinn_rationale_73",
       "target": "models_pinn_gradnormweights",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L70",
+      "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13067,6 +13849,18 @@
     {
       "source": "pkg_dlt",
       "target": "pkg_numpy",
+      "relation": "depends_on",
+      "context": "dependency",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "pyproject.toml",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "pkg_dlt",
+      "target": "pkg_zarr",
       "relation": "depends_on",
       "context": "dependency",
       "confidence": "EXTRACTED",
@@ -13236,7 +14030,7 @@
     },
     {
       "source": "tests_test_configs",
-      "target": "tests_test_configs_test_debug_composes",
+      "target": "tests_test_configs_test_optim_builds_an_optimizer",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
@@ -13246,11 +14040,51 @@
     },
     {
       "source": "tests_test_configs",
+      "target": "tests_test_configs_test_sched_builds_against_an_optimizer",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_configs",
+      "target": "tests_test_configs_test_the_model_takes_its_optimizer_from_the_optim_group",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_configs",
+      "target": "tests_test_configs_test_no_scheduler_unless_one_is_asked_for",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L67",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_configs",
+      "target": "tests_test_configs_test_debug_composes",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_configs",
       "target": "tests_test_configs_test_run_dir_template_is_grouped_and_hashed",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L41",
+      "source_location": "L82",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13260,7 +14094,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L58",
+      "source_location": "L99",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13270,7 +14104,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L70",
+      "source_location": "L111",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13280,7 +14114,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L81",
+      "source_location": "L122",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13290,7 +14124,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L93",
+      "source_location": "L134",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13300,7 +14134,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L103",
+      "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13315,42 +14149,72 @@
       "_origin": "ast"
     },
     {
-      "source": "tests_test_configs_rationale_42",
+      "source": "tests_test_configs_rationale_38",
+      "target": "tests_test_configs_test_optim_builds_an_optimizer",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_configs_rationale_57",
+      "target": "tests_test_configs_test_the_model_takes_its_optimizer_from_the_optim_group",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L57",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_configs_rationale_68",
+      "target": "tests_test_configs_test_no_scheduler_unless_one_is_asked_for",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_configs_rationale_83",
       "target": "tests_test_configs_test_run_dir_template_is_grouped_and_hashed",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L42",
+      "source_location": "L83",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_configs_rationale_59",
+      "source": "tests_test_configs_rationale_100",
       "target": "tests_test_configs_test_paths_never_chain_to_a_hydra_resolver",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L59",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_configs_rationale_71",
+      "source": "tests_test_configs_rationale_112",
       "target": "tests_test_configs_test_eval_writes_into_the_run_that_produced_the_checkpoint",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L71",
+      "source_location": "L112",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_configs_rationale_104",
+      "source": "tests_test_configs_rationale_145",
       "target": "tests_test_configs_test_amp_requires_fp32",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L104",
+      "source_location": "L145",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13656,7 +14520,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L9",
+      "source_location": "L15",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13667,7 +14531,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L11",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13678,7 +14542,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L12",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13689,7 +14553,18 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L13",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "zarr",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L20",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13700,7 +14575,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L15",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13711,7 +14586,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L16",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13722,7 +14597,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L17",
+      "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13733,37 +14608,118 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L18",
+      "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "tests_test_data",
-      "target": "tests_test_data_make_dataset",
+      "target": "tests_test_data_write_store",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L21",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_write_store",
+      "target": "tests_test_data_py_ndarray",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "tests_test_data",
-      "target": "tests_test_data_test_folder_data_trains_end_to_end",
+      "target": "tests_test_data_make_root",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L33",
+      "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "tests_test_data",
-      "target": "tests_test_data_test_missing_split_points_at_the_data_root",
+      "target": "tests_test_data_write_stats",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L41",
+      "source_location": "L55",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_a_sample_is_the_named_variables_at_that_row",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_unnamed_variables_are_never_read",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_input_order_follows_the_config",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_missing_variable_lists_what_the_store_has",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_pointing_at_an_array_instead_of_a_group_says_so",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L104",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_missing_store_points_at_the_data_root",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_variables_of_different_lengths_are_rejected",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L116",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13773,17 +14729,37 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L47",
+      "source_location": "L129",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "tests_test_data",
-      "target": "tests_test_data_test_stats_reach_the_model_and_then_the_checkpoint",
+      "target": "tests_test_data_test_stats_are_keyed_by_name_so_reordering_inputs_is_safe",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L60",
+      "source_location": "L143",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_stats_for_an_unlisted_variable_is_a_clear_error",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L157",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_stats_reach_the_model_buffers_and_then_the_checkpoint",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L164",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13793,51 +14769,245 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L86",
+      "source_location": "L186",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_test_folder_data_trains_end_to_end",
-      "target": "tests_test_data_make_dataset",
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_forward_takes_and_returns_raw_units",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L200",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_normalisation_survives_a_checkpoint_round_trip",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L218",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_denorm_inverts_norm",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L237",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "tests_test_data_test_a_constant_variable_does_not_divide_by_zero",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L244",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_make_root",
+      "target": "tests_test_data_write_store",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L34",
+      "source_location": "L50",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_test_stats_match_numpy",
-      "target": "tests_test_data_make_dataset",
+      "source": "tests_test_data_test_a_sample_is_the_named_variables_at_that_row",
+      "target": "tests_test_data_write_store",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L49",
+      "source_location": "L66",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_test_stats_reach_the_model_and_then_the_checkpoint",
-      "target": "tests_test_data_make_dataset",
+      "source": "tests_test_data_test_unnamed_variables_are_never_read",
+      "target": "tests_test_data_write_store",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L68",
+      "source_location": "L78",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_test_no_stats_file_is_a_warning_not_a_crash",
-      "target": "tests_test_data_make_dataset",
+      "source": "tests_test_data_test_input_order_follows_the_config",
+      "target": "tests_test_data_write_store",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
       "source_location": "L88",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_missing_variable_lists_what_the_store_has",
+      "target": "tests_test_data_write_store",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L99",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_pointing_at_an_array_instead_of_a_group_says_so",
+      "target": "tests_test_data_write_store",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L106",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_stats_match_numpy",
+      "target": "tests_test_data_write_store",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L131",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_stats_are_keyed_by_name_so_reordering_inputs_is_safe",
+      "target": "tests_test_data_make_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L146",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_stats_are_keyed_by_name_so_reordering_inputs_is_safe",
+      "target": "tests_test_data_write_stats",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L147",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_stats_for_an_unlisted_variable_is_a_clear_error",
+      "target": "tests_test_data_make_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L158",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_stats_reach_the_model_buffers_and_then_the_checkpoint",
+      "target": "tests_test_data_make_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L165",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_stats_reach_the_model_buffers_and_then_the_checkpoint",
+      "target": "tests_test_data_write_stats",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L166",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_no_stats_file_is_a_warning_not_a_crash",
+      "target": "tests_test_data_make_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L188",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_forward_takes_and_returns_raw_units",
+      "target": "tests_test_data_make_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L203",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_forward_takes_and_returns_raw_units",
+      "target": "tests_test_data_write_stats",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L204",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_forward_takes_and_returns_raw_units",
+      "target": "tests_test_data_write_store",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L211",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_normalisation_survives_a_checkpoint_round_trip",
+      "target": "tests_test_data_make_root",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L220",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_normalisation_survives_a_checkpoint_round_trip",
+      "target": "tests_test_data_write_stats",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L221",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -13852,42 +15022,112 @@
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_rationale_42",
-      "target": "tests_test_data_test_missing_split_points_at_the_data_root",
+      "source": "tests_test_data_rationale_31",
+      "target": "tests_test_data_write_store",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L42",
+      "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_rationale_48",
+      "source": "tests_test_data_rationale_77",
+      "target": "tests_test_data_test_unnamed_variables_are_never_read",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_rationale_86",
+      "target": "tests_test_data_test_input_order_follows_the_config",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_rationale_105",
+      "target": "tests_test_data_test_pointing_at_an_array_instead_of_a_group_says_so",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L105",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_rationale_117",
+      "target": "tests_test_data_test_variables_of_different_lengths_are_rejected",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L117",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_rationale_130",
       "target": "tests_test_data_test_stats_match_numpy",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L48",
+      "source_location": "L130",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_rationale_61",
-      "target": "tests_test_data_test_stats_reach_the_model_and_then_the_checkpoint",
+      "source": "tests_test_data_rationale_144",
+      "target": "tests_test_data_test_stats_are_keyed_by_name_so_reordering_inputs_is_safe",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L61",
+      "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_rationale_87",
+      "source": "tests_test_data_rationale_187",
       "target": "tests_test_data_test_no_stats_file_is_a_warning_not_a_crash",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L87",
+      "source_location": "L187",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_rationale_201",
+      "target": "tests_test_data_test_forward_takes_and_returns_raw_units",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L201",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_rationale_219",
+      "target": "tests_test_data_test_normalisation_survives_a_checkpoint_round_trip",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L219",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_rationale_245",
+      "target": "tests_test_data_test_a_constant_variable_does_not_divide_by_zero",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L245",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14256,7 +15496,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L409",
+      "source_location": "L410",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14266,7 +15506,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L432",
+      "source_location": "L433",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14276,7 +15516,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L514",
+      "source_location": "L515",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14386,7 +15626,7 @@
       "context": "argument",
       "confidence": "INFERRED",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L427",
+      "source_location": "L428",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14561,22 +15801,22 @@
       "_origin": "ast"
     },
     {
-      "source": "tests_test_smoke_rationale_410",
+      "source": "tests_test_smoke_rationale_411",
       "target": "tests_test_smoke_test_ddp_ranks_actually_all_reduce",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L410",
+      "source_location": "L411",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_smoke_rationale_435",
+      "source": "tests_test_smoke_rationale_436",
       "target": "tests_test_smoke_test_complex_weights_are_split_in_histograms_and_named_in_checkpoint_errors",
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L435",
+      "source_location": "L436",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -14748,6 +15988,173 @@
       "confidence": "EXTRACTED",
       "source_file": "utils/aggregate_seeds.py",
       "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize",
+      "target": "collections_abc",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize",
+      "target": "torch",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize",
+      "target": "torch",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize",
+      "target": "utils_normalize_normalizer",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize_normalizer",
+      "target": "utils_normalize_normalizer_init",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize_normalizer",
+      "target": "utils_normalize_normalizer_fit",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize_normalizer",
+      "target": "utils_normalize_normalizer_norm",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize_normalizer_norm",
+      "target": "utils_normalize_py_tensor",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize_normalizer",
+      "target": "utils_normalize_normalizer_denorm",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize_normalizer_denorm",
+      "target": "utils_normalize_py_tensor",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize_normalizer",
+      "target": "utils_normalize_normalizer_forward",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize_normalizer_forward",
+      "target": "utils_normalize_py_tensor",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize_normalizer_forward",
+      "target": "utils_normalize_normalizer_norm",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize_rationale_1",
+      "target": "utils_normalize",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize_rationale_21",
+      "target": "utils_normalize_normalizer",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_normalize_rationale_29",
+      "target": "utils_normalize_normalizer_fit",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/normalize.py",
+      "source_location": "L29",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15054,11 +16461,43 @@
     },
     {
       "source": "utils_stats",
+      "target": "utils_stats_scalar_or_list",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/stats.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_stats_scalar_or_list",
+      "target": "utils_stats_py_ndarray",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/stats.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_stats_scalar_or_list",
+      "target": "utils_stats_py_any",
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/stats.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_stats",
       "target": "utils_stats_main",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "utils/stats.py",
-      "source_location": "L92",
+      "source_location": "L85",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15068,7 +16507,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "utils/stats.py",
-      "source_location": "L127",
+      "source_location": "L111",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15079,7 +16518,18 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "utils/stats.py",
-      "source_location": "L127",
+      "source_location": "L111",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_stats_compute_stats",
+      "target": "utils_stats_scalar_or_list",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/stats.py",
+      "source_location": "L73",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15090,7 +16540,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "utils/stats.py",
-      "source_location": "L112",
+      "source_location": "L102",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15101,7 +16551,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "utils/stats.py",
-      "source_location": "L123",
+      "source_location": "L108",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15112,6 +16562,16 @@
       "confidence": "EXTRACTED",
       "source_file": "utils/stats.py",
       "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "utils_stats_rationale_81",
+      "target": "utils_stats_scalar_or_list",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "utils/stats.py",
+      "source_location": "L81",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15261,7 +16721,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L59",
+      "source_location": "L64",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15271,7 +16731,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L72",
+      "source_location": "L77",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15281,7 +16741,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L132",
+      "source_location": "L146",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15291,7 +16751,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L153",
+      "source_location": "L167",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15301,7 +16761,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L173",
+      "source_location": "L195",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15311,7 +16771,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L195",
+      "source_location": "L217",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15321,7 +16781,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "CLAUDE.md",
-      "source_location": "L213",
+      "source_location": "L235",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15521,7 +16981,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L192",
+      "source_location": "L206",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "usage_your_data",
+      "target": "usage_normalisation_lives_in_the_model_not_the_dataloader",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "USAGE.md",
+      "source_location": "L232",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15531,7 +17001,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L239",
+      "source_location": "L281",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15541,7 +17011,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L241",
+      "source_location": "L283",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15551,7 +17021,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L286",
+      "source_location": "L328",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15561,7 +17031,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L346",
+      "source_location": "L388",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15571,7 +17041,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L401",
+      "source_location": "L443",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15581,7 +17051,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L462",
+      "source_location": "L504",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15591,7 +17061,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L484",
+      "source_location": "L526",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15601,7 +17071,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L505",
+      "source_location": "L547",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15611,7 +17081,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L539",
+      "source_location": "L581",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15621,7 +17091,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L572",
+      "source_location": "L614",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15631,7 +17101,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L614",
+      "source_location": "L656",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15641,7 +17111,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L643",
+      "source_location": "L685",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15651,7 +17121,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L694",
+      "source_location": "L736",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15661,7 +17131,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L708",
+      "source_location": "L750",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15671,7 +17141,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L724",
+      "source_location": "L766",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15681,7 +17151,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L738",
+      "source_location": "L780",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15691,7 +17161,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L777",
+      "source_location": "L819",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15701,7 +17171,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L806",
+      "source_location": "L848",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15711,7 +17181,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L844",
+      "source_location": "L886",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15721,7 +17191,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L875",
+      "source_location": "L917",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15731,7 +17201,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L890",
+      "source_location": "L932",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15741,7 +17211,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "USAGE.md",
-      "source_location": "L925",
+      "source_location": "L967",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -15785,7 +17255,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "dataset/loader.py",
-      "source_location": "L43",
+      "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16368,7 +17838,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L26",
+      "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16379,7 +17849,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L26",
+      "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16390,7 +17860,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L26",
+      "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16401,7 +17871,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L26",
+      "source_location": "L30",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16412,7 +17882,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/forecast.py",
-      "source_location": "L27",
+      "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16423,7 +17893,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L16",
+      "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16434,7 +17904,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L16",
+      "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16445,7 +17915,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L16",
+      "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16456,7 +17926,18 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/mlp.py",
-      "source_location": "L16",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_mlp",
+      "target": "utils_normalize_normalizer",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "models/mlp.py",
+      "source_location": "L33",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16467,7 +17948,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16478,7 +17959,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16489,7 +17970,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16533,7 +18014,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L82",
+      "source_location": "L123",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16544,7 +18025,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L94",
+      "source_location": "L135",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16555,7 +18036,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L105",
+      "source_location": "L146",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16649,12 +18130,34 @@
     },
     {
       "source": "tests_test_data",
-      "target": "dataset_loader_folderdata",
+      "target": "dataset_loader_zarrdata",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L15",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "dataset_loader_zarrrows",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data",
+      "target": "dataset_loader_open_group",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16665,7 +18168,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L16",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16676,7 +18179,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L17",
+      "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16687,7 +18190,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L18",
+      "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -16846,6 +18349,72 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_smoke",
+      "target": "dataset_examples_syntheticdata",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_smoke.py",
+      "source_location": "L400",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_smoke",
+      "target": "models_mlp_mlp",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_smoke.py",
+      "source_location": "L401",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_smoke",
+      "target": "engine_base_optimspec",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_smoke.py",
+      "source_location": "L444",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_smoke",
+      "target": "engine_base_taskmodule",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_smoke.py",
+      "source_location": "L444",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_smoke",
+      "target": "engine_checkpoint_safetensorsformat",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_smoke.py",
+      "source_location": "L446",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_smoke",
+      "target": "engine_tracking_tensorboardlogger",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_smoke.py",
+      "source_location": "L447",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "train",
       "target": "engine_train_run",
       "relation": "imports",
@@ -16858,18 +18427,7 @@
     },
     {
       "source": "utils_stats",
-      "target": "dataset_loader_find",
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "utils/stats.py",
-      "source_location": "L43",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "utils_stats",
-      "target": "dataset_loader_open",
+      "target": "dataset_loader_open_group",
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -17110,13 +18668,35 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_configs_test_the_model_takes_its_optimizer_from_the_optim_group",
+      "target": "tests_conftest_load",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_configs_test_no_scheduler_unless_one_is_asked_for",
+      "target": "tests_conftest_load",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_configs.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_configs_test_ckpt_run_dir_walks_up_to_the_run",
       "target": "engine_utils_ckpt_run_dir",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L85",
+      "source_location": "L126",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -17127,7 +18707,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L96",
+      "source_location": "L137",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -17138,7 +18718,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_configs.py",
-      "source_location": "L107",
+      "source_location": "L148",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -17165,46 +18745,167 @@
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_test_folder_data_trains_end_to_end",
-      "target": "dataset_loader_folderdata",
+      "source": "tests_test_data_write_stats",
+      "target": "dataset_loader_open_group",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L34",
+      "source_location": "L56",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_test_folder_data_trains_end_to_end",
-      "target": "engine_trainer_trainer",
+      "source": "tests_test_data_write_stats",
+      "target": "utils_stats_compute_stats",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L35",
+      "source_location": "L57",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_test_folder_data_trains_end_to_end",
-      "target": "models_mlp_mlp",
+      "source": "tests_test_data_test_a_sample_is_the_named_variables_at_that_row",
+      "target": "dataset_loader_zarrrows",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L36",
+      "source_location": "L67",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_test_missing_split_points_at_the_data_root",
-      "target": "dataset_loader_folderdata",
+      "source": "tests_test_data_test_a_sample_is_the_named_variables_at_that_row",
+      "target": "dataset_loader_open_group",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L44",
+      "source_location": "L67",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_unnamed_variables_are_never_read",
+      "target": "dataset_loader_zarrrows",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_unnamed_variables_are_never_read",
+      "target": "dataset_loader_open_group",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_input_order_follows_the_config",
+      "target": "dataset_loader_open_group",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_input_order_follows_the_config",
+      "target": "dataset_loader_zarrrows",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L90",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_missing_variable_lists_what_the_store_has",
+      "target": "dataset_loader_zarrrows",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_missing_variable_lists_what_the_store_has",
+      "target": "dataset_loader_open_group",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L101",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_pointing_at_an_array_instead_of_a_group_says_so",
+      "target": "dataset_loader_open_group",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_missing_store_points_at_the_data_root",
+      "target": "dataset_loader_zarrdata",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_variables_of_different_lengths_are_rejected",
+      "target": "dataset_loader_zarrrows",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_variables_of_different_lengths_are_rejected",
+      "target": "dataset_loader_open_group",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_stats_match_numpy",
+      "target": "dataset_loader_open_group",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L132",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -17215,62 +18916,73 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L51",
+      "source_location": "L133",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_test_stats_reach_the_model_and_then_the_checkpoint",
-      "target": "utils_stats_compute_stats",
+      "source": "tests_test_data_test_stats_are_keyed_by_name_so_reordering_inputs_is_safe",
+      "target": "dataset_loader_zarrdata",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L70",
+      "source_location": "L149",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_test_stats_reach_the_model_and_then_the_checkpoint",
+      "source": "tests_test_data_test_stats_for_an_unlisted_variable_is_a_clear_error",
+      "target": "dataset_loader_zarrdata",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L161",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_stats_reach_the_model_buffers_and_then_the_checkpoint",
       "target": "models_mlp_mlp",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L73",
+      "source_location": "L168",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_test_stats_reach_the_model_and_then_the_checkpoint",
+      "source": "tests_test_data_test_stats_reach_the_model_buffers_and_then_the_checkpoint",
       "target": "engine_trainer_trainer",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L76",
+      "source_location": "L171",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "tests_test_data_test_stats_reach_the_model_and_then_the_checkpoint",
-      "target": "dataset_loader_folderdata",
+      "source": "tests_test_data_test_stats_reach_the_model_buffers_and_then_the_checkpoint",
+      "target": "dataset_loader_zarrdata",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L77",
+      "source_location": "L172",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "tests_test_data_test_no_stats_file_is_a_warning_not_a_crash",
-      "target": "dataset_loader_folderdata",
+      "target": "dataset_loader_zarrdata",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L88",
+      "source_location": "L188",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -17281,7 +18993,95 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_data.py",
-      "source_location": "L92",
+      "source_location": "L192",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_forward_takes_and_returns_raw_units",
+      "target": "models_mlp_mlp",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L206",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_forward_takes_and_returns_raw_units",
+      "target": "engine_trainer_trainer",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L207",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_forward_takes_and_returns_raw_units",
+      "target": "dataset_loader_zarrdata",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_normalisation_survives_a_checkpoint_round_trip",
+      "target": "models_mlp_mlp",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L223",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_normalisation_survives_a_checkpoint_round_trip",
+      "target": "engine_trainer_trainer",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L224",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_normalisation_survives_a_checkpoint_round_trip",
+      "target": "dataset_loader_zarrdata",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L225",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_denorm_inverts_norm",
+      "target": "models_mlp_mlp",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L238",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_data_test_a_constant_variable_does_not_divide_by_zero",
+      "target": "models_mlp_mlp",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_data.py",
+      "source_location": "L246",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -17705,12 +19505,45 @@
     },
     {
       "source": "tests_test_smoke_ddp_worker",
-      "target": "engine_trainer_trainer",
+      "target": "models_mlp_mlp",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_smoke.py",
+      "source_location": "L404",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_smoke_ddp_worker",
+      "target": "dataset_examples_syntheticdata",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_smoke.py",
       "source_location": "L405",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_smoke_ddp_worker",
+      "target": "engine_trainer_trainer",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_smoke.py",
+      "source_location": "L406",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_smoke_test_complex_weights_are_split_in_histograms_and_named_in_checkpoint_errors",
+      "target": "engine_tracking_tensorboardlogger",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_smoke.py",
+      "source_location": "L474",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -17721,7 +19554,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L476",
+      "source_location": "L477",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -17732,7 +19565,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L477",
+      "source_location": "L478",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -17743,7 +19576,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L482",
+      "source_location": "L483",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_smoke_test_complex_weights_are_split_in_histograms_and_named_in_checkpoint_errors",
+      "target": "engine_checkpoint_safetensorsformat",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_smoke.py",
+      "source_location": "L506",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -17754,29 +19598,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_smoke.py",
-      "source_location": "L515",
+      "source_location": "L516",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "utils_stats_main",
-      "target": "dataset_loader_open",
+      "target": "dataset_loader_open_group",
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "utils/stats.py",
-      "source_location": "L112",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "utils_stats_main",
-      "target": "dataset_loader_find",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "utils/stats.py",
-      "source_location": "L112",
+      "source_location": "L99",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -17831,22 +19664,22 @@
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_arraypairs",
+      "source": "dataset_loader_zarrrows",
       "target": "engine_base_datamodule",
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "dataset/loader.py",
-      "source_location": "L43",
+      "source_location": "L55",
       "weight": 0.8,
       "_origin": "ast"
     },
     {
-      "source": "dataset_loader_folderdata",
+      "source": "dataset_loader_zarrdata",
       "target": "engine_base_datamodule",
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "dataset/loader.py",
-      "source_location": "L43",
+      "source_location": "L55",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18236,7 +20069,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/forecast.py",
-      "source_location": "L26",
+      "source_location": "L30",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18246,7 +20079,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/forecast.py",
-      "source_location": "L26",
+      "source_location": "L30",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18256,7 +20089,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/forecast.py",
-      "source_location": "L26",
+      "source_location": "L30",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18266,7 +20099,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/forecast.py",
-      "source_location": "L26",
+      "source_location": "L30",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18276,7 +20109,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/forecast.py",
-      "source_location": "L27",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18286,7 +20119,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/mlp.py",
-      "source_location": "L16",
+      "source_location": "L32",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18296,7 +20129,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/mlp.py",
-      "source_location": "L16",
+      "source_location": "L32",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18306,7 +20139,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/mlp.py",
-      "source_location": "L16",
+      "source_location": "L32",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18316,7 +20149,17 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/mlp.py",
-      "source_location": "L16",
+      "source_location": "L32",
+      "weight": 0.8,
+      "_origin": "ast"
+    },
+    {
+      "source": "models_mlp_mlp",
+      "target": "utils_normalize_normalizer",
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "models/mlp.py",
+      "source_location": "L33",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18326,7 +20169,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18336,7 +20179,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18346,7 +20189,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18356,7 +20199,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18366,7 +20209,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18376,7 +20219,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18386,7 +20229,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18396,7 +20239,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18406,7 +20249,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18416,7 +20259,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18426,7 +20269,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18436,7 +20279,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "models/pinn.py",
-      "source_location": "L28",
+      "source_location": "L31",
       "weight": 0.8,
       "_origin": "ast"
     },
@@ -18669,6 +20512,18 @@
       "_origin": "ast"
     },
     {
+      "source": "models_mlp_mlp_init",
+      "target": "utils_normalize_normalizer",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "models/mlp.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_configs_test_experiment_composes",
       "target": "tests_conftest_load",
       "relation": "calls",
@@ -18705,6 +20560,30 @@
       "_origin": "ast"
     },
     {
+      "source": "tests_test_configs_test_optim_builds_an_optimizer",
+      "target": "tests_conftest_load",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_configs.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "tests_test_configs_test_sched_builds_against_an_optimizer",
+      "target": "tests_conftest_load",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_configs.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
       "source": "tests_test_configs_test_debug_composes",
       "target": "tests_conftest_load",
       "relation": "calls",
@@ -18712,7 +20591,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_configs.py",
-      "source_location": "L38",
+      "source_location": "L79",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18825,30 +20704,6 @@
       "_origin": "ast"
     },
     {
-      "source": "tests_test_smoke_ddp_worker",
-      "target": "models_mlp_mlp",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "tests/test_smoke.py",
-      "source_location": "L403",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "tests_test_smoke_ddp_worker",
-      "target": "dataset_examples_syntheticdata",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "tests/test_smoke.py",
-      "source_location": "L404",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
       "source": "tests_test_smoke_test_complex_weights_are_split_in_histograms_and_named_in_checkpoint_errors",
       "target": "engine_base_taskmodule_training_step",
       "relation": "indirect_call",
@@ -18856,31 +20711,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "tests/test_smoke.py",
-      "source_location": "L456",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "tests_test_smoke_test_complex_weights_are_split_in_histograms_and_named_in_checkpoint_errors",
-      "target": "engine_tracking_tensorboardlogger",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_smoke.py",
-      "source_location": "L473",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "tests_test_smoke_test_complex_weights_are_split_in_histograms_and_named_in_checkpoint_errors",
-      "target": "engine_checkpoint_safetensorsformat",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "INFERRED",
-      "confidence_score": 0.8,
-      "source_file": "tests/test_smoke.py",
-      "source_location": "L505",
+      "source_location": "L457",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18904,7 +20735,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "models/forecast.py",
-      "source_location": "L129",
+      "source_location": "L141",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18916,7 +20747,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "models/mlp.py",
-      "source_location": "L72",
+      "source_location": "L100",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -18928,7 +20759,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "models/pinn.py",
-      "source_location": "L179",
+      "source_location": "L192",
       "weight": 1.0,
       "_origin": "ast"
     }

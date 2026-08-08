@@ -159,26 +159,36 @@ layout:
 
 ```
 $DL_DATA/
-├── train/  x.npy  y.npy      # or x.zarr / y.zarr, or x.pt
-├── val/    x.npy  y.npy
-└── stats.json                # written by utils/stats.py
+├── train.zarr/     time  feature_1  feature_2  feature_3     # a zarr GROUP
+├── val.zarr/       same variables
+└── stats.json      # written by utils/stats.py, keyed by variable name
 ```
 
 ```bash
-uv run python train.py data=folder model=mymodel
+uv run python train.py data=disk model=mymodel
 ```
 
 ### The dataloader is `dataset/loader.py`
 
-`FolderData` opens those arrays **lazily** — `.npy` through a numpy memmap, `.zarr`
-through zarr's own chunked indexing — so a 40 GB training set costs no RAM at startup.
-Three functions are the ones you actually rewrite:
+`ZarrData` reads a zarr **group** — a directory of named arrays, one per variable. Which
+variables are inputs and which are targets is a config decision, not a storage decision:
+
+```yaml
+inputs:  [feature_1, feature_2]     # model.in_dim = total width
+targets: [feature_3]                # model.out_dim = total width
+```
+
+Variables you don't name are never read, so `time` can sit in the store for orientation
+and cost nothing. Reads are lazy: zarr decompresses only the chunk holding row `i`, so a
+store far larger than RAM costs nothing at startup.
+
+Sample `i` is row `i`. Three pieces are the ones you actually rewrite:
 
 | | |
 |---|---|
-| `_open(path)` | how one shard is read. Suffix dispatch; add your format here. |
-| `ArrayPairs.__getitem__` | what one sample is |
+| `ZarrRows` | **what one sample is.** A windowed or strided dataset changes `__len__` and `__getitem__` and touches nothing else. |
 | `_collate(samples)` | what one batch is |
+| `open_group(path)` | how the store is opened |
 
 Samples are returned in their stored dtype; the Trainer casts floating-point tensors
 when it moves the batch to the device, so the same file serves an fp32 and an fp64 run.
@@ -187,48 +197,80 @@ Anything that *changes* the data — augmentation, masking, mixup — goes in
 `__getitem__`, `_collate`, or `training_step`. Never in a callback.
 
 For a dataset that doesn't fit this shape, write a new `DataModule` in `dataset/` and
-point a config at it; `FolderData` has no privileged status.
+point a config at it; `ZarrData` has no privileged status.
+
+Two zarr facts that are not obvious from its docs: a zarr 3 `Array` has **no `__len__`**
+(use `.shape[0]`), and indexing a `(T,)` array with an int returns a 0-d array rather
+than a scalar.
 
 ### Statistics: computed once, offline
 
-Bounds and moments are computed by a separate command and written next to the data:
+Moments are computed by a separate command and written next to the data:
 
 ```bash
-uv run python utils/stats.py                      # uses $DL_DATA
-uv run python utils/stats.py --root /mnt/data/proj --axis 1
+uv run python utils/stats.py                                  # uses $DL_DATA
+uv run python utils/stats.py --root /mnt/data/proj --store train.zarr
 ```
 
-That writes `stats.json` (`lower`, `upper`, `mean`, `std`, per channel). The chain
-from there:
+That writes `stats.json` **keyed by variable name** — not by column position, so
+reordering or subsetting `data.inputs` can never pair a variable with another
+variable's mean:
+
+```json
+{"feature_1": {"count": 4096, "mean": 99.92, "std": 4.99, "min": 80.5, "max": 116.3},
+ "feature_2": {...}}
+```
+
+`ZarrData` assembles those into `x_mean`, `x_std`, `y_mean`, `y_std`, concatenated in
+the order `inputs` and `targets` name them — the same order `__getitem__` builds the
+row, which is what makes the two line up. The chain from there:
 
 ```
-train split → stats.json → FolderData.stats → model buffers → checkpoint → inference
+train store → stats.json → ZarrData.stats → model buffers → checkpoint → inference
 ```
 
-The model picks them up in `on_data_ready`, which the Trainer calls once after
-`setup("fit")`:
+### Normalisation lives in the model, not the dataloader
+
+`utils/normalize.py` is a ~30-line `Normalizer` — an `nn.Module`, because that is what
+makes `register_buffer` and `state_dict()` work — holding `mean` and `std` as
+**buffers**. The model owns two, one for inputs and one for targets:
 
 ```python
-def __init__(self, in_dim: int = 8, ...):
-    ...
-    # BUFFERS, not attributes: buffers are in state_dict(), so they are written into
-    # every checkpoint and restored with the weights.
-    self.register_buffer("lower", torch.zeros(in_dim))
-    self.register_buffer("upper", torch.ones(in_dim))
+self.x_norm = Normalizer(in_dim)
+self.y_norm = Normalizer(out_dim)
 
-def on_data_ready(self, datamodule):
+def on_data_ready(self, datamodule):          # Trainer calls this once, after setup("fit")
     if stats := getattr(datamodule, "stats", None):
-        self.lower.copy_(torch.as_tensor(stats["lower"], dtype=self.lower.dtype))
-        self.upper.copy_(torch.as_tensor(stats["upper"], dtype=self.upper.dtype))
+        self.x_norm.fit(stats["x_mean"], stats["x_std"])
+        self.y_norm.fit(stats["y_mean"], stats["y_std"])
+
+def forward(self, x):                          # raw units in, raw units out
+    return self.y_norm.denorm(self.net(self.x_norm.norm(x)))
 ```
 
-Three rules, each of which is a silent bug when broken:
+Because the statistics are buffers they are in `state_dict()`, so **inference needs the
+checkpoint and nothing else** — no `stats.json`, no dataloader, and no way to normalise
+against different numbers than training used.
+
+Loss is computed in **normalised** space, so every target channel contributes on the
+same scale whatever its units. Metrics like `mae` are reported in **raw** units, because
+that is the number a human reading a metric wants:
+
+```python
+def training_step(self, batch, state):
+    pred = self.net(self.x_norm.norm(batch["x"]))
+    return {"loss": F.mse_loss(pred, self.y_norm.norm(batch["y"]))}
+```
+
+Four rules, each of which is a silent bug when broken:
 
 1. **Fit statistics on the train split only.** Anything else leaks val into train.
 2. **Never compute them in `setup()`.** It costs minutes per run, and the val split
    would normalise against different numbers than the train split did.
-3. **Keep them in buffers.** Then inference cannot use different bounds than training,
-   because they arrive inside the same file as the weights.
+3. **Keep them in buffers.** Then inference cannot use different statistics than
+   training, because they arrive inside the same file as the weights.
+4. **Clamp `std` away from zero.** A constant variable has `std == 0` and normalises to
+   `inf`. `Normalizer.fit` clamps at `1e-8`.
 
 `eval.py` deliberately does *not* call `on_data_ready` — an evaluation takes its bounds
 from the checkpoint. On resume the hook runs *before* the checkpoint loads, so the

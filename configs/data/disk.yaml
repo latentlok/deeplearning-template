@@ -1,0 +1,23 @@
+# A zarr group of named variables, outside the repo. The one you point at your data.
+#
+#   <data_root>/train.zarr/   time  feature_1  feature_2  feature_3
+#   <data_root>/val.zarr/     same variables
+#   <data_root>/stats.json    <- python utils/stats.py
+#
+# Which variables are inputs and which are targets is decided here, not in storage.
+# `time` is in the store and simply not named, so it is never read.
+_target_: dataset.loader.ZarrData
+root: ${paths.data_root}
+
+train_store: train.zarr
+val_store: val.zarr
+
+inputs: [feature_1, feature_2] # model.in_dim must equal the total width
+targets: [feature_3] # model.out_dim likewise
+
+stats: null # null -> <root>/stats.json, keyed by variable name
+
+batch_size: 32
+num_workers: 0 # zarr opens its chunk store per worker; raise once it is working
+pin_memory: false
+drop_last: false

@@ -1,0 +1,20 @@
+# @package _global_
+# The MLP against real data on disk, as opposed to e0's in-memory synthetic set.
+#
+#   python utils/stats.py --root /mnt/data/example      # once, offline
+#   python train.py experiment=e1 paths.data_root=/mnt/data/example
+defaults:
+  - override /model: mlp
+  - override /data: disk
+
+exp_name: e1
+seed: 0
+
+model:
+  in_dim: 2 # total width of data.inputs  [feature_1, feature_2]
+  out_dim: 1 # total width of data.targets [feature_3]
+
+trainer:
+  max_steps: 200
+  log_every: 20
+  val_every: 50

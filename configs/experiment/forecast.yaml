@@ -2,9 +2,15 @@
 defaults:
   - override /model: forecast
   - override /data: series
+  - override /sched: cosine
 
 exp_name: forecast
 seed: 42
+
+# T_max counts optimizer steps, so it tracks trainer.max_steps below. Leave them
+# mismatched and the LR bottoms out early while the run keeps going.
+sched:
+  T_max: 2000
 
 trainer:
   max_steps: 2000

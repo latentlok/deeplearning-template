@@ -11,8 +11,8 @@ and the plug points; everything model-shaped and data-shaped lives at the top le
 ```
 train.py  eval.py   entrypoints. @hydra.main must stay HERE (see below).
 models/             the user's models. One TaskModule per file.
-dataset/            the user's dataloaders. loader.py reads $DL_DATA/{train,val}.
-utils/              offline tools: stats.py, runs.py, aggregate_seeds.py
+dataset/            the user's dataloaders. loader.py reads a zarr group from $DL_DATA.
+utils/              stats.py, runs.py, aggregate_seeds.py (offline) + normalize.py
 configs/            one directory per config group
 engine/             the orchestration. Rarely touched.
 ```
@@ -28,7 +28,7 @@ code that assumes data is in the working tree.
 
 ```bash
 uv sync --extra dev                      # install (Python >=3.12,<3.14)
-uv run pytest tests/ -q                  # 76 tests
+uv run pytest tests/ -q                  # 88 tests
 uv run ruff check engine models dataset utils tests train.py eval.py   # must be clean
 uv run ruff format engine models dataset utils tests train.py eval.py
 uv run python train.py experiment=e0     # ~20-step smoke run
@@ -51,10 +51,15 @@ Verified this way: two-rank DDP, `no_sync()` under `grad_accum`, rank-zero gatin
 unverified, so do not claim it:** CUDA kernels, the `nccl` backend, multi-GPU device
 placement, and `GradScaler` on real fp16 hardware.
 
-Also unverified in `dataset/loader.py`: the `.zarr` and `.pt` branches of `_open`
-(only `.npy` is exercised — zarr is not a dependency), and `FolderData` with
-`num_workers > 0`, though `configs/data/folder.yaml` defaults to 4. Memmap handles
-crossing a fork are the thing to watch there.
+Unverified in `dataset/loader.py`: `ZarrData` with `num_workers > 0`.
+`configs/data/zarr.yaml` defaults to `0`; zarr reopens its chunk store per worker, which
+is the thing to watch there.
+
+**Data is zarr only.** The `.npy` / `.pt` loader is gone — `loader.py` reads a zarr
+*group* of named variables and nothing else. A zarr 3 `Array` has **no `__len__`**; use
+`.shape[0]`, or you get a bare `TypeError` (this is exactly what silently broke the old
+`_open` zarr branch). Indexing a `(T,)` array with an int gives a 0-d array, not a
+scalar, hence `np.atleast_1d` in `row()`.
 
 ## Architecture in one paragraph
 
@@ -88,6 +93,15 @@ Each of these was a bug at some point. Breaking one is silent, not loud.
   They belong in buffers so they ride inside the checkpoint. `eval.py` must never call
   it: an evaluation takes its bounds from the checkpoint, not from whatever data is
   mounted. Resume loads *after* the hook, so checkpointed values win.
+- **Normalisation lives in the model (`utils/normalize.py`), never in the dataloader.**
+  `Normalizer` holds mean/std as buffers, so `forward()` takes raw units and returns raw
+  units and inference needs only the checkpoint. Normalising in `__getitem__` instead
+  would leave the checkpoint unable to denormalise its own predictions.
+- **`stats.json` is keyed by variable name, not column position.** A positional list
+  silently pairs a variable with another variable's mean the moment `data.inputs` is
+  reordered or subset. `_assemble` concatenates in config order, matching `row()`.
+- **`Normalizer.fit` clamps `std` to `1e-8`.** A constant variable has `std == 0` and
+  would normalise every sample to `inf`.
 - **Never compute dataset statistics in `DataModule.setup()`.** They are read from
   `stats.json`, written once by `utils/stats.py`. Computing them per run costs minutes
   and makes the val split normalise against different numbers than train.
@@ -155,7 +169,15 @@ Verified on torch 2.13.0 / safetensors 0.8.0 — do not re-derive from memory:
 - **`models/` holds nothing data-shaped; `dataset/` holds nothing model-shaped.** The
   project is one dataset with many models tried against it.
 - **`dataset/` vs `utils/` splits on when code runs**: per-batch hot path versus
-  run-once offline analysis that writes a file.
+  run-once offline analysis that writes a file. `utils/normalize.py` is the one
+  exception — it runs per batch but is a shared building block rather than a model, so
+  it sits with the other shared pieces.
+- **Optimizer and scheduler come from `configs/optim/` and `configs/sched/`**, not from
+  hardcoded calls in `configure_optimizers`. Both are `_partial_: true`, so hydra hands
+  the model a factory it calls with `self.parameters()` (or the built optimizer). Model
+  configs interpolate `optim: ${optim}` and `sched: ${oc.select:sched,null}` — plain
+  `${sched}` raises when the group is null, which is the default. `lr` survives on the
+  model constructor purely as the fallback for direct construction in tests.
 - **Callbacks observe; they never own the update.** Anything that changes results
   (augmentation, EMA of a target encoder, loss weighting) belongs in `training_step` or
   `collate_fn`. This is a deliberate trade, not an oversight.

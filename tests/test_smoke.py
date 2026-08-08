@@ -396,8 +396,8 @@ def _ddp_worker(rank: int, world: int, port: int, out: str) -> None:
         MASTER_ADDR="127.0.0.1",
         MASTER_PORT=str(port),
     )
-    from engine.trainer import Trainer
     from dataset.examples import SyntheticData
+    from engine.trainer import Trainer
     from models.mlp import MLP
 
     torch.manual_seed(0)  # identical init; only the DATA differs per rank

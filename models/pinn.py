@@ -21,9 +21,12 @@ torch.rand, so there is nothing to download.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from collections.abc import Callable
+from typing import Any
 
 import torch
 from torch import Tensor, nn
+from torch.optim import Optimizer
 
 from engine.base import OptimSpec, TaskModule, TrainState
 
@@ -127,6 +130,8 @@ class PINN(TaskModule):
         self,
         hidden_dim: int = 32,
         depth: int = 3,
+        optim: Callable[..., Optimizer] | None = None,
+        sched: Callable[..., Any] | None = None,
         lr: float = 1e-3,
         weighting: Weighting | None = None,
     ) -> None:
@@ -136,7 +141,9 @@ class PINN(TaskModule):
             layers += [nn.Linear(hidden_dim, hidden_dim), nn.Tanh()]
         layers += [nn.Linear(hidden_dim, 1)]
         self.net = nn.Sequential(*layers)
-        self.lr = lr
+        # Factories from configs/optim/ and configs/sched/; `lr` is the fallback for
+        # direct construction only.
+        self.optim, self.sched, self.lr = optim, sched, lr
         # A submodule, so its weights are checkpointed and resumed with the model.
         self.weighting = weighting or StaticWeights(["residual", "boundary"])
 
@@ -176,4 +183,10 @@ class PINN(TaskModule):
         }
 
     def configure_optimizers(self) -> OptimSpec:
-        return OptimSpec.of(torch.optim.AdamW(self.parameters(), lr=self.lr))
+        opt = (
+            self.optim(self.parameters())
+            if self.optim is not None
+            else torch.optim.AdamW(self.parameters(), lr=self.lr)
+        )
+        sched = self.sched(opt) if self.sched is not None else None
+        return OptimSpec.of(opt, sched, interval="step")

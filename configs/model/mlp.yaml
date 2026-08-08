@@ -2,5 +2,9 @@ _target_: models.mlp.MLP
 in_dim: 8
 hidden_dim: 32
 out_dim: 1
-lr: 1e-3
-weight_decay: 0.0
+
+# The optimizer/scheduler come from their OWN config groups, so `optim=sgd` or
+# `optim.lr=3e-4` works without touching this file. There is one source of truth for
+# the learning rate and it is configs/optim/.
+optim: ${optim}
+sched: ${oc.select:sched,null} # oc.select, because `sched: null` means the group is absent

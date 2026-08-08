@@ -33,6 +33,47 @@ def test_data_instantiates(name: str) -> None:
     hydra.utils.instantiate(cfg.data)
 
 
+@pytest.mark.parametrize("name", config_names("optim"))
+def test_optim_builds_an_optimizer(name: str) -> None:
+    """optim configs are _partial_: they instantiate to a factory, and only become an
+    optimizer once a model hands them its parameters."""
+    import torch
+
+    factory = hydra.utils.instantiate(load([f"optim={name}"]).optim)
+    opt = factory([torch.nn.Parameter(torch.zeros(2))])
+    assert isinstance(opt, torch.optim.Optimizer)
+
+
+@pytest.mark.parametrize("name", config_names("sched"))
+def test_sched_builds_against_an_optimizer(name: str) -> None:
+    import torch
+
+    opt = torch.optim.SGD([torch.nn.Parameter(torch.zeros(2))], lr=0.1)
+    sched = hydra.utils.instantiate(load([f"sched={name}"]).sched)(opt)
+    assert hasattr(sched, "step") and hasattr(sched, "state_dict")
+
+
+def test_the_model_takes_its_optimizer_from_the_optim_group() -> None:
+    """The whole point of the group: `optim=sgd` must reach the built optimizer without
+    editing any model file."""
+    import torch
+
+    cfg = load(["model=mlp", "optim=sgd", "optim.lr=0.123"])
+    spec = hydra.utils.instantiate(cfg.model).configure_optimizers()
+    assert isinstance(spec.optimizers[0], torch.optim.SGD)
+    assert spec.optimizers[0].param_groups[0]["lr"] == pytest.approx(0.123)
+
+
+def test_no_scheduler_unless_one_is_asked_for() -> None:
+    """`sched: null` is the default, and oc.select must resolve it to None rather than
+    raising on a missing interpolation."""
+    spec = hydra.utils.instantiate(load(["model=mlp"]).model).configure_optimizers()
+    assert spec.schedulers == []
+
+    spec = hydra.utils.instantiate(load(["model=mlp", "sched=cosine"]).model).configure_optimizers()
+    assert len(spec.schedulers) == 1
+
+
 @pytest.mark.parametrize("name", config_names("debug"))
 def test_debug_composes(name: str) -> None:
     load([f"debug={name}"])

@@ -1,6 +1,7 @@
 """Your data. Everything between "bytes on disk" and "a batch on the device".
 
-    loader.py     FolderData -- the one you rewrite. Reads <data_root>/{train,val}.
+    loader.py     ZarrData -- the one you rewrite. Reads a zarr group of named
+                  variables from <data_root>/{train,val}.zarr.
     examples.py   the datamodules for the three shipped example models. Delete with them.
 
 A DataModule owns four things: the Dataset, the split, the DataLoader arguments, and
