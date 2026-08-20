@@ -38,19 +38,22 @@ uv run python eval.py ckpt=outputs/e0/<run>/ckpt/best_weights
 uv run python utils/stats.py --root $DL_DATA         # write stats.json
 ```
 
-There is no compatible GPU on the development machine (sm_61 vs a torch build starting
-at sm_75), so **verify on CPU** with `trainer.device=cpu`.
+**This is a template, and it has no target machine.** Never write anything here that
+assumes a particular card, driver or accelerator count, and never hardcode a device.
+`trainer.device: auto` already resolves to `cuda:LOCAL_RANK` when a GPU is present and
+falls back to `cpu` when one is not (`resolve_device` in `engine/utils.py`), so code
+and docs alike should assume a current GPU and let the fallback handle the rest.
 
-That is less limiting than it sounds — distributed runs fine on the `gloo` backend:
+Testing distributed does not need a GPU either — the `gloo` backend runs it on CPU:
 
 ```bash
 uv run torchrun --nproc_per_node=2 train.py experiment=e0 trainer.device=cpu
 ```
 
-Verified this way: two-rank DDP, `no_sync()` under `grad_accum`, rank-zero gating,
-`torch.compile`, `amp=bf16`/`fp16`, and FSDP2 through `Trainer.wrap()`. **Still
-unverified, so do not claim it:** CUDA kernels, the `nccl` backend, multi-GPU device
-placement, and `GradScaler` on real fp16 hardware.
+Exercised that way: two-rank DDP, `no_sync()` under `grad_accum`, rank-zero gating,
+`torch.compile`, `amp=bf16`/`fp16`, and FSDP2 through `Trainer.wrap()`. The `nccl`
+backend, multi-GPU device placement and `GradScaler` on fp16 hardware have not been
+exercised — state that rather than implying coverage.
 
 Unverified in `dataset/loader.py`: `ZarrData` with `num_workers > 0`.
 `configs/data/zarr.yaml` defaults to `0`; zarr reopens its chunk store per worker, which
