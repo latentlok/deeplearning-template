@@ -165,7 +165,7 @@ $DL_DATA/
 ```
 
 ```bash
-uv run python train.py data=disk model=mymodel
+uv run python train.py data=zarr model=mymodel
 ```
 
 ### The dataloader is `dataset/loader.py`

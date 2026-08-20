@@ -22,7 +22,7 @@ smoke:  ## 20-step end-to-end run; proves the wiring
 train:  ## EXP=<name> (default e0)
 	uv run python train.py experiment=$(or $(EXP),e0)
 
-stats:  ## scan $DL_DATA/train and write stats.json
+stats:  ## scan $DL_DATA/train.zarr and write stats.json
 	uv run python utils/stats.py
 
 tb:  ## tensorboard over every run

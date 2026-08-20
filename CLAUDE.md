@@ -6,7 +6,8 @@ Guidance for Claude Code working in this repository.
 
 A minimal, **fork-first** PyTorch training template. It provides the loop, the logging
 and the plug points; everything model-shaped and data-shaped lives at the top level.
-~1,800 lines of code.
+~3,300 lines including docstrings and comments; ~2,400 of them (`engine/`, `utils/`,
+the entrypoints) you never rewrite.
 
 ```
 train.py  eval.py   entrypoints. @hydra.main must stay HERE (see below).
@@ -28,7 +29,7 @@ code that assumes data is in the working tree.
 
 ```bash
 uv sync --extra dev                      # install (Python >=3.12,<3.14)
-uv run pytest tests/ -q                  # 88 tests
+uv run pytest tests/ -q                  # 94 tests
 uv run ruff check engine models dataset utils tests train.py eval.py   # must be clean
 uv run ruff format engine models dataset utils tests train.py eval.py
 uv run python train.py experiment=e0     # ~20-step smoke run

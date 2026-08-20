@@ -2,87 +2,64 @@
 
 Train, track, log. Nothing else.
 
-You cannot design one abstraction that covers PINNs, JEPA, neural operators, neural
-ODEs, forecasters and language models. Anything general enough to span them all is
-worse than no abstraction — so this doesn't try.
+Every deep learning project rewrites the same scaffolding: the training loop, the
+checkpoints, the metric logging, the config plumbing. None of it is the interesting
+part, and all of it has to work before the interesting part can be tried. This repo is
+that scaffolding, already written and already tested — fork it, drop in your model and
+your data, and start running experiments on day one. It deliberately does *not* try to
+abstract over what a model is: you write the model you'd have written anyway.
 
-It gives you **the loop, the logging, and the plug point**. Everything model-shaped
-lives in your fork. *One step above a monolith:* you write the monolith you'd have
-written anyway, minus the boilerplate for experiment tracking and testing.
+## Architecture
 
-It works with anything that satisfies four assumptions:
-
-1. Training is a loop over batches from a dataloader.
-2. Each step yields a scalar to minimise — or you take manual control.
-3. Parameters are updated by `torch.optim` optimizers.
-4. Progress is measured in steps.
-
-`batch` is never inspected, model outputs are a free dict, and steps return arbitrary
-scalars. Roughly 1,800 lines of code, ~1,300 of which you never rewrite.
-
-## Layout
-
-Your code is at the top level. The orchestration is hidden in `engine/`.
+Your code lives at the top level. The machinery is hidden in `engine/`.
 
 ```
 train.py  eval.py     the two entrypoints
-models/                your models — one file per model, each a TaskModule
-dataset/               your dataloaders — loader.py reads $DL_DATA/{train,val}
-utils/                 offline analysis: dataset statistics, run tables, seed aggregation
-configs/               one group per directory; experiment/ holds saved recipes
-engine/                the loop, checkpointing, logging. You should never need to open it.
-outputs/<exp>/<run>/   everything a run produced: logs, metrics, tb/, ckpt/, eval/
+models/               your models — one file each
+dataset/              your dataloaders — loader.py reads $DL_DATA/{train,val}.zarr
+configs/              one directory per config group; experiment/ holds saved recipes
+utils/                dataset statistics, run tables, seed aggregation
+engine/               the loop, checkpointing, logging. You should never need to open it.
+outputs/<exp>/<run>/  everything a run produced: logs, metrics, tb/, ckpt/, eval/
 ```
 
-The dataset itself lives **outside** the repo — set `DL_DATA` once and every config
-follows it.
+You implement two classes and the Trainer handles the rest:
 
-## Install
+- **`TaskModule`** — `training_step`, `validation_step`, `configure_optimizers`.
+  A step returns a dict containing `"loss"`; every other scalar in it is logged for free.
+- **`DataModule`** — `setup`, `train_dataloader`, `val_dataloader`.
 
-Requires **Python ≥3.12, <3.14** and [uv](https://docs.astral.sh/uv/).
+The Trainer never looks inside a batch, so any batch shape works. The dataset lives
+**outside** the repo — set `DL_DATA` once and every config follows it.
+
+## Use it
+
+Needs [uv](https://docs.astral.sh/uv/) and Python ≥3.12, <3.14 (uv fetches it).
 
 ```bash
-git clone https://github.com/latentlok/deeplearning-template.git
-cd deeplearning-template
-uv sync --extra dev
+uv sync --extra dev                     # install
+uv run pytest tests/ -q                 # 94 tests, all should pass
+uv run python train.py experiment=e0    # ~20-step smoke run
 ```
 
-`.python-version` pins 3.13, and uv will fetch it if you don't have it. The upper bound
-is real, not caution: hydra-core 1.3.4 breaks on Python 3.14, whose argparse rejects
-Hydra's lazy `--shell-completion` help object. Lift it when hydra-core 1.4 ships stable.
-
-Verify:
+Then:
 
 ```bash
-uv run pytest tests/ -q                # 76 tests
-uv run python train.py experiment=e0   # ~20-step smoke run
+uv run python train.py experiment=e1                  # train on your own zarr data
+uv run python train.py experiment=e0 trainer.max_steps=5000 optim.lr=1e-4
+uv run python eval.py ckpt=outputs/e0/<run>/ckpt/best_weights
 ```
 
-The default `trainer.device: auto` uses CUDA when available. Note that
-`torch.cuda.is_available()` returns True even for a GPU your torch build has no kernels
-for — if you hit `CUBLAS_STATUS_ARCH_MISMATCH`, install a torch build matching your card
-or pass `trainer.device=cpu`.
+Adding a model is two files: one in `models/`, one config in `configs/model/`. Copy
+`models/mlp.py` — it is the smallest complete example. `forecast.py` and `pinn.py` show
+harder cases (rollout, gradient losses); delete what you don't need.
 
 ## Next
 
-- **[USAGE.md](USAGE.md)** — running experiments, configs, checkpoints and resuming,
-  evaluation, sweeps, adding your own model.
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** — the two contracts, the loop, and why each
-  design decision is the way it is.
-
-## What ships
-
-Three examples in `models/`, with their data in `dataset/examples.py` — delete the ones
-you don't need:
-
-| | |
-|---|---|
-| `mlp.py` | two-layer net; the fast smoke and contract test, and the file to copy |
-| `forecast.py` | windowed forecasting: scaler-as-buffers, temporal split, teacher forcing vs free-running rollout, multi-horizon eval |
-| `pinn.py` | `du/dx = -u` with a gradient loss and gradient-adaptive term weighting; converges against the analytic `e^(-x)` |
-
-Plus `dataset/loader.py` — a real dataloader over a zarr group of named variables at
-`$DL_DATA/{train,val}.zarr`, which is the file you rewrite for your own data.
+- **[USAGE.md](USAGE.md)** — experiments, configs, checkpoints, resuming, sweeps,
+  adding your own model.
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** — the two contracts and why each decision is
+  the way it is.
 
 ## Licence
 
